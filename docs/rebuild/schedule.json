@@ -1,0 +1,186 @@
+{
+	"status": "planned",
+	"version": 1,
+	"coreHours": 30,
+	"minutesPerDay": 360,
+	"dailyReviewMinutes": 30,
+	"breaksIncluded": false,
+	"timingEvidence": "Authoring budgets; learner pilot not yet conducted.",
+	"days": [
+		{
+			"day": 1,
+			"title": "From accounting questions to learning problems",
+			"modules": [
+				{
+					"id": "M01",
+					"title": "AI history and choosing an approach",
+					"minutes": 50,
+					"prerequisites": []
+				},
+				{
+					"id": "M02",
+					"title": "Financial data, targets, and leakage",
+					"minutes": 70,
+					"prerequisites": ["M01"]
+				},
+				{
+					"id": "M03",
+					"title": "How training changes a model",
+					"minutes": 75,
+					"prerequisites": ["M02"]
+				},
+				{
+					"id": "M04",
+					"title": "Generalization and independent evidence",
+					"minutes": 75,
+					"prerequisites": ["M03"]
+				},
+				{
+					"id": "M05",
+					"title": "Classification, uncertainty, and decisions",
+					"minutes": 60,
+					"prerequisites": ["M04"]
+				}
+			]
+		},
+		{
+			"day": 2,
+			"title": "Learning mechanisms and financial analysis",
+			"modules": [
+				{
+					"id": "M06",
+					"title": "Inside a trainable neural network",
+					"minutes": 70,
+					"prerequisites": ["M03", "M04"]
+				},
+				{
+					"id": "M07",
+					"title": "Deep learning and representations",
+					"minutes": 70,
+					"prerequisites": ["M06"]
+				},
+				{ "id": "M08", "title": "Forecasting over time", "minutes": 70, "prerequisites": ["M04"] },
+				{
+					"id": "M09",
+					"title": "Excel, Power Query, SQL, and Power BI",
+					"minutes": 70,
+					"prerequisites": ["M02", "M08"]
+				},
+				{
+					"id": "M10",
+					"title": "Finance applications, value, and future scenarios",
+					"minutes": 50,
+					"prerequisites": ["M05", "M07", "M09"]
+				}
+			]
+		},
+		{
+			"day": 3,
+			"title": "Language models from mechanism to evidence",
+			"modules": [
+				{
+					"id": "M11",
+					"title": "Language modeling, tokens, and embeddings",
+					"minutes": 55,
+					"prerequisites": ["M06", "M07"]
+				},
+				{
+					"id": "M12",
+					"title": "Transformers and autoregressive generation",
+					"minutes": 80,
+					"prerequisites": ["M11"]
+				},
+				{
+					"id": "M13",
+					"title": "Pretraining, post-training, and adaptation",
+					"minutes": 70,
+					"prerequisites": ["M04", "M12"]
+				},
+				{
+					"id": "M14",
+					"title": "Context, hallucination, and supported analysis",
+					"minutes": 65,
+					"prerequisites": ["M09", "M13"]
+				},
+				{
+					"id": "M15",
+					"title": "Generative and multimodal AI",
+					"minutes": 60,
+					"prerequisites": ["M07", "M14"]
+				}
+			]
+		},
+		{
+			"day": 4,
+			"title": "Applications, tools, and agent systems",
+			"modules": [
+				{
+					"id": "M16",
+					"title": "Retrieval and current company knowledge",
+					"minutes": 70,
+					"prerequisites": ["M11", "M14"]
+				},
+				{
+					"id": "M17",
+					"title": "Tools and execution contracts",
+					"minutes": 65,
+					"prerequisites": ["M09", "M14"]
+				},
+				{
+					"id": "M18",
+					"title": "Workflows and model-directed agents",
+					"minutes": 65,
+					"prerequisites": ["M16", "M17"]
+				},
+				{
+					"id": "M19",
+					"title": "Skills, harnesses, and recoverable state",
+					"minutes": 65,
+					"prerequisites": ["M18"]
+				},
+				{
+					"id": "M20",
+					"title": "Prompt and harness engineering",
+					"minutes": 65,
+					"prerequisites": ["M19"]
+				}
+			]
+		},
+		{
+			"day": 5,
+			"title": "Build, evaluate, and defend",
+			"modules": [
+				{
+					"id": "M21",
+					"title": "Build a financial pipeline with AI assistance",
+					"minutes": 60,
+					"prerequisites": ["M09", "M20"]
+				},
+				{
+					"id": "M22",
+					"title": "Evaluation, monitoring, and release decisions",
+					"minutes": 60,
+					"prerequisites": ["M05", "M16", "M19", "M21"]
+				},
+				{
+					"id": "M23",
+					"title": "Integrate the finance assistant capstone",
+					"minutes": 80,
+					"prerequisites": ["M22"]
+				},
+				{
+					"id": "M24",
+					"title": "Unseen cases and incident investigation",
+					"minutes": 80,
+					"prerequisites": ["M23"]
+				},
+				{
+					"id": "M25",
+					"title": "Interview defense and next specialization",
+					"minutes": 50,
+					"prerequisites": ["M24"]
+				}
+			]
+		}
+	]
+}

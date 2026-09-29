@@ -4,6 +4,8 @@ A visual, beginner-friendly field guide to AI for accounting and finance. Built 
 
 **Live course:** https://eliaboutorabi.github.io/AIAccountant/
 
+**Curriculum rebuild:** [Research and five-day course specification](docs/rebuild/README.md). The planned 30-hour expansion is not yet implemented; the current site is the introductory edition.
+
 ## The learning experience
 
 - 12 connected chapters, 36 lessons, and 72 explained knowledge checks.
