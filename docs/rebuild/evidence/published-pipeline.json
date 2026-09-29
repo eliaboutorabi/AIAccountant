@@ -1,0 +1,44 @@
+{
+	"dataVersion": "PIPE-01-v1",
+	"units": "USD cents",
+	"result": [
+		{
+			"invoiceId": "A",
+			"invoiceMinor": "100000",
+			"paidMinor": "50000",
+			"outstandingMinor": "50000"
+		},
+		{
+			"invoiceId": "B",
+			"invoiceMinor": "60000",
+			"paidMinor": "60000",
+			"outstandingMinor": "0"
+		},
+		{
+			"invoiceId": "C",
+			"invoiceMinor": "40000",
+			"paidMinor": "0",
+			"outstandingMinor": "40000"
+		}
+	],
+	"quarantine": [
+		{
+			"row": "3",
+			"id": "P2",
+			"invoiceId": "A",
+			"entity": "Willow",
+			"currency": "USD",
+			"amount": "200.00"
+		}
+	],
+	"unmatched": [
+		{
+			"row": "5",
+			"id": "P4",
+			"invoiceId": "X",
+			"entity": "Willow",
+			"currency": "USD",
+			"amount": "150.00"
+		}
+	]
+}

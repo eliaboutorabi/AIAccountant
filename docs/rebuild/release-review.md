@@ -48,4 +48,14 @@ Final local release gate: `npm run check` reported zero errors and zero warnings
 
 The compiled optional local-model worker was also verified separately under `/AIAccountant/`: worker/WASM assets loaded successfully, real inference executed, tool/evidence gates rejected invalid output, and the verification observed no page errors or network requests after model initialization. This is execution evidence, not a claim of answer reliability; the recorded model failures remain in `local-model-verification.md`.
 
-Publication status is appended after deployment finishes. The retained source includes reproducible tests and the original worked cases; transient build logs and screenshots live in the ignored `.work` directory.
+The retained source includes reproducible tests and the original worked cases; transient build logs and screenshots live in the ignored `.work` directory.
+
+## Published release verification
+
+The expanded course is live at [AI Accountant](https://eliaboutorabi.github.io/AIAccountant/). Application commit `93635a969437c377c8b5fc7e0c7c3d6cd525c7cc` passed [GitHub Actions run 36529145635](https://github.com/eliaboutorabi/AIAccountant/actions/runs/36529145635) and deployed successfully on September 29, 2026. The hosted workflow independently reported zero type errors/warnings, 127 passing unit/component tests, and 20 passing browser tests.
+
+The first hosted inspection exposed a legacy `.callout` style collision: it placed chapter explanations in a flex row. The corrected component uses its own class. Browser overflow checks were strengthened to compare against the document's client width, because a mobile browser can expand `innerWidth` around overflowing content. All 25 chapters passed those stricter checks, and actual reading panels were visually inspected on desktop and mobile.
+
+After the correction deployed, 39 public-site checks passed at 06:07:51 UTC. These verified chapter and laboratory routes, formula recalculation, correct-grain join totals, actual regression updates and final lock, 100 transformer training updates, notebook persistence, keyboard definitions, and downloadable resources at 1440- and 390-pixel widths. No client exceptions or failed course asset responses were observed. The detailed record is in `evidence/published-site.json`.
+
+The publicly downloaded Node starter matched the tested build byte for byte and reproduced total outstanding of USD 900, the P2 duplicate quarantine, and the separate P4 unmatched receipt. Its output is retained in `evidence/published-pipeline.json`. The continuation heartbeat was removed after these publication checks passed. This evidence record follows the deployed code as a documentation-only commit.

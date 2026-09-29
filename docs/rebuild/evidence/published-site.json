@@ -1,0 +1,331 @@
+{
+	"verifiedAt": "2026-09-29T06:07:51.983Z",
+	"base": "https://eliaboutorabi.github.io/AIAccountant/",
+	"results": [
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "",
+			"status": 200,
+			"heading": "Accounting minds.\nAI possibilities."
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "path/",
+			"status": 200,
+			"heading": "Understand deeply.\nPut it to work."
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "course/m11/",
+			"status": 200,
+			"heading": "Language modeling, tokens, and embeddings"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "course/m12/",
+			"status": 200,
+			"heading": "Transformers and autoregressive generation"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "course/m13/",
+			"status": 200,
+			"heading": "Pretraining, post-training, and adaptation"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "course/m14/",
+			"status": 200,
+			"heading": "Context, hallucination, and supported analysis"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "course/m25/",
+			"status": 200,
+			"heading": "Interview defense and next specialization"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "interview/",
+			"status": 200,
+			"heading": "Bring evidence\nto the conversation."
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "projects/",
+			"status": 200,
+			"heading": "Build something\nyou can defend."
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "lab/capstone/",
+			"status": 200,
+			"heading": "The finance assistant capstone"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "lab/forecast/",
+			"status": 200,
+			"heading": "Forecasting through time"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "lab/network/",
+			"status": 200,
+			"heading": "Inside a learning network"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"route": "lab/local-agent/",
+			"status": 200,
+			"heading": "A model chooses the next step"
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"check": "Formula recalculation and correct-grain join",
+			"passed": true
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"check": "Actual training updates and frozen final evaluation",
+			"passed": true
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"check": "Actual transformer trained for 100 updates",
+			"passed": true
+		},
+		{
+			"viewport": {
+				"width": 1440,
+				"height": 1050
+			},
+			"check": "Linked definitions, runtime errors, asset responses",
+			"errors": [],
+			"failedAssets": []
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "",
+			"status": 200,
+			"heading": "Accounting minds.\nAI possibilities."
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "path/",
+			"status": 200,
+			"heading": "Understand deeply.\nPut it to work."
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "course/m11/",
+			"status": 200,
+			"heading": "Language modeling, tokens, and embeddings"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "course/m12/",
+			"status": 200,
+			"heading": "Transformers and autoregressive generation"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "course/m13/",
+			"status": 200,
+			"heading": "Pretraining, post-training, and adaptation"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "course/m14/",
+			"status": 200,
+			"heading": "Context, hallucination, and supported analysis"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "course/m25/",
+			"status": 200,
+			"heading": "Interview defense and next specialization"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "interview/",
+			"status": 200,
+			"heading": "Bring evidence\nto the conversation."
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "projects/",
+			"status": 200,
+			"heading": "Build something\nyou can defend."
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "lab/capstone/",
+			"status": 200,
+			"heading": "The finance assistant capstone"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "lab/forecast/",
+			"status": 200,
+			"heading": "Forecasting through time"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "lab/network/",
+			"status": 200,
+			"heading": "Inside a learning network"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"route": "lab/local-agent/",
+			"status": 200,
+			"heading": "A model chooses the next step"
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"check": "Formula recalculation and correct-grain join",
+			"passed": true
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"check": "Actual training updates and frozen final evaluation",
+			"passed": true
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"check": "Actual transformer trained for 100 updates",
+			"passed": true
+		},
+		{
+			"viewport": {
+				"width": 390,
+				"height": 844
+			},
+			"check": "Linked definitions, runtime errors, asset responses",
+			"errors": [],
+			"failedAssets": []
+		},
+		{
+			"check": "Public download",
+			"file": "data-manifest.json",
+			"status": 200
+		},
+		{
+			"check": "Public download",
+			"file": "willow-pipeline.mjs",
+			"status": 200
+		},
+		{
+			"check": "Public download",
+			"file": "day-1.md",
+			"status": 200
+		},
+		{
+			"check": "Public download",
+			"file": "day-5.md",
+			"status": 200
+		},
+		{
+			"check": "Public download",
+			"file": "reviewed-solutions.md",
+			"status": 200
+		}
+	]
+}

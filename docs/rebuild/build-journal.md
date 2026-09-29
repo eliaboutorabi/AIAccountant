@@ -1,6 +1,8 @@
 # Implementation journal
 
-The substantive rebuild is active. The specification in this directory is approved.
+The substantive rebuild is complete and deployed. The historical checkpoints below record implementation and review; the final publication record is at the end.
+
+## Initial coordination notes
 
 - Persistent goal: fully implement, independently review, commit, push, and verify all 25 modules and required labs.
 - Continuation heartbeat: `finish-ai-accountant-rebuild`, every 30 minutes, attached to this chat. Delete once the goal is complete.
@@ -8,7 +10,7 @@ The substantive rebuild is active. The specification in this directory is approv
 - Professional review agent: `professional_education`; novice/prerequisite review agent: `novice_education`.
 - Content contract: `src/lib/course/types.ts`. Main agent owns common types, rendering, routes, progress, and integration.
 
-## Work remaining
+## Initial work plan
 
 1. Author all 25 modules as substantial connected instruction, real worked cases, rigorous checks and written assignments.
 2. Implement course reader, five-day navigation, accessible linked terms, progress evidence and export.
@@ -47,3 +49,12 @@ Completion is not established by a successful software build. Keep educational r
 - Final base-path tests: 127 unit/component tests in 19 files and all 20 desktop/mobile end-to-end tests passed. Every expanded chapter was checked for accessibility and viewport overflow.
 - The compiled optional model ran under `/AIAccountant/` with actual downloads and inference. Asset loading and guard behavior passed; malformed model output stayed visible and was rejected. This is not a model quality benchmark.
 - The implementation is ready for publication. Only commit/push, hosted deployment verification, and closing the continuation loop remain. The 30-hour schedule remains an authored study budget, not a measured learner completion time.
+
+## Verified publication — September 29, 2026
+
+- Published application commit: `93635a969437c377c8b5fc7e0c7c3d6cd525c7cc`. [GitHub Actions run 36529145635](https://github.com/eliaboutorabi/AIAccountant/actions/runs/36529145635) completed successfully, including 127 unit/component tests, 20 desktop/mobile browser tests, and Pages deployment.
+- Initial hosted verification found a collision between the legacy global callout style and the new chapter callouts. The correction isolates the new styles. Overflow assertions now compare with `document.documentElement.clientWidth`; mobile emulation can expand `innerWidth` to the overflowing content and hide a failure. The stricter all-chapter checks passed, and the corrected reading panels were visually inspected at 390 and 1440 pixels.
+- Final public-site verification completed at 06:07:51 UTC: 39 checks across desktop and mobile, including new chapter routes, correct callout layout, formula dependency recalculation, join totals, actual regression and transformer training, saved notes, linked definitions, laboratory routes, and downloads. No page errors or failed course asset responses were observed. Evidence: `evidence/published-site.json`.
+- The hosted starter matched the built source byte for byte and executed successfully. Outstanding balances were A=500, B=0, C=400 dollars; duplicate P2 was quarantined and unmatched P4 remained separate. Evidence: `evidence/published-pipeline.json`.
+- The continuation heartbeat `finish-ai-accountant-rebuild` was deleted after successful hosted verification. The publication evidence is committed separately from the deployed application; this documentation-only record does not change the site assets.
+- No implementation, review repair, or deployment work remains. The 30-hour schedule is still an authored active-study budget; no learner timing pilot or independent professional certification is claimed.
