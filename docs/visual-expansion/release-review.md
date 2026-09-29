@@ -28,4 +28,10 @@ The reviews and tests establish the inspected artifacts' behavior and consistenc
 
 ## Publication
 
-The release is deployed through the repository's required verification workflow. Final workflow identity and public URL verification are recorded after deployment.
+Published on 29 September 2026 from application commit `1cd6f5f8cadd60599cadf735ad91a3e25259f7a2`.
+
+- [GitHub Actions run 36626294974](https://github.com/eliaboutorabi/AIAccountant/actions/runs/36626294974): successful build and Pages deployment. CI confirms **157 numerical/component tests and 24 desktop/mobile end-to-end tests passed**. Build job: 3m25s; deploy job: 9s.
+- [Public visual atlas](https://eliaboutorabi.github.io/AIAccountant/visuals/): 82 entries; infographic filter gives 25.
+- Every one of the 25 public WebP files returns HTTP 200 and has the same SHA-256 digest as its reviewed repository counterpart.
+- Fresh browser sessions at 1440px and 390px verify the public M11 tokenizer round-trip for `INV-42 paid.`, original-size image width of 1536px, and M12's three zero-weight future positions when the first of four tokens is selected. No JavaScript page errors or document overflow occurred.
+- Public-site evidence was saved locally under `.work/public-visual-atlas-*.png`, `.work/public-token-figure-*.png`, and `.work/visual-public-verification.json`.
