@@ -8,6 +8,8 @@
 	import RichText from './RichText.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import SourceLink from './SourceLink.svelte';
+	import TeachingFigure from '../visuals/TeachingFigure.svelte';
+	import { moduleVisuals, visualsAt } from '../visuals';
 	let {
 		module,
 		previous,
@@ -19,6 +21,7 @@
 	} = $props();
 	const book = useBook();
 	const evidence = $derived(book.get(module.id));
+	const visualGuide = $derived(moduleVisuals(module.id));
 	const image = $derived(
 		module.day === 1
 			? 'foundations'
@@ -100,6 +103,27 @@
 				<p class="term-hint">
 					Dotted terms have definitions. Hover, tap, or focus and press Enter to explore them.
 				</p>
+				<nav class="chapter-visual-guide" aria-label="Visual guide for this module">
+					<div>
+						<Icon name="sparkles" size={18} /><strong>See the ideas</strong><a
+							href={resolve('/visuals')}>Explore the visual atlas <Icon name="arrow" size={14} /></a
+						>
+					</div>
+					<ul>
+						{#each visualGuide as visual (visual.id)}<li>
+								<a href={`#${visual.id}`}
+									><Icon
+										name={visual.kind === 'interactive'
+											? 'play'
+											: visual.kind === 'art'
+												? 'sparkles'
+												: 'network'}
+										size={15}
+									/>{visual.title}</a
+								>
+							</li>{/each}
+					</ul>
+				</nav>
 			</div>
 			{#each module.sections as section, i (section.id)}<section
 					class="chapter-section"
@@ -114,7 +138,9 @@
 							{block}
 							moduleId={module.id}
 							index={`${section.id}-${j}`}
-						/>{/each}<label class="read-mark"
+						/>{#each visualsAt(module.id, section.id, j) as visual (visual.id)}<TeachingFigure
+								{visual}
+							/>{/each}{/each}<label class="read-mark"
 						><input
 							type="checkbox"
 							checked={evidence.read.includes(section.id)}
@@ -189,6 +215,49 @@
 </div>
 
 <style>
+	.chapter-visual-guide {
+		margin-top: 26px;
+		padding: 22px;
+		border: 1px solid #dce4d8;
+		border-radius: 16px;
+		background: linear-gradient(120deg, #eef4e9, #f1edf8);
+	}
+	.chapter-visual-guide > div {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+	.chapter-visual-guide > div > a {
+		margin-left: auto;
+		display: inline-flex;
+		align-items: center;
+		gap: 7px;
+		font-size: 12px;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.chapter-visual-guide ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+		gap: 10px 20px;
+		padding: 0;
+		margin: 18px 0 0;
+		list-style: none;
+	}
+	.chapter-visual-guide li a {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		font-size: 13px;
+		line-height: 1.5;
+		padding: 5px 0;
+	}
+	.chapter-visual-guide li a:hover {
+		color: var(--green);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
 	.reader-wrap {
 		max-width: 1250px;
 		margin: auto;

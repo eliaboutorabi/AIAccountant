@@ -170,11 +170,16 @@
 					own pace and take breaks outside the estimated activity time.
 				</p>
 				<p>
-					The miniature artwork was generated for this project. It provides atmosphere and
-					conceptual metaphors; all quantitative charts come from actual calculations. Essential
-					instruction is written in accessible text, not embedded in artwork. Public case data and
-					teaching prose are original.
+					The original chapter art now includes 25 generated teaching infographics. Their labels,
+					arithmetic, and relationships are checked against the lessons. Each has a text companion
+					and an enlarged view. Fifty native diagrams and seven inline interactive figures make
+					mechanisms visible within the reading flow. Illustrative examples are labeled; model and
+					financial measurements come from computations. Public case data and teaching prose are
+					original.
 				</p>
+				<a class="button secondary" href={resolve('/visuals')}
+					>Browse the visual atlas <Icon name="arrow" size={16} /></a
+				>
 			</details>
 		</div>
 	</section>

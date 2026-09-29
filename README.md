@@ -8,6 +8,7 @@ A substantive visual course in AI for accounting and finance. Built with Svelte 
 
 - Follow 25 connected modules across five study days: 30 planned active hours including practice and review. The estimate is an authoring budget, not a measured learner completion time.
 - Work through AI history, machine learning, generalization, neural networks, forecasting, spreadsheet analysis, tokens, transformers, pretraining/adaptation, generative models, retrieval, tools, agents, skills, harnesses, and evaluation.
+- Explore 82 in-chapter teaching figures: 25 original generated infographics, 50 responsive diagrams, and seven interactive explanations. Search the [visual atlas](https://eliaboutorabi.github.io/AIAccountant/visuals/) or inspect the [complete inventory](docs/visual-expansion/inventory.md). Full-resolution image zoom, text companions, and prediction questions accompany the figures.
 - Answer 150 explained concept checks, 25 additional changed-case checks, 30 cumulative review prompts, and substantive written cases. First attempts, hints, solution reveals, and written self-assessment remain distinct.
 - Train real models, inspect their parameters and attention, compare held-out results, and build an executable synthetic finance pipeline. The 3D network uses the actual trained weights and activations.
 - Enter spreadsheet formulas; diagnose join multiplication and filter context; reconcile a variance memo; preserve source evidence and units.
@@ -41,6 +42,7 @@ The optional local language-model verification is separate from normal tests bec
 - `src/lib/course/days/`: complete authored explanations, finance cases, six concept checks per module, interview follow-ups, and primary references.
 - `src/lib/course/transfer.ts`, `days.ts`: changed-case checks and cumulative review.
 - `src/lib/course/components/`: reader, worked evidence, linked definitions, assessments, and notebook.
+- `src/lib/course/visuals/`: typed figure catalogs, accessible renderer, real tokenization and calculated inline experiments; `static/images/visuals/` contains optimized original illustrations.
 - `src/lib/course/progress.svelte.ts`: per-app learning state, validated imports, first-attempt and assistance history, and merge behavior.
 - `src/lib/course/labs/`: learner interfaces and experiment-specific evidence exports.
 - `src/lib/engines/`: original numerical and workflow engines; [mechanisms and provenance](src/lib/engines/README.md).
@@ -49,6 +51,7 @@ The optional local language-model verification is separate from normal tests bec
 - `src/lib/data/` and `/learn/`: preserved introductory edition; archive banners point to the expanded chapters.
 - `docs/rebuild/`: approved design, source register, independent agent reviews, and release evidence.
 - `docs/art-direction.md`: original generated artwork and prompt provenance.
+- `docs/visual-expansion/`: the complete visual inventory, exact image-generation prompts, independent educational reviews, and release checks.
 
 The chapter content is independent of presentation. A new concept needs an explanation, a concrete case, appropriate practice, a check of transfer, and a source where applicable; a larger word count alone is not the acceptance test.
 

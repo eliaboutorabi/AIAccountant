@@ -32,6 +32,7 @@
 		{ label: 'Course home', href: '/', icon: 'home' },
 		{ label: 'Your learning path', href: '/path/', icon: 'route' },
 		{ label: 'The playground', href: '/playground/', icon: 'flask' },
+		{ label: 'Visual atlas', href: '/visuals/', icon: 'sparkles' },
 		{ label: 'Interview studio', href: '/interview/', icon: 'mic' },
 		{ label: 'Portfolio projects', href: '/projects/', icon: 'folder' }
 	] as const;

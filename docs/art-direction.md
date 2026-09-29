@@ -2,7 +2,9 @@
 
 Original artwork generated with the built-in image generation tool. Optimized project assets live in `static/images/`: `hero.webp`, `foundations.webp`, `language.webp`, and `agents.webp`.
 
-The visual system uses tactile ceramic miniature worlds, ivory and sage with peach, lavender, and polished gold accents, diffuse studio light, soft shadows, and no embedded text. The hero uses a winding path through a floating landscape of learning; chapter art represents neural foundations, language, and useful agents. All text and diagrams that convey lesson meaning remain accessible HTML or SVG.
+The original decorative visual system uses tactile ceramic miniature worlds, ivory and sage with peach, lavender, and polished gold accents, diffuse studio light, soft shadows, and no embedded text. The hero uses a winding path through a floating landscape of learning; chapter art represents neural foundations, language, and useful agents.
+
+The visual teaching expansion adds 25 original generated infographics with readable labels, alongside 50 native diagrams and 7 inline interactive figures. Every raster infographic has an equivalent accessible text companion, actual dimensions, lazy loading, and an enlarged view. Full inventory, exact final prompts and image source paths are retained in `docs/visual-expansion/`; optimized published assets live in `static/images/visuals/`. Schematic values are labeled as examples. The native figures compute or explicitly state their source data.
 
 ## Final prompts
 

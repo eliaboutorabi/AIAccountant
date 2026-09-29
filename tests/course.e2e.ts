@@ -1,6 +1,64 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('the visual atlas filters, links into lessons, and supports readable image zoom', async ({
+	page
+}) => {
+	await page.goto('./visuals/');
+	await expect(page.locator('.visual-card')).toHaveCount(82);
+	await page.getByRole('button', { name: 'Infographics', exact: true }).click();
+	await expect(page.locator('.visual-card')).toHaveCount(25);
+	await page.getByLabel('Select study day').selectOption('3');
+	await expect(page.locator('.visual-card')).toHaveCount(5);
+	await page.getByLabel('Find a visual').fill('attention');
+	await expect(page.locator('.visual-card')).toHaveCount(1);
+	await page.locator('.visual-card').click();
+	await expect(page).toHaveURL(/course\/m12\/#/);
+	const enlarge = page.getByRole('button', { name: /^Enlarge:/ });
+	await enlarge.click();
+	const dialog = page.getByRole('dialog');
+	await expect(dialog).toBeVisible();
+	await dialog.getByRole('button', { name: 'Original size', exact: true }).click();
+	const region = dialog.getByRole('region', { name: /image viewer/ });
+	await expect(region).toBeFocused();
+	expect(await region.locator('img').evaluate((e) => e.getBoundingClientRect().width)).toBe(1536);
+	await page.keyboard.press('ArrowRight');
+	await expect.poll(() => region.evaluate((e) => e.scrollLeft)).toBeGreaterThan(0);
+	await page.keyboard.press('Escape');
+	await expect(dialog).not.toBeVisible();
+	await expect(enlarge).toBeFocused();
+});
+
+test('inline tokens and attention expose actual calculations inside the chapters', async ({
+	page
+}) => {
+	await page.goto('./course/m11/');
+	const tokenizer = page.locator('#M11-interactive-token-ids');
+	await expect(tokenizer.getByRole('button', { name: /^Token 1:/ })).toBeVisible();
+	await tokenizer.getByLabel('1 · Text to encode').fill('INV-42 paid.');
+	await expect(
+		tokenizer.getByRole('group', { name: 'Actual token pieces and vocabulary IDs' })
+	).toContainText('ID');
+	await tokenizer.getByText('Verify the full text & understand the scope', { exact: true }).click();
+	await expect(tokenizer.locator('pre')).toHaveText('INV-42 paid.');
+	await expect(tokenizer).toContainText('Exact round trip.');
+	await page.goto('./course/m12/');
+	const attention = page.locator('#M12-interactive-mixture');
+	await attention
+		.getByRole('group', { name: 'Query position' })
+		.getByRole('button')
+		.first()
+		.click();
+	await expect(attention.locator('.ie-masked')).toHaveCount(3);
+	for (const masked of await attention.locator('.ie-masked').all()) {
+		await expect(masked.locator('.ie-weight')).toContainText('0.0%');
+	}
+	await expect(attention.locator('.ie-attention-output')).toContainText('1.000');
+	await attention.getByRole('group', { name: 'Query position' }).getByRole('button').last().click();
+	await expect(attention.locator('.ie-masked')).toHaveCount(0);
+	await expect(attention.locator('.ie-attention-output')).toContainText('1.000');
+});
+
 test('a module preserves reading, case writing, bookmarks, and attempts', async ({ page }) => {
 	await page.goto('./');
 	await expect(page.locator('h1')).toContainText('Accounting minds.');
@@ -102,6 +160,17 @@ test('all chapters and laboratory components load without client errors', async 
 		await page.goto(link.endsWith('/') ? link : `${link}/`);
 		await expect(page.locator('#knowledge-check fieldset')).toHaveCount(6);
 		await expect(page.locator('#transfer-check')).toBeVisible();
+		expect(await page.locator('.tf-figure').count(), link).toBeGreaterThanOrEqual(3);
+		await expect(page.locator('.tf-figure[data-kind="art"]')).toHaveCount(1);
+		const illustration = page.locator('.tf-art > img');
+		await illustration.scrollIntoViewIfNeeded();
+		await expect
+			.poll(
+				() =>
+					illustration.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0),
+				{ message: link }
+			)
+			.toBe(true);
 		expect(
 			await page.evaluate(
 				() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1
@@ -233,6 +302,7 @@ test('principal pages and core workbenches are accessible and responsive', async
 	for (const route of [
 		'./',
 		'./path/',
+		'./visuals/',
 		'./course/m14/',
 		'./diagnostic/',
 		'./interview/',
