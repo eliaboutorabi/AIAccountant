@@ -115,5 +115,7 @@ test('assessment controls, feedback and assisted evidence are accessible on a na
 	expect(
 		result.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((n) => n.target) }))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 }, 15000);

@@ -107,7 +107,9 @@ test('representation and denoising controls remain accessible at a narrow viewpo
 	expect(
 		first.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((node) => node.target) }))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 	await representation.unmount();
 	const denoising = await render(DenoisingLab);
 	await expect.element(denoising.getByRole('status')).toHaveTextContent('Fresh random weights');
@@ -115,7 +117,9 @@ test('representation and denoising controls remain accessible at a narrow viewpo
 	expect(
 		second.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((node) => node.target) }))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 }, 15000);
 
 test('unavailable exposure storage is labeled unknown rather than a fresh final test', async () => {

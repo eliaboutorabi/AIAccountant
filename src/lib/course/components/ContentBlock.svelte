@@ -12,7 +12,7 @@
 		{#each block.paragraphs as text, i (i)}<p><RichText {text} /></p>{/each}
 	</div>
 {:else if block.kind === 'callout'}
-	<aside class="callout {block.tone}">
+	<aside class="concept-callout {block.tone}">
 		<p class="block-label">
 			<Icon
 				name={block.tone === 'accounting'
@@ -167,7 +167,7 @@
 	p + p {
 		margin-top: 15px;
 	}
-	.callout,
+	.concept-callout,
 	.worked,
 	.lab-brief,
 	.mechanism,
@@ -178,15 +178,15 @@
 		border-radius: 18px;
 		padding: 30px;
 	}
-	.callout.accounting {
+	.concept-callout.accounting {
 		background: #edf2e5;
 		border: 1px solid #dce5d2;
 	}
-	.callout.mechanism {
+	.concept-callout.mechanism {
 		background: #eeedf8;
 		border: 1px solid #dedbec;
 	}
-	.callout.warning {
+	.concept-callout.warning {
 		background: #fcf0e2;
 		border: 1px solid #efdfc6;
 	}
@@ -354,7 +354,7 @@
 		margin-top: 18px;
 	}
 	@media (max-width: 600px) {
-		.callout,
+		.concept-callout,
 		.worked,
 		.lab-brief,
 		.mechanism,

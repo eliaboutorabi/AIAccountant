@@ -41,5 +41,7 @@ test('adaptation controls and descriptions fit mobile and expose accessible name
 	expect(
 		audit.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((n) => n.target) }))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 });

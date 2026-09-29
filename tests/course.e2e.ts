@@ -103,7 +103,9 @@ test('all chapters and laboratory components load without client errors', async 
 		await expect(page.locator('#knowledge-check fieldset')).toHaveCount(6);
 		await expect(page.locator('#transfer-check')).toBeVisible();
 		expect(
-			await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+			await page.evaluate(
+				() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1
+			),
 			link
 		).toBe(true);
 		const audit = await new AxeBuilder({ page })
@@ -258,7 +260,9 @@ test('principal pages and core workbenches are accessible and responsive', async
 				}))
 			});
 		expect(
-			await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+			await page.evaluate(
+				() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1
+			),
 			route
 		).toBe(true);
 	}

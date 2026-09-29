@@ -95,5 +95,7 @@ test('forecast controls and evidence remain accessible on a narrow viewport', as
 	expect(
 		audit.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((node) => node.target) }))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 });

@@ -136,7 +136,9 @@ test('capstone requires a commitment, retains distinct first-case evidence, and 
 	expect(
 		audit.violations.map((v) => ({ id: v.id, targets: v.nodes.map((n) => n.target) }))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 	clearFinal();
 });
 
@@ -159,7 +161,9 @@ test('all workbench modes fit a narrow viewport and expose accessible controls',
 			audit.violations.map(({ id, nodes }) => ({ id, targets: nodes.map((n) => n.target) })),
 			mode
 		).toEqual([]);
-		expect(document.documentElement.scrollWidth, mode).toBeLessThanOrEqual(window.innerWidth);
+		expect(document.documentElement.scrollWidth, mode).toBeLessThanOrEqual(
+			document.documentElement.clientWidth
+		);
 		await screen.unmount();
 	}
 }, 30000);

@@ -86,7 +86,9 @@ test('training labs expose accessible controls and fit a narrow viewport', async
 			targets: nodes.map((node) => node.target)
 		}))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 	await page.viewport(390, 844);
 	await neural.unmount();
 	const transformer = await render(TransformerLab);
@@ -100,5 +102,7 @@ test('training labs expose accessible controls and fit a narrow viewport', async
 			targets: nodes.map((node) => node.target)
 		}))
 	).toEqual([]);
-	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(window.innerWidth);
+	expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(
+		document.documentElement.clientWidth
+	);
 }, 15000);
