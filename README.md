@@ -25,6 +25,7 @@ npm run dev
 npm run check
 npm run lint
 npm run test:unit -- --run
+npx playwright install chromium
 npm run test:e2e
 npm run build
 npm run preview

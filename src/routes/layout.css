@@ -1033,6 +1033,9 @@ main:focus {
 	margin-bottom: 25px;
 }
 .chip {
+	transition:
+		border-color 0.18s,
+		box-shadow 0.18s;
 	border: 1px solid #dfe5da;
 	background: #fff;
 	border-radius: 20px;

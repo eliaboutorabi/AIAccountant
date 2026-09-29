@@ -1,0 +1,61 @@
+name: Verify and deploy course
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BASE_PATH: /AIAccountant
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check types and formatting
+        run: |
+          npm run check
+          npm run lint
+      - name: Verify course calculations and progress validation
+        run: npm run test:unit -- --run
+      - name: Install the browser test runtime
+        run: npx playwright install --with-deps chromium
+      - name: Verify desktop, mobile, and accessibility behavior
+        run: npm run test:e2e
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6.0.0
+      - name: Build static course
+        run: npm run build
+      - name: Upload the course
+        uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1

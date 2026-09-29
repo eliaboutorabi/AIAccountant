@@ -544,7 +544,7 @@
 		margin-top: 4px;
 	}
 	.takeaway .micro-label {
-		color: #5b6750;
+		color: #cdddb7;
 	}
 	.takeaway p {
 		font-family: 'Manrope Variable', sans-serif;

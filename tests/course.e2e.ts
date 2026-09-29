@@ -155,6 +155,7 @@ test('3D controls react and important learning pages meet accessibility checks',
 	await page.getByRole('button', { name: 'Pause motion' }).click();
 	await expect(page.getByRole('button', { name: 'Play motion' })).toBeVisible();
 	await page.screenshot({ path: `.work/network-${testInfo.project.name}.png`, fullPage: true });
+	const auditFailures: unknown[] = [];
 	for (const route of [
 		'./playground/#network',
 		'./playground/#forecast',
@@ -168,18 +169,20 @@ test('3D controls react and important learning pages meet accessibility checks',
 		const result = await new AxeBuilder({ page })
 			.withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
 			.analyze();
-		expect(
-			result.violations.map((v) => ({
-				id: v.id,
-				nodes: v.nodes.map((n) => ({ target: n.target, details: n.failureSummary }))
-			})),
-			route
-		).toEqual([]);
+		if (result.violations.length)
+			auditFailures.push({
+				route,
+				violations: result.violations.map((v) => ({
+					id: v.id,
+					nodes: v.nodes.map((n) => ({ target: n.target, details: n.failureSummary }))
+				}))
+			});
 		expect(
 			await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
 			route
 		).toBe(true);
 	}
+	expect(auditFailures).toEqual([]);
 	expect(hydrationWarnings).toEqual([]);
 });
 
@@ -207,13 +210,11 @@ test('export and restore work and storage denial is handled', async ({ page }) =
 			bookmarks: ['foundations/1']
 		}
 	};
-	await page
-		.getByLabel('Restore a learning record')
-		.setInputFiles({
-			name: 'record.json',
-			mimeType: 'application/json',
-			buffer: Buffer.from(JSON.stringify(record))
-		});
+	await page.getByLabel('Restore a learning record').setInputFiles({
+		name: 'record.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from(JSON.stringify(record))
+	});
 	await expect(page.getByText('A restored thought.', { exact: true })).toBeVisible();
 	await expect(page.getByText('Learning record merged.', { exact: false })).toBeVisible();
 });
