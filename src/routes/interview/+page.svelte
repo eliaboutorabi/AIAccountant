@@ -1,361 +1,406 @@
 <script lang="ts">
-	import { asset, resolve } from '$app/paths';
-	import { interviewQuestions } from '$lib/data/interview';
-	import { lessonPath } from '$lib/data/course';
-	import { useProgress } from '$lib/context';
+	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
+	import { modules } from '$lib/course';
+	import { useBook } from '$lib/course/progress.svelte';
+	import Notebook from '$lib/course/components/Notebook.svelte';
+	import RichText from '$lib/course/components/RichText.svelte';
 	import Icon from '$lib/components/Icon.svelte';
-	const progress = useProgress();
-	let role = $state('All roles');
-	let selected = $state(0);
-	let revealed = $state(false);
-	let response = $state('');
-	let checked = $state<string[]>([]);
-	const roles = ['All roles', ...new Set(interviewQuestions.map((q) => q.role))];
-	const questions = $derived(
-		interviewQuestions.filter((q) => role === 'All roles' || q.role === role)
-	);
-	const question = $derived(questions[selected] ?? questions[0]);
-	function choose(index: number) {
-		selected = index;
-		revealed = false;
-		response = '';
-		checked = [];
+	const book = useBook();
+	let selectedId = $state('M01'),
+		day = $state(0),
+		running = $state(false),
+		seconds = $state(120);
+	let timer: ReturnType<typeof setInterval> | undefined;
+	const selected = $derived(modules.find((m) => m.id === selectedId) ?? modules[0]);
+	const candidates = $derived(modules.filter((m) => day === 0 || m.day === day));
+	function select(id: string) {
+		selectedId = id;
+		running = false;
+		seconds = 120;
 	}
-	function filter(value: string) {
-		role = value;
-		choose(0);
+	function filter() {
+		const first = modules.find((m) => day === 0 || m.day === day);
+		if (first) select(first.id);
 	}
+	onMount(() => {
+		timer = setInterval(() => {
+			if (running && seconds > 0) seconds -= 1;
+			else if (seconds === 0) running = false;
+		}, 1000);
+		return () => clearInterval(timer);
+	});
 </script>
 
 <svelte:head
 	><title>Interview studio · AI Accountant</title><meta
 		name="description"
-		content="Practice finance transformation, analytics, data science, AI engineering, and agent engineering interviews with 18 worked scenarios and self-assessment rubrics."
+		content="Practice 25 professional AI and finance interview defenses, changed-constraint follow-ups, worked case exhibits, and evidence-based self-assessment."
 	/></svelte:head
 >
 <div class="page-wrap">
-	<div class="interview-hero">
-		<div class="page-title">
-			<p class="eyebrow">CONFIDENCE COMES FROM PRACTICE</p>
-			<h1>You know more than you think.<br />Let’s find the words.</h1>
+	<div class="page-title">
+		<p class="eyebrow">EXPLAIN THE MECHANISM. DEFEND THE DECISION.</p>
+		<h1>Bring evidence<br />to the conversation.</h1>
+		<p>
+			Practice a clear two-minute answer, then handle the follow-up. Use a worked case to show that
+			your knowledge survives a change in the numbers or constraints.
+		</p>
+	</div>
+	<div class="interview-setup">
+		<div>
+			<Icon name="mic" size={27} />
 			<p>
-				A quiet space to practice the questions that matter. Think it through, say it in your own
-				words, then explore a thoughtful answer.
+				<strong>A strong answer connects four things.</strong><br />The business decision, the
+				mechanism, the evidence, and the limitation. Answer aloud before reading the model response.
 			</p>
-			<span class="tag"><Icon name="mic" size={14} />18 real-world scenarios · 5 role families</span
+		</div>
+		<label
+			>Focus area<select bind:value={day} onchange={filter}
+				><option value={0}>All 25 modules</option><option value={1}>Day 1 · data & learning</option
+				><option value={2}>Day 2 · models & analysis</option><option value={3}
+					>Day 3 · LLMs & evidence</option
+				><option value={4}>Day 4 · applications & agents</option><option value={5}
+					>Day 5 · delivery & defense</option
+				></select
+			></label
+		>
+	</div>
+	<div class="interview-layout">
+		<nav aria-label="Interview topics">
+			{#each candidates as module (module.id)}<button
+					class:active={selectedId === module.id}
+					aria-pressed={selectedId === module.id}
+					onclick={() => select(module.id)}
+					><span>{module.id}</span><strong>{module.title}</strong>{#if book
+						.get(module.id)
+						.responses.interview?.trim()}<Icon name="check" size={13} />{/if}</button
+				>{/each}
+		</nav>
+		<div class="interview-content">
+			{#key selected.id}<article class="interview-card">
+					<div class="question-meta">
+						<span>DAY {selected.day} · {selected.id}</span>
+						<div class="timer" aria-label="Optional practice timer">
+							<span aria-live="off"
+								>{Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}</span
+							><button
+								aria-label={running ? 'Pause timer' : 'Start two-minute timer'}
+								onclick={() => {
+									if (seconds === 0) seconds = 120;
+									running = !running;
+								}}><Icon name={running ? 'pause' : 'play'} size={15} /></button
+							><button
+								aria-label="Reset timer"
+								onclick={() => {
+									running = false;
+									seconds = 120;
+								}}><Icon name="reset" size={15} /></button
+							>
+						</div>
+					</div>
+					<h2>{selected.interview.question}</h2>
+					<Notebook
+						moduleId={selected.id}
+						field="interview"
+						label="Your answer, before the worked response"
+						hint="Lead with your recommendation. Explain why, use a concrete example, and name what you would verify."
+						rows={8}
+					/>
+					<details>
+						<summary>Study a strong answer</summary
+						>{#each selected.interview.strongAnswer as text, i (i)}<p><RichText {text} /></p>{/each}
+					</details>
+					<h3 class="follow-up-title">Now the interviewer changes the conditions.</h3>
+					{#each selected.interview.followUps as item, i (i)}<div class="follow-up">
+							<span class="eyebrow">FOLLOW-UP 0{i + 1}</span><Notebook
+								moduleId={selected.id}
+								field={`followup-${i}`}
+								label={item.question}
+								rows={4}
+							/>
+							<details>
+								<summary>Compare the reasoning</summary>
+								<p><RichText text={item.answer} /></p>
+							</details>
+						</div>{/each}
+					<details class="case-exhibit">
+						<summary>Work the case behind this answer</summary>
+						<h3>{selected.assignment.title}</h3>
+						<p><RichText text={selected.assignment.scenario} /></p>
+						<ol>
+							{#each selected.assignment.tasks as text, i (i)}<li><RichText {text} /></li>{/each}
+						</ol>
+						<p><strong>Deliverable:</strong> {selected.assignment.deliverable}</p>
+						<a
+							class="button secondary"
+							href={resolve('/course/[slug]', { slug: selected.id.toLowerCase() })}
+							>Study the records and complete the case <Icon name="arrow" size={15} /></a
+						>
+					</details>
+					<div class="self-review">
+						<h3>Before calling the answer ready</h3>
+						<ul>
+							<li>Could a colleague follow the mechanism without filling in missing steps?</li>
+							<li>Did you state what evidence supports the claim and what remains unknown?</li>
+							<li>Did you address the changed constraint rather than repeat your first answer?</li>
+							<li>
+								Could you show a calculation, record, or experiment supporting your recommendation?
+							</li>
+						</ul>
+						<p>
+							This is practice with worked guidance. There is no automatic AI grading or claim of
+							interview certification.
+						</p>
+					</div>
+					<a class="text-link" href={resolve('/course/[slug]', { slug: selected.id.toLowerCase() })}
+						>Return to the complete lesson <Icon name="arrow" size={16} /></a
+					>
+				</article>{/key}
+		</div>
+	</div>
+	<section class="role-note">
+		<Icon name="graduation" size={27} />
+		<div>
+			<h2>Choose your next specialization.</h2>
+			<p>
+				Finance transformation emphasizes process, controls, economics, and stakeholder judgment.
+				Analytics roles need stronger SQL, data modeling, and statistical validation. Data science
+				and AI engineering roles need deeper mathematics, coding, evaluation, and deployment
+				practice beyond this core.
+			</p>
+			<a class="text-link" href={resolve('/course/[slug]', { slug: 'm25' })}
+				>Open the role pathways and defense rubric <Icon name="arrow" size={16} /></a
 			>
 		</div>
-		<img
-			src={asset('/images/language.webp')}
-			alt="Playful speech bubbles around a network of ideas"
-			width="960"
-			height="640"
-		/>
-	</div>
-	<div class="chip-row">
-		{#each roles as r (r)}<button class="chip" class:selected={role === r} onclick={() => filter(r)}
-				>{r}</button
-			>{/each}
-	</div>
-	<div class="studio-grid">
-		<aside class="question-list">
-			<p class="micro-label">PICK A CONVERSATION</p>
-			{#each questions as item, i (item.title)}<button
-					class:current={selected === i}
-					onclick={() => choose(i)}
-					><span>{String(i + 1).padStart(2, '0')}</span><span>{item.title}</span
-					>{#if progress.data.reviewed.includes(item.title)}<Icon
-							name="circleCheck"
-							size={15}
-						/>{/if}</button
-				>{/each}
-		</aside>
-		<section class="panel practice-card">
-			<div class="practice-meta">
-				<span class="tag">{question.role}</span><span>{selected + 1} / {questions.length}</span>
-			</div>
-			<h2>{question.title}</h2>
-			<p class="interview-question">{question.question}</p>
-			<label class="field-label" for="practice-answer">Your first thoughts</label><textarea
-				id="practice-answer"
-				class="field"
-				rows="5"
-				bind:value={response}
-				placeholder="Start with the problem. Explain your approach. Name the tradeoffs. No perfect words needed."
-			></textarea>
-			<p class="draft-note">
-				A scratchpad for this question. Your draft clears when you switch questions; it is never
-				sent anywhere.
-			</p>
-			{#if !revealed}<button class="button primary" onclick={() => (revealed = true)}
-					>Explore a strong answer<Icon name="sparkles" size={16} /></button
-				>{:else}<div class="worked-answer">
-					<p class="micro-label">ONE THOUGHTFUL WAY TO ANSWER</p>
-					<p>{question.answer}</p>
-				</div>
-				<div class="rubric">
-					<h3>How did your answer connect?</h3>
-					<p>
-						Self-assessment, not an automated grade. Compare your explanation with these three
-						ingredients.
-					</p>
-					{#each question.rubric as item (item)}<label
-							><input type="checkbox" bind:group={checked} value={item} /><span>{item}</span></label
-						>{/each}
-				</div>
-				<div class="practice-actions">
-					<button
-						class="button primary"
-						onclick={() => progress.review(question.title)}
-						disabled={progress.data.reviewed.includes(question.title)}
-						><Icon name="check" size={16} />{progress.data.reviewed.includes(question.title)
-							? 'Practice recorded'
-							: 'Mark as practiced'}</button
-					><a class="text-link" href={resolve(lessonPath(question.chapter))}
-						>Revisit the idea<Icon name="arrow" size={15} /></a
-					>
-				</div>{/if}
-			<div class="question-nav">
-				<button
-					class="button secondary small"
-					disabled={selected === 0}
-					onclick={() => choose(selected - 1)}><Icon name="back" size={14} />Previous</button
-				><button
-					class="button secondary small"
-					disabled={selected === questions.length - 1}
-					onclick={() => choose(selected + 1)}>Next question<Icon name="arrow" size={14} /></button
-				>
-			</div>
-		</section>
-	</div>
-	<div class="callout studio-note">
-		<Icon name="sprout" />
-		<div>
-			<strong>Your experience is part of the answer.</strong>Use your own examples and explain your
-			assumptions. These scenarios build conceptual confidence; technical roles also need practical
-			statistics, SQL, coding, and domain experience. Bring a
-			<a class="text-link" href={resolve('/projects/')}>portfolio project</a> to make your learning tangible.
-		</div>
-	</div>
+	</section>
 </div>
 
 <style>
-	.interview-hero {
+	.interview-setup {
 		display: flex;
+		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 12px;
-		overflow: hidden;
-		background: #eeedf4;
-		border-radius: 18px;
+		gap: 25px;
+		background: #f4eedf;
+		border: 1px solid #e8dfc9;
+		border-radius: 16px;
+		padding: 25px;
+		margin: 30px 0;
 	}
-	.interview-hero .page-title {
-		padding: 32px;
-		flex: 1;
+	.interview-setup > div {
+		display: flex;
+		gap: 16px;
+		align-items: center;
 	}
-	.interview-hero h1 {
-		font-size: 30px;
+	.interview-setup p {
+		font-size: 13px;
+		line-height: 1.8;
 	}
-	.interview-hero .page-title > p:not(.eyebrow) {
+	.interview-setup label {
+		font-size: 11px;
+		font-weight: 700;
+		display: grid;
+		gap: 8px;
+		flex-shrink: 0;
+	}
+	.interview-setup select {
+		padding: 10px;
+		border: 1px solid #dfd7c1;
+		border-radius: 8px;
+		background: white;
 		font-size: 12px;
 	}
-	.interview-hero .tag {
-		margin-top: 17px;
-		background: #ffffff90;
-		font-size: 9px;
-	}
-	.interview-hero > img {
-		width: 32%;
-		height: 290px;
-		object-fit: cover;
-		mix-blend-mode: multiply;
-		mask-image: linear-gradient(90deg, transparent, #000 30%);
-	}
-	.chip-row {
-		margin-top: 24px;
-	}
-	.studio-grid {
+	.interview-layout {
 		display: grid;
 		grid-template-columns: 230px minmax(0, 1fr);
 		gap: 25px;
 	}
-	.question-list {
-		padding-right: 15px;
-		border-right: 1px solid var(--line);
+	.interview-layout > nav {
+		display: grid;
+		align-content: start;
+		gap: 7px;
 	}
-	.question-list > .micro-label {
-		display: block;
-		margin-bottom: 16px;
-	}
-	.question-list button {
+	.interview-layout > nav button {
 		display: flex;
-		gap: 10px;
-		align-items: flex-start;
+		align-items: start;
+		gap: 9px;
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 9px;
 		text-align: left;
-		width: 100%;
-		font-size: 11px;
-		line-height: 1.8;
-		padding: 12px 10px;
-		border: 0;
-		border-radius: 8px;
-		background: none;
-		color: #5f6853;
-		margin-bottom: 4px;
+		padding: 14px 12px;
 	}
-	.question-list button > span:first-child {
-		font-size: 8px;
-		color: #5f6853;
-		padding-top: 3px;
+	.interview-layout > nav button.active {
+		background: #eaf1e1;
+		border-color: #afc29e;
 	}
-	.question-list button.current {
-		background: #eaf0e1;
-		color: #426b39;
-		font-weight: 600;
-	}
-	.question-list button:hover {
-		background: #f0f3e9;
-	}
-	.question-list button > :global(svg) {
-		margin-left: auto;
-	}
-	.practice-card {
-		align-self: start;
-	}
-	.practice-meta {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		font-size: 10px;
+	.interview-layout > nav span {
+		font-size: 9px;
 		color: var(--muted);
-		margin-bottom: 24px;
+		padding-top: 4px;
 	}
-	.practice-card h2 {
+	.interview-layout > nav strong {
+		font-size: 11px;
+		line-height: 1.7;
+		flex: 1;
+	}
+	.interview-card {
+		background: #fff;
+		border: 1px solid var(--line);
+		border-radius: 18px;
+		padding: 30px;
+	}
+	.question-meta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 15px;
+	}
+	.question-meta > span {
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		color: #657b53;
+	}
+	.timer {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		background: #f3f1e9;
+		border-radius: 8px;
+		padding: 8px 10px;
+	}
+	.timer span {
+		font-size: 13px;
+		font-variant-numeric: tabular-nums;
+		margin-right: 5px;
+	}
+	.timer button {
+		border: 0;
+		background: transparent;
+		padding: 3px;
+		display: flex;
+	}
+	.interview-card h2 {
 		font-size: 27px;
+		letter-spacing: -0.5px;
+		line-height: 1.5;
+		margin: 22px 0;
+	}
+	.interview-card details {
+		padding: 20px;
+		border: 1px solid #dfdfd4;
+		border-radius: 12px;
+		background: #fafbf7;
+	}
+	.interview-card summary {
+		font-size: 13px;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.interview-card details p,
+	.interview-card details li {
+		font-size: 14px;
+		line-height: 1.85;
+		margin-top: 16px;
+	}
+	.follow-up-title {
+		font-size: 19px;
+		margin: 35px 0 22px;
 		line-height: 1.5;
 	}
-	.interview-question {
-		font-size: 15px;
-		line-height: 1.9;
-		margin: 17px 0 27px;
-		color: #58684f;
+	.follow-up {
+		border-top: 1px solid var(--line);
+		padding-top: 25px;
+		margin-top: 25px;
 	}
-	.practice-card textarea {
+	.case-exhibit {
+		margin-top: 30px;
+	}
+	.case-exhibit h3 {
+		font-size: 19px;
+		margin-top: 23px;
+	}
+	.case-exhibit ol {
+		padding-left: 20px;
+	}
+	.case-exhibit .button {
 		font-size: 12px;
-		line-height: 1.9;
-		resize: vertical;
+		margin-top: 20px;
 	}
-	.draft-note {
-		font-size: 9px;
-		line-height: 1.8;
-		color: #5d674f;
-		margin: 10px 0 22px;
-	}
-	.worked-answer {
+	.self-review {
 		padding: 23px;
-		background: #eef3e7;
-		border-radius: 12px;
-		margin-top: 22px;
+		background: #efedf7;
+		border-radius: 13px;
+		margin: 27px 0;
 	}
-	.worked-answer > p:last-child {
+	.self-review h3 {
+		font-size: 16px;
+	}
+	.self-review ul {
+		padding-left: 18px;
 		font-size: 13px;
-		line-height: 1.95;
-		color: #506b42;
-		margin-top: 15px;
+		line-height: 1.9;
 	}
-	.rubric {
-		margin: 28px 0;
-	}
-	.rubric > p {
+	.self-review p {
 		font-size: 11px;
 		line-height: 1.8;
 		color: var(--muted);
-		margin: 10px 0 15px;
+		margin-top: 15px;
 	}
-	.rubric label {
+	.role-note {
 		display: flex;
-		align-items: flex-start;
-		gap: 10px;
-		font-size: 12px;
-		line-height: 1.9;
-		margin: 12px 0;
-	}
-	.rubric input {
-		margin-top: 5px;
-	}
-	.practice-actions {
-		display: flex;
-		align-items: center;
 		gap: 20px;
-		flex-wrap: wrap;
+		padding: 28px;
+		background: #edf2e5;
+		border-radius: 16px;
+		margin-top: 35px;
 	}
-	.question-nav {
-		display: flex;
-		justify-content: space-between;
-		border-top: 1px solid var(--line);
-		padding-top: 20px;
-		margin-top: 28px;
+	.role-note h2 {
+		font-size: 22px;
+		margin-bottom: 15px;
 	}
-	.studio-note {
-		margin-top: 30px;
+	.role-note p {
+		font-size: 14px;
+		line-height: 1.85;
+		color: var(--muted);
 	}
-	@media (max-width: 1050px) {
-		.studio-grid {
-			grid-template-columns: 180px minmax(0, 1fr);
-		}
-		.question-list button {
-			font-size: 10px;
-		}
-		.practice-card h2 {
-			font-size: 23px;
-		}
-		.interview-hero h1 {
-			font-size: 26px;
-		}
-		.interview-hero > img {
-			width: 25%;
-			height: 310px;
-		}
+	.role-note .text-link {
+		margin-top: 18px;
+		font-size: 12px;
 	}
-	@media (max-width: 740px) {
-		.studio-grid {
+	@media (max-width: 1000px) {
+		.interview-layout {
 			grid-template-columns: 1fr;
 		}
-		.question-list {
-			display: flex;
+		.interview-layout > nav {
+			grid-template-columns: repeat(3, 1fr);
+			max-height: 230px;
 			overflow: auto;
-			border: 0;
-			gap: 7px;
-			padding: 0 0 8px;
 		}
-		.question-list > .micro-label {
-			display: none;
+		.interview-setup {
+			flex-wrap: wrap;
 		}
-		.question-list button {
-			width: 180px;
-			flex-shrink: 0;
-			font-size: 10px;
-			padding: 12px;
-			background: #f1f4e9;
+	}
+	@media (max-width: 600px) {
+		.interview-layout > nav {
+			grid-template-columns: repeat(2, 1fr);
 		}
-		.interview-hero > img {
-			display: none;
+		.interview-card {
+			padding: 22px;
 		}
-		.interview-hero .page-title {
-			padding: 25px;
-		}
-		.interview-hero h1 {
-			font-size: 26px;
-		}
-		.interview-question {
-			font-size: 13px;
-		}
-		.practice-card h2 {
+		.interview-card h2 {
 			font-size: 23px;
 		}
-		.worked-answer {
-			padding: 20px;
+		.interview-setup {
+			padding: 22px;
 		}
-		.worked-answer > p:last-child {
-			font-size: 12px;
+		.role-note {
+			padding: 22px;
+		}
+		.question-meta {
+			align-items: start;
 		}
 	}
 </style>

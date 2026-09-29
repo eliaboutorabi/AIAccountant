@@ -1,6 +1,6 @@
 {
-	"status": "planned",
-	"version": 1,
+	"status": "implemented",
+	"version": 2,
 	"coreHours": 30,
 	"minutesPerDay": 360,
 	"dailyReviewMinutes": 30,
@@ -51,7 +51,7 @@
 					"id": "M06",
 					"title": "Inside a trainable neural network",
 					"minutes": 70,
-					"prerequisites": ["M03", "M04"]
+					"prerequisites": ["M03", "M04", "M05"]
 				},
 				{
 					"id": "M07",
@@ -59,7 +59,12 @@
 					"minutes": 70,
 					"prerequisites": ["M06"]
 				},
-				{ "id": "M08", "title": "Forecasting over time", "minutes": 70, "prerequisites": ["M04"] },
+				{
+					"id": "M08",
+					"title": "Forecasting over time",
+					"minutes": 70,
+					"prerequisites": ["M04"]
+				},
 				{
 					"id": "M09",
 					"title": "Excel, Power Query, SQL, and Power BI",

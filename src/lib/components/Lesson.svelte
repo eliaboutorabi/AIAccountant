@@ -3,6 +3,7 @@
 	import { asset, resolve } from '$app/paths';
 	import { allLessons, parts, lessonPath, type Chapter, type Lesson } from '$lib/data/course';
 	import { sources } from '$lib/data/resources';
+	import { legacyModules } from '$lib/course';
 	import { useProgress } from '$lib/context';
 	import Icon from './Icon.svelte';
 	let {
@@ -31,6 +32,22 @@
 	}
 </script>
 
+<div class="callout">
+	<Icon name="book" />
+	<div>
+		<strong>Introductory edition archive</strong>
+		<p>
+			Your original notes and bookmarks remain here. Continue with the expanded course for the full
+			explanations, experiments, cases, and assessments.
+		</p>
+		<a
+			class="text-link"
+			href={resolve('/course/[slug]', {
+				slug: (legacyModules[chapter.slug] ?? 'M01').toLowerCase()
+			})}>Open the expanded chapter →</a
+		>
+	</div>
+</div>
 <div class="lesson-top">
 	<a class="text-link" href={resolve('/path/')}><Icon name="back" size={16} /> Your learning path</a
 	><button
@@ -227,8 +244,14 @@
 			</div>
 			{#if chapter.lab}<a
 					class="button secondary small lab-link"
-					href={resolve(`/playground/#${chapter.lab}`)}
-					><Icon name="flask" size={16} />Try it in the playground</a
+					href={resolve('/lab/[slug]', {
+						slug:
+							chapter.lab === 'fit'
+								? 'generalization'
+								: chapter.lab === 'network'
+									? 'network'
+									: 'evaluation'
+					})}><Icon name="flask" size={16} />Try it in the playground</a
 				>{/if}
 		</div>
 	</aside>

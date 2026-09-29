@@ -1,6 +1,6 @@
 # Assessment, architecture, and delivery
 
-Status: implementation specification. No planned functionality described here should be presented as already shipped.
+Status: original implementation specification, now delivered with the explicit refinements in release-review.md. The release record distinguishes tested functionality, independent agent review, and unperformed human learner pilots.
 
 ## Assessment is part of the instruction
 

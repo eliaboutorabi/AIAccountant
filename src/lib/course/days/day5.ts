@@ -781,7 +781,7 @@ export const day5Modules: CourseModule[] = [
 					kind: 'lab',
 					id: 'capstone',
 					title: 'Willow finance assistant workbench',
-					task: 'Run the approved synthetic case through reconciliation, evidence selection, draft preparation, and review. Inspect the trace and export or record the evidence. Then remove a required source and explain the changed result.',
+					task: 'In the Capstone workbench, use the public Development case selector for M23. Run the original PIPE-01 cohort through reconciliation, evidence selection, draft preparation, and review; inspect its trace and export evidence. Select Policy unavailable and run again to explain what changes. Test another public malformed-input case. Keep the distinct final pack unrevealed until the M24 commitment exercise; practising these public cases does not reveal that pack.',
 					prediction:
 						'Which parts of the output remain valid if the policy is unavailable but the invoice and payment records are intact?',
 					evidence: [
@@ -984,7 +984,7 @@ export const day5Modules: CourseModule[] = [
 				'Freeze the proposal before revealing the next cases',
 				'A final check is valuable because it can surprise you.',
 				p(
-					'Record the current data contract, procedure version, prompt or template, tool configuration, and expected behavior. State which outcomes would block release and which would trigger review. Then inspect the new-case material in the workbench. The commitment is an instructional discipline, not secure exam proctoring: a static website cannot hide its client-side assets from a determined reader.',
+					'Record the current data contract, procedure version, prompt or template, tool configuration, and expected behavior. State which outcomes would block release and which would trigger review. Use the public PIPE-01 cases for development, then commit before revealing the separate WILLOW-FINAL-02-v1 pack. Its numeric cohorts and combinations of conditions differ from the public scenarios. The first configuration and its results persist on this browser; a return visit reports that the pack is already consulted. Export the evidence to keep a portable copy. The commitment is an instructional discipline, not secure exam proctoring: a static website cannot hide its client-side assets from a determined reader.',
 					'A new case should change a meaningful condition. A fresh invoice number alone is a weak transfer test. A conflicting duplicate, different currency, missing policy, or unknown tool result challenges an assumption. Explain your expected behavior before running it. A correct rejection or escalation can count as success when the contract requires it.',
 					'After revealing final cases, use them to learn and repair the system. Keep the original result separately from the corrected run. The revealed cases are now development/regression evidence. A later claim of independent improvement needs another fresh assessment. This is the same idea you applied to model selection, forecasting, and prompt tuning earlier in the course.'
 				),
@@ -1114,7 +1114,7 @@ export const day5Modules: CourseModule[] = [
 					kind: 'lab',
 					id: 'capstone',
 					title: 'Final cases and incident desk',
-					task: 'Record the configuration and expected boundaries before revealing final variants. Run the cases, retain failures, and investigate two mechanisms. Add a correction and explain what a fresh final assessment would require.',
+					task: 'Use the Capstone view. Practise on the public PIPE-01 development cases, record your configuration and expected boundaries, and choose Commit configuration. Then reveal the distinct WILLOW-FINAL-02-v1 pack. Its eight cohorts change amounts, identities, dates, and combinations of conditions. Open two case results and choose Inspect records and execution to follow their actual sources, calculations, tool results, and queue state. Export the preserved first result. Change a faulty setting or repair a failed setting, run the repaired configuration on the already consulted pack, and explain why this is regression evidence rather than a new independent assessment.',
 					prediction:
 						'Which case will your current pipeline handle correctly, and which assumption is most vulnerable?',
 					evidence: [

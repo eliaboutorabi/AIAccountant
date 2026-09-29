@@ -329,7 +329,7 @@ export const m14: CourseModule = {
 			{
 				criterion: 'Numerical correctness',
 				evidence:
-					'Revenue −60/−5%; COGS +21; gross profit −81/−16.875%; margin −5 points; freight +20%; bridge399.'
+					'Revenue −60/−5%; COGS +21; gross profit −81/−16.875%; margin −5 points; freight +20%; bridge 399.'
 			},
 			{
 				criterion: 'Evidence and causal discipline',
@@ -339,7 +339,7 @@ export const m14: CourseModule = {
 			{
 				criterion: 'Source scope and version',
 				evidence:
-					'Names all three records, September2026, USD thousands, and the same reporting basis.'
+					'Names all three records, September 2026, USD thousands, and the same reporting basis.'
 			},
 			{
 				criterion: 'Model/context/tool distinction',
@@ -355,7 +355,7 @@ export const m14: CourseModule = {
 		workedSolution: [
 			'September revenue was $1.140m, $60k (5.0%) below the approved $1.200m budget. COGS was $741k, $21k above budget. Gross profit was $399k, $81k (16.9%) below budget, and gross margin was 35.0% versus 40.0% budget, a decline of 5.0 percentage points. These amounts reconcile to BUD-SEP-01 and GL-SEP-01.',
 			'COST-SEP-02 explains the net $21k COGS increase as materials +$18k, freight +$16k, and warehouse −$13k. The gross-profit bridge is 480 −60 −18 −16 +13 =399, in USD thousands. Freight was 20% above budget. These are arithmetic contributions, not proof of the operational causes. The sources do not establish volume, price, mix, carrier rates, or cash-flow effects. Request reconciled sales quantity/price/mix detail, freight rate/shipment detail, and a cash/working-capital bridge.',
-			'The original “5%” margin claim is ambiguous; “17% freight” is contradicted by the new detail; “profit −81k” is supported only when specified as gross profit; cash and volume assertions remain unknown. Example of profit up/margin down: revenue500→800 and gross profit200→280 yields margins40%→35%.',
+			'The original “5%” margin claim is ambiguous; “17% freight” is contradicted by the new detail; “profit −81k” is supported only when specified as gross profit; cash and volume assertions remain unknown. Example of profit up/margin down: revenue 500→800 and gross profit 200→280 yields margins40%→35%.',
 			'Adding current context changes available input evidence; invoking a tool performs a calculation. Neither guarantees appropriate narrative support nor ordinarily changes model weights. Self-score each dimension independently and repair any unsupported or incorrect claim before calling the response ready.'
 		]
 	},

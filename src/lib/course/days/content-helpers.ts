@@ -1,10 +1,52 @@
 import type { Block, Check, Section } from '../types';
-export const p = (...paragraphs:string[]):Block => ({kind:'prose',paragraphs});
-export const note = (tone:'accounting'|'mechanism'|'warning',title:string,...paragraphs:string[]):Block => ({kind:'callout',tone,title,paragraphs});
-export const table = (caption:string,headers:string[],rows:string[][]):Block=>({kind:'table',caption,headers,rows});
-export const worked = (title:string,problem:string,steps:string[],conclusion:string):Block=>({kind:'worked',title,problem,steps,conclusion});
-export const steps = (title:string,items:[string,string][]):Block=>({kind:'steps',title,steps:items.map(([title,text])=>({title,text}))});
-export const reflect = (prompt:string,guidance:string,modelAnswer:string):Block=>({kind:'reflection',prompt,guidance,modelAnswer});
-export const lab = (id:string,title:string,task:string,prediction:string,evidence:string[],limitation:string):Block=>({kind:'lab',id,title,task,prediction,evidence,limitation});
-export const section=(id:string,title:string,lead:string,...blocks:Block[]):Section=>({id,title,lead,blocks});
-export const check=(id:string,objective:number,prompt:string,options:string[],answer:number,rationales:string[]):Check=>({id,objective,prompt,options,answer,rationales});
+export const p = (...paragraphs: string[]): Block => ({ kind: 'prose', paragraphs });
+export const note = (
+	tone: 'accounting' | 'mechanism' | 'warning',
+	title: string,
+	...paragraphs: string[]
+): Block => ({ kind: 'callout', tone, title, paragraphs });
+export const table = (caption: string, headers: string[], rows: string[][]): Block => ({
+	kind: 'table',
+	caption,
+	headers,
+	rows
+});
+export const worked = (
+	title: string,
+	problem: string,
+	steps: string[],
+	conclusion: string
+): Block => ({ kind: 'worked', title, problem, steps, conclusion });
+export const steps = (title: string, items: [string, string][]): Block => ({
+	kind: 'steps',
+	title,
+	steps: items.map(([title, text]) => ({ title, text }))
+});
+export const reflect = (prompt: string, guidance: string, modelAnswer: string): Block => ({
+	kind: 'reflection',
+	prompt,
+	guidance,
+	modelAnswer
+});
+export const lab = (
+	id: string,
+	title: string,
+	task: string,
+	prediction: string,
+	evidence: string[],
+	limitation: string
+): Block => ({ kind: 'lab', id, title, task, prediction, evidence, limitation });
+export const section = (id: string, title: string, lead: string, ...blocks: Block[]): Section => ({
+	id,
+	title,
+	lead,
+	blocks
+});
+export const check = (
+	id: string,
+	objective: number,
+	prompt: string,
+	options: string[],
+	answer: number,
+	rationales: string[]
+): Check => ({ id, objective, prompt, options, answer, rationales });

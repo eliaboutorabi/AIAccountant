@@ -1,10 +1,10 @@
 # Five-day curriculum and evidence map
 
-All modules below are planned. The budgets total 330 minutes of modules plus 30 minutes of cumulative retrieval and reflection per day: 1,800 minutes overall. Practice is included in each module's time. Do not add all assignments on top of these budgets and still call it a 30-hour course.
+All 25 modules below are implemented. This document retains the original design brief; see release-review.md for the actual laboratory architecture, assessment refinements, and verification. The budgets total 330 minutes of modules plus 30 minutes of cumulative retrieval and reflection per day: 1,800 minutes overall. Practice is included in each module's time. Do not add all assignments on top of these budgets and still call it a 30-hour course.
 
 The core has no programming prerequisite. Reading a small table and basic arithmetic are enough to start; essential accounting refreshers are included. Guided spreadsheet and code inspection appear later. Installing a development environment and becoming fluent in a language belong to the engineering extension, not an unexplained prerequisite on day five.
 
-Each module will contain two to four purposeful sections, rather than a mandatory number of identical lesson cards. Reading, worked examples, and experimentation should each occupy a meaningful share. These budgets require learner testing.
+The implemented modules contain five or six purposeful sections, with reusable evidence and experiment blocks rather than identical lesson cards. Reading, worked examples, and experimentation should each occupy a meaningful share. These budgets require learner testing.
 
 ## Day 1 — From accounting questions to learning problems
 

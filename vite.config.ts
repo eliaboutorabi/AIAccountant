@@ -5,6 +5,9 @@ import adapter from '@sveltejs/adapter-static';
 import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
+	cacheDir: process.env.VITEST ? 'node_modules/.vite-tests' : 'node_modules/.vite-app',
+	worker: { format: 'es' },
+	optimizeDeps: { include: ['three', 'fast-formula-parser'] },
 	plugins: [
 		tailwindcss(),
 		sveltekit({
@@ -14,7 +17,8 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 			adapter: adapter(),
-			paths: { base: (process.env.BASE_PATH || '') as '' | `/${string}` }
+			// Vitest serves its component runner at the origin root; end-to-end tests verify the production base path.
+			paths: { base: (process.env.VITEST ? '' : process.env.BASE_PATH || '') as '' | `/${string}` }
 		})
 	],
 	test: {

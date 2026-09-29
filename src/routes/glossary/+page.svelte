@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { glossary } from '$lib/data/resources';
-	import { lessonPath } from '$lib/data/course';
+	import { terms } from '$lib/course/terms';
+	import { modules } from '$lib/course';
+	const glossary = terms.map((t) => ({
+		...t,
+		category: `Day ${modules.find((m) => m.id === t.module)?.day ?? 1}`
+	}));
 	import Icon from '$lib/components/Icon.svelte';
 	let query = $state('');
 	let category = $state('Everything');
@@ -18,18 +22,19 @@
 </script>
 
 <svelte:head
-	><title>The little glossary · AI Accountant</title><meta
+	><title>Technical glossary · AI Accountant</title><meta
 		name="description"
 		content="Friendly definitions of AI, data science, accounting, and agent engineering concepts, each with a finance example."
 	/></svelte:head
 >
 <div class="page-wrap">
 	<div class="page-title">
-		<p class="eyebrow">BIG IDEAS. LITTLE DEFINITIONS.</p>
+		<p class="eyebrow">PRECISE WORDS. CLEAR EXPLANATIONS.</p>
 		<h1>A friend for every unfamiliar word.</h1>
 		<p>
-			No jargon left behind. A plain-language guide to the words you’ll meet along the way, with a
-			little finance context to make them stick.
+			No jargon left behind. A plain-language guide to the words you’ll meet along the way, with
+			finance examples and links to the full teaching. Hover over an underlined term in a lesson, or
+			select it with a keyboard or touch, to open its definition.
 		</p>
 	</div>
 	<label class="glossary-search"
@@ -56,8 +61,8 @@
 				<h2>{term.term}</h2>
 				<p>{term.definition}</p>
 				<div class="term-example"><Icon name="bulb" size={16} />{term.example}</div>
-				<a class="text-link" href={resolve(lessonPath(term.chapter))}
-					>Meet it in a lesson <Icon name="arrow" size={14} /></a
+				<a class="text-link" href={resolve('/course/[slug]', { slug: term.module.toLowerCase() })}
+					>Study the concept <Icon name="arrow" size={14} /></a
 				>
 			</article>{:else}<div class="empty-state">
 				<h3>We haven’t met that word yet.</h3>

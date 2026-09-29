@@ -1,13 +1,13 @@
 # AI Accountant: the substantive course rebuild
 
-Status: researched specification, not an implemented course expansion.
-Prepared September 28, 2026. Baseline: main at 6c6d54b.
+Status: implemented expanded edition; publication verification is recorded in [release evidence](release-review.md).
+Original specification prepared September 28, 2026 against baseline 6c6d54b. Implementation and independent agent reviews completed September 29–30, 2026. Human learner timing remains unpiloted.
 
 ## The product we are building
 
 A rigorous, approachable course for adults in accounting and finance who want to understand, use, evaluate, and help build AI systems. The teaching must develop a mental model, let the learner test it, then require its application to an unfamiliar financial problem. Attractive pages and correct definitions are necessary but insufficient.
 
-The planned core is **30 hours of active learning over five study days**, excluding breaks. A study day means about six focused hours, normally seven to eight hours with breaks. These are authoring budgets to validate with learners, not measured completion times. Reading quickly must not be confused with completing the experiments and assignments. Do not enforce waiting periods, pad prose, or artificially lock days.
+The implemented core is **30 hours of active learning over five study days**, excluding breaks. A study day means about six focused hours, normally seven to eight hours with breaks. These are authoring budgets to validate with learners, not measured completion times. Reading quickly must not be confused with completing the experiments and assignments. Do not enforce waiting periods, pad prose, or artificially lock days.
 
 Preserve the existing visual identity, responsive navigation, local notes, accessibility work, and original artwork. Replace the thin instruction, uniformly easy questions, and unsupported completion estimates. Adults can encounter difficult ideas with a supportive explanation. Remove diminutive language such as “a little check-in,” “next little step,” and congratulatory feedback that overstates understanding.
 
@@ -17,13 +17,13 @@ Preserve the existing visual identity, responsive navigation, local notes, acces
 2. [Five-day curriculum](curriculum.md): 25 modules, prerequisites, worked cases, experiments, assessment evidence, and the mapping to the original brief.
 3. [LLM benchmark specification](llm-benchmark.md): a four-and-a-half-hour learning sequence, mechanisms to teach, lab contracts, and an authored finance case with worked answers.
 4. [Assessment and implementation](delivery.md): assessment design, role pathways, content architecture, progress migration, numerical verification, and release gates.
-5. [Machine-readable schedule](schedule.json): the module and daily review budgets. All modules remain explicitly marked planned.
+5. [Machine-readable schedule](schedule.json): the module and daily review budgets. The authored budgets match the implemented modules.
 
 ## What the audit found
 
-The current course contains 36 lessons and 72 questions, but only 4,015 words in the main explanation paragraphs. The entire LLM chapter has 342 such words. Every lesson has exactly two explanation paragraphs and two multiple-choice questions. The 18 interview answers average 47 words. Those counts exclude examples, refreshers, quiz explanations, and other UI text; they are a narrow measure of the core prose, not a claim about total site word count.
+The September 28 introductory edition contained 36 lessons and 72 questions, but only 4,015 words in the main explanation paragraphs. Its entire LLM chapter had 342 such words. Every lesson has exactly two explanation paragraphs and two multiple-choice questions. The 18 interview answers average 47 words. Those counts exclude examples, refreshers, quiz explanations, and other UI text; they are a narrow measure of the core prose, not a claim about total site word count.
 
-The more important gaps are qualitative:
+The more important baseline gaps were qualitative (the implementation repairs and design refinements are documented in the release evidence):
 
 - Definitions are stated without enough intermediate reasoning, comparisons, counterexamples, or changes in conditions.
 - Most financial examples name a task without supplying the records, calculation, draft output, or complete solution.

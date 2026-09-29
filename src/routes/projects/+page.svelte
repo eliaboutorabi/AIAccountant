@@ -1,256 +1,292 @@
 <script lang="ts">
 	import { asset, resolve } from '$app/paths';
-	import { projects } from '$lib/data/projects';
-	import { lessonPath } from '$lib/data/course';
+	import { days } from '$lib/course/days';
+	import { modules } from '$lib/course';
 	import Icon from '$lib/components/Icon.svelte';
+	import Notebook from '$lib/course/components/Notebook.svelte';
+	const labs = ['generalization', 'spreadsheet', 'language-training', 'harness', 'capstone'];
+	const checks = [
+		[
+			'Define one prediction or decision time and the information available then.',
+			'Compare a rules baseline with a learned approach using independent evidence.',
+			'Explain how review capacity and missed-case consequences affect the threshold.'
+		],
+		[
+			'Reconcile formulas to source records and preserve units.',
+			'Compare forecasts at the relevant horizon using only past information.',
+			'Show how a join or filter changes the analytical population.'
+		],
+		[
+			'Trace token IDs, representations, attention, and next-token selection without claiming human reasoning.',
+			'Separate verified calculations, supported claims, and hypotheses in the memo.',
+			'Record a real experiment and the limits of what its loss or output establishes.'
+		],
+		[
+			'Identify the policy version and source passage supporting a claim.',
+			'Show validated tool arguments, actual results, and a rejected request.',
+			'Distinguish skill instructions from harness enforcement and demonstrate recovery.'
+		],
+		[
+			'Reproduce the exact pipeline controls and retain exceptions.',
+			'Commit a configuration, preserve its first changed-case result, and explain a repair.',
+			'Defend the source-to-decision trace and identify a remaining professional skill gap.'
+		]
+	];
+	const files = [
+		{ name: 'portfolio-guide.md', label: 'Portfolio guide & role extensions' },
+		{ name: 'willow-pipeline.mjs', label: 'Runnable Node.js reconciliation starter' },
+		{ name: 'pipeline-data.json', label: 'Invoices & payments · PIPE-01' },
+		{ name: 'policies.json', label: 'Versioned policy source documents' },
+		{ name: 'collections-72.csv', label: '72-month forecast series · seed 42' },
+		{ name: 'variance.csv', label: 'September variance source records' },
+		{ name: 'data-manifest.json', label: 'Data provenance, units & control totals' },
+		{ name: 'reviewed-solutions.md', label: 'Reviewed solutions · open after your attempt' }
+	];
 </script>
 
 <svelte:head
-	><title>Portfolio projects · AI Accountant</title><meta
+	><title>Your five-day portfolio · AI Accountant</title><meta
 		name="description"
-		content="Build a cash forecast, a reconciliation pipeline, and a controlled finance agent with downloadable fictional data, project briefs, and review criteria."
+		content="Create five connected finance artifacts, download original datasets and a runnable starter, and defend your evidence with explicit review criteria."
 	/></svelte:head
 >
 <div class="page-wrap">
 	<div class="page-title">
-		<p class="eyebrow">MAKE YOUR LEARNING TANGIBLE</p>
-		<h1>Something you can point to<br />and say, “I built that.”</h1>
+		<p class="eyebrow">FROM LEARNING TO EVIDENCE</p>
+		<h1>Build something<br />you can defend.</h1>
 		<p>
-			Three practical projects, from a first forecast to a controlled finance assistant. Download
-			the materials, build at your pace, and make your thinking visible.
+			Five connected submissions turn the course into a portfolio. Keep the source records,
+			calculations, failed cases, and decisions—not just a polished final screenshot.
 		</p>
 	</div>
-	{#each projects as project, i (project.id)}<section class="project panel" id={project.id}>
-			<div class="project-head">
-				<div>
-					<span class="micro-label">PROJECT 0{i + 1} · {project.level}</span>
-					<h2>{project.title}</h2>
-					<p>{project.subtitle}</p>
-					<div class="project-tags">
-						<span class="tag"><Icon name="clock" size={13} />{project.time}</span><span class="tag"
-							>{project.tools}</span
-						>
-					</div>
-				</div>
-				<img
-					src={asset(`/images/${project.image}.webp`)}
-					alt=""
-					width="960"
-					height="640"
-					loading="lazy"
-				/>
-			</div>
-			<div class="project-outcome">
-				<Icon name="folder" size={20} />
-				<div>
-					<strong>You’ll come away with</strong>
-					<p>{project.outcome}</p>
-				</div>
-			</div>
-			<div class="project-steps">
-				{#each project.steps as step, si (step.title)}<div>
-						<span class="step-number">0{si + 1}</span>
-						<div>
-							<h3>{step.title}</h3>
-							<p>{step.body}</p>
-						</div>
-					</div>{/each}
-			</div>
-			<details class="disclosure">
-				<summary
-					><Icon name="list" size={18} />Your definition of “done”<Icon
-						name="down"
-						size={16}
-					/></summary
-				>
-				<ul class="plain-list">
-					{#each project.rubric as item (item)}<li><Icon name="check" size={16} />{item}</li>{/each}
-				</ul>
-				<p class="stretch"><strong>A little further:</strong> {project.stretch}</p>
-			</details>
-			<div class="project-downloads">
-				<a class="button primary" href={asset(`/data/${project.download}`)} download
-					><Icon name="download" size={16} />Project brief</a
-				><a class="button secondary" href={asset(`/data/${project.data}`)} download
-					><Icon name="download" size={16} />{project.data.endsWith('.csv')
-						? 'Sample data'
-						: 'Evaluation cases'}</a
-				><a class="text-link" href={resolve(lessonPath(project.chapter))}
-					>Brush up on the ideas<Icon name="arrow" size={15} /></a
-				>
-			</div>
-			{#if project.id === 'reconcile'}<div class="support-files">
-					<span>Also in your toolkit:</span><a href={asset('/data/payments.csv')} download
-						>payments.csv</a
-					><a href={asset('/data/expected-controls.json')} download>expected-controls.json</a><a
-						href={asset('/data/reconciliation-starter.mjs')}
-						download>Runnable starter</a
-					>
-				</div>{/if}
-		</section>{/each}
 	<div class="callout">
-		<Icon name="shield" />
+		<Icon name="folder" />
 		<div>
-			<strong>A safe place to practice.</strong>All datasets are fictional, deliberately small
-			teaching fixtures. Use the capstone brief’s evaluation criteria to check your work. They are
-			not representative production datasets or professional certification assessments.
+			<strong>A complete path without paid tools</strong>
+			<p>
+				Use the browser laboratories for the core activities. Export their evidence and your course
+				notebook. The optional local starter runs with Node.js and needs no packages, API keys, or
+				financial-system connection.
+			</p>
 		</div>
 	</div>
+	{#each days as day, i (day.day)}<section class="project panel" id={`day-${day.day}`}>
+			<header>
+				<div>
+					<span class="micro-label">DAY 0{day.day} · CONNECTED SUBMISSION</span>
+					<h2>{day.artifact}</h2>
+					<p>{day.question}</p>
+				</div>
+				<img
+					src={asset(`/images/${day.image}.webp`)}
+					alt=""
+					loading="lazy"
+					width="400"
+					height="300"
+				/>
+			</header>
+			<div class="project-body">
+				<h3>What a reviewer should be able to check</h3>
+				<ul>
+					{#each checks[i] as criterion (criterion)}<li>{criterion}</li>{/each}
+				</ul>
+				<div class="project-actions">
+					<a class="button primary" href={resolve('/lab/[slug]', { slug: labs[i] })}
+						>Open the workbench <Icon name="arrow" size={15} /></a
+					><a
+						class="button secondary"
+						href={resolve('/downloads/[file]', { file: `day-${day.day}.md` })}
+						download><Icon name="download" size={16} />Day {day.day} case brief</a
+					>
+				</div>
+				<details class="disclosure">
+					<summary>Connect this submission to its five modules</summary>
+					<ul>
+						{#each modules.filter((m) => m.day === day.day) as module (module.id)}<li>
+								<a
+									class="text-link"
+									href={resolve('/course/[slug]', { slug: module.id.toLowerCase() })}
+									>{module.id} · {module.title}</a
+								>
+								<p>{module.assignment.deliverable}</p>
+							</li>{/each}
+					</ul>
+				</details>
+				<Notebook
+					moduleId={`M${String(day.day * 5).padStart(2, '0')}`}
+					field="portfolio-submission"
+					label="Your submission index"
+					hint="Record the files you exported, the results they reproduce, the failure you investigated, and the decision you can defend."
+				/>
+			</div>
+		</section>{/each}
+	<section class="page-section">
+		<p class="eyebrow">KEEP BUILDING OUTSIDE THE BROWSER</p>
+		<h2>Your portfolio materials</h2>
+		<p class="materials-intro">
+			All data are original fictional teaching fixtures. The manifest identifies each dataset's
+			units and controls. The starter is a runnable reconciliation baseline; the browser capstone
+			adds retrieval, review-queue state, and changed-case evaluation.
+		</p>
+		<div class="downloads">
+			{#each files as file (file.name)}<a
+					href={resolve('/downloads/[file]', { file: file.name })}
+					download
+					><Icon name="download" size={20} />
+					<div><strong>{file.label}</strong><span>{file.name}</span></div></a
+				>{/each}
+		</div>
+		<div class="run-box">
+			<h3>Run the local baseline</h3>
+			<p>
+				Install a current Node.js LTS runtime. Save the starter to a folder, open a terminal there,
+				and run:
+			</p>
+			<pre><code>node willow-pipeline.mjs</code></pre>
+			<p>
+				The output lists invoice balances in USD cents, the duplicate quarantine, and unmatched
+				allocations. The starter checks total outstanding of 90,000 cents (USD 900). Add the
+				malformed-amount and conflicting-ID cases described in its comments, then retain the
+				observed results.
+			</p>
+		</div>
+	</section>
+	<section class="page-section">
+		<h2>Prepare the defense, then extend it.</h2>
+		<p class="materials-intro">
+			Your case is stronger when another person can reproduce it. The portfolio guide includes ten
+			capstone tasks and further work for finance transformation, analytics, data science, AI
+			engineering, and agent engineering. Estimates for those extensions sit outside the core 30
+			hours.
+		</p>
+		<div class="project-actions">
+			<a class="button primary" href={resolve('/interview/')}>Practice your portfolio defense →</a
+			><a class="button secondary" href={resolve('/diagnostic/')}
+				>Return to the changed diagnostic →</a
+			><a class="text-link" href={resolve('/progress/')}>Export your course notebook →</a>
+		</div>
+	</section>
 </div>
 
 <style>
 	.project {
-		margin-bottom: 28px;
-		scroll-margin-top: 20px;
+		margin: 28px 0;
+		padding: 0;
 		overflow: hidden;
 	}
-	.project-head {
+	.project header {
 		display: flex;
-		justify-content: space-between;
-		gap: 25px;
 		align-items: center;
+		background: #f3f4ed;
+		gap: 24px;
+		padding: 30px;
 	}
-	.project-head > div {
+	.project header > div {
 		flex: 1;
 	}
-	.project-head h2 {
-		font-size: 29px;
-		margin: 13px 0;
+	.project h2 {
+		font-size: 25px;
 		line-height: 1.4;
+		margin: 12px 0;
 	}
-	.project-head > div > p {
+	.project header p {
+		line-height: 1.8;
+		color: var(--muted);
+		font-size: 14px;
+	}
+	.project img {
+		width: 190px;
+		height: 160px;
+		object-fit: cover;
+		border-radius: 14px;
+	}
+	.project-body {
+		padding: 30px;
+	}
+	.project-body h3 {
+		font-size: 17px;
+	}
+	.project-body ul {
+		padding-left: 22px;
+		line-height: 1.9;
+		font-size: 14px;
+	}
+	.project-body li {
+		margin: 12px 0;
+	}
+	.project-body li p {
 		font-size: 13px;
 		color: var(--muted);
-		line-height: 1.8;
+		margin-top: 6px;
 	}
-	.project-head img {
-		width: 210px;
-		height: 165px;
-		object-fit: cover;
-		border-radius: 12px;
-	}
-	.project-tags {
-		display: flex;
-		gap: 8px;
-		flex-wrap: wrap;
-		margin: 17px 0;
-	}
-	.project-tags .tag {
-		font-size: 8px;
-	}
-	.project-outcome {
-		display: flex;
-		gap: 13px;
-		align-items: center;
-		padding: 19px 22px;
-		background: #f0f3e8;
-		border-radius: 12px;
-		margin: 23px 0;
-	}
-	.project-outcome strong {
-		font-size: 12px;
-	}
-	.project-outcome p {
-		font-size: 12px;
-		line-height: 1.8;
-		color: var(--muted);
-		margin-top: 5px;
-	}
-	.project-steps {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 25px;
-		margin: 29px 0;
-	}
-	.project-steps > div {
-		display: flex;
-		gap: 13px;
-	}
-	.step-number {
-		width: 27px;
-		height: 27px;
-		background: #e8efdc;
-		border-radius: 50%;
-		display: grid;
-		place-items: center;
-		flex-shrink: 0;
-		color: #4f6d3d;
-		font-size: 10px;
-	}
-	.project-steps h3 {
-		font-size: 14px;
-		margin: 3px 0 9px;
-	}
-	.project-steps p {
-		font-size: 12px;
-		line-height: 1.95;
-		color: var(--muted);
-	}
-	.project-downloads {
+	.project-actions {
 		display: flex;
 		gap: 12px;
+		flex-wrap: wrap;
 		align-items: center;
-		flex-wrap: wrap;
-		margin-top: 24px;
+		margin: 24px 0;
 	}
-	.project-downloads > .text-link {
-		margin-left: auto;
+	.downloads {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 14px;
+		margin: 25px 0;
 	}
-	.support-files {
+	.downloads > a {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 13px;
-		font-size: 10px;
-		margin-top: 21px;
-		color: #5c694a;
+		gap: 15px;
+		align-items: center;
+		padding: 22px;
+		border: 1px solid var(--line);
+		border-radius: 14px;
+		background: #fff;
 	}
-	.support-files a {
-		text-decoration: underline;
+	.downloads strong {
+		font-size: 14px;
+		line-height: 1.6;
 	}
-	.stretch {
-		padding-top: 12px !important;
+	.downloads span {
+		display: block;
+		font-size: 12px;
+		color: var(--muted);
+		margin-top: 6px;
+		overflow-wrap: anywhere;
 	}
-	.plain-list {
-		margin-bottom: 8px;
+	.run-box {
+		padding: 25px;
+		background: #eef2e7;
+		border-radius: 15px;
 	}
-	@media (max-width: 1050px) {
-		.project-head h2 {
-			font-size: 24px;
-		}
-		.project-head img {
-			width: 150px;
-			height: 150px;
-		}
-		.project-downloads > .text-link {
-			width: 100%;
-			margin-left: 0;
-			margin-top: 7px;
-		}
+	.run-box p,
+	.materials-intro {
+		font-size: 14px;
+		line-height: 1.9;
+		color: var(--muted);
+		margin: 15px 0;
 	}
-	@media (max-width: 740px) {
-		.project-head {
-			flex-direction: column-reverse;
-			align-items: stretch;
-			gap: 22px;
+	.run-box pre {
+		padding: 18px;
+		background: #fff;
+		border-radius: 9px;
+		overflow: auto;
+		font-size: 13px;
+	}
+	@media (max-width: 650px) {
+		.project header {
+			padding: 23px;
 		}
-		.project-head img {
-			width: 100%;
-			height: 180px;
+		.project header img {
+			width: 90px;
+			height: 130px;
 		}
-		.project-head h2 {
-			font-size: 25px;
+		.project h2 {
+			font-size: 22px;
 		}
-		.project-steps {
+		.project-body {
+			padding: 23px;
+		}
+		.downloads {
 			grid-template-columns: 1fr;
-		}
-		.project-downloads .button {
-			font-size: 10px;
-		}
-		.project-outcome {
-			padding: 17px;
-		}
-		.project-outcome p {
-			font-size: 11px;
 		}
 	}
 </style>

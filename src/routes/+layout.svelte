@@ -8,12 +8,23 @@
 	import { afterNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { LearningProgress } from '$lib/progress.svelte';
+	import { CourseProgress, BOOK } from '$lib/course/progress.svelte';
+	import { modules } from '$lib/course';
 	import { PROGRESS } from '$lib/context';
 	import { allLessons, lessonPath } from '$lib/data/course';
-	import { glossary } from '$lib/data/resources';
+	import { terms as glossary } from '$lib/course/terms';
 	import Icon from '$lib/components/Icon.svelte';
 	let { children } = $props();
 	const progress = setContext(PROGRESS, new LearningProgress());
+	const book = setContext(BOOK, new CourseProgress());
+	const studied = $derived(
+		modules.reduce(
+			(n, m) => n + m.sections.filter((s) => book.get(m.id).read.includes(s.id)).length,
+			0
+		)
+	);
+	const sectionCount = modules.reduce((n, m) => n + m.sections.length, 0);
+	const coursePercent = $derived(Math.round((100 * studied) / sectionCount));
 	let mobileOpen = $state(false);
 	let query = $state('');
 	let dialog: HTMLDialogElement;
@@ -25,7 +36,7 @@
 		{ label: 'Portfolio projects', href: '/projects/', icon: 'folder' }
 	] as const;
 	const extras = [
-		{ label: 'The little glossary', href: '/glossary/', icon: 'book' },
+		{ label: 'Technical glossary', href: '/glossary/', icon: 'book' },
 		{ label: 'Your progress', href: '/progress/', icon: 'chart' },
 		{ label: 'Sources & further reading', href: '/resources/', icon: 'library' }
 	] as const;
@@ -37,6 +48,18 @@
 	const searchResults = $derived(
 		query.trim().length > 1
 			? [
+					...modules
+						.filter((m) =>
+							`${m.title} ${m.subtitle} ${JSON.stringify(m.sections)}`
+								.toLowerCase()
+								.includes(query.toLowerCase().trim())
+						)
+						.map((m) => ({
+							title: m.title,
+							subtitle: `Day ${m.day} · ${m.id}`,
+							href: `/course/${m.id.toLowerCase()}/` as const,
+							icon: 'book'
+						})),
 					...allLessons
 						.filter((l) =>
 							`${l.title} ${l.subtitle} ${l.chapter.title} ${l.paragraphs.join(' ')}`
@@ -45,7 +68,7 @@
 						)
 						.map((l) => ({
 							title: l.title,
-							subtitle: l.chapter.title,
+							subtitle: `Introductory archive · ${l.chapter.title}`,
 							href: lessonPath(l.chapter.slug, l.lessonIndex + 1),
 							icon: 'book'
 						})),
@@ -55,7 +78,7 @@
 						)
 						.map((g) => ({
 							title: g.term,
-							subtitle: g.category,
+							subtitle: `Concept · ${g.module}`,
 							href: `/glossary/#${g.term.toLowerCase().replaceAll(' ', '-')}` as const,
 							icon: 'search'
 						}))
@@ -72,7 +95,10 @@
 			openSearch();
 		}
 	}
-	onMount(() => progress.load());
+	onMount(() => {
+		progress.load();
+		book.load();
+	});
 	afterNavigate(() => {
 		mobileOpen = false;
 	});
@@ -105,7 +131,9 @@
 				class:active={item.href === '/'
 					? page.route.id === '/'
 					: page.route.id?.startsWith(item.href.slice(0, -1)) ||
-						(item.href === '/path/' && page.route.id?.startsWith('/learn'))}
+						(item.href === '/path/' &&
+							(page.route.id?.startsWith('/learn') || page.route.id?.startsWith('/course'))) ||
+						(item.href === '/playground/' && page.route.id?.startsWith('/lab'))}
 				aria-current={(
 					item.href === '/'
 						? page.route.id === '/'
@@ -118,7 +146,7 @@
 			>
 		{/each}
 	</nav>
-	<div class="sidebar-label resource-label">A LITTLE HELP ALONG THE WAY</div>
+	<div class="sidebar-label resource-label">YOUR REFERENCE DESK</div>
 	<nav aria-label="Resources">
 		{#each extras as item (item.href)}<a
 				href={resolve(item.href)}
@@ -130,22 +158,22 @@
 	<div class="sidebar-bottom">
 		<div class="journey-note">
 			<span class="note-star">✳</span>
-			<h3>A little every day.<br />A whole new you.</h3>
-			<p>No rush. Just a little curiosity.</p>
+			<h3>Understand it.<br />Build with it.</h3>
+			<p>Five days of connected learning.</p>
 			<div class="progress-heading">
-				<span>Your journey</span><strong>{progress.percent}%</strong>
+				<span>Sections studied</span><strong>{coursePercent}%</strong>
 			</div>
 			<div
 				class="progress-track"
 				role="progressbar"
 				aria-label="Course progress"
-				aria-valuenow={progress.percent}
+				aria-valuenow={coursePercent}
 				aria-valuemin="0"
 				aria-valuemax="100"
 			>
-				<span style:width={`${progress.percent}%`}></span>
+				<span style:width={`${coursePercent}%`}></span>
 			</div>
-			<small>{progress.data.completed.length} of 36 lessons explored</small>
+			<small>{studied} of {sectionCount} sections studied</small>
 		</div>
 		<a class="sidebar-footer" href={resolve('/resources/')}
 			><span class="mini-avatar"><Icon name="sprout" size={17} /></span> Made for curious minds <Icon
@@ -169,7 +197,7 @@
 		</div>
 		<div class="topbar-right">
 			<button class="search-trigger" aria-label="Search the course" onclick={openSearch}
-				><Icon name="search" size={17} /><span>Find a little inspiration...</span><kbd>⌘ K</kbd
+				><Icon name="search" size={17} /><span>Search concepts and cases…</span><kbd>⌘ K</kbd
 				></button
 			><span class="learner-avatar" title="Your personal learning space"
 				><Icon name="sprout" size={21} /></span
@@ -193,7 +221,7 @@
 	<div class="search-input-row">
 		<Icon name="search" /><input
 			aria-label="Search the course"
-			placeholder="Search lessons, ideas, and little definitions…"
+			placeholder="Search modules, cases, and definitions…"
 			bind:value={query}
 		/><button class="icon-button" aria-label="Close search" onclick={() => dialog.close()}
 			><Icon name="x" /></button
@@ -216,5 +244,5 @@
 					<p>Try a shorter phrase, like “model” or “data”.</p>
 				</div>{/each}{/if}
 	</div>
-	<div class="dialog-hint">Your next “aha!” is one search away. <kbd>esc to close</kbd></div>
+	<div class="dialog-hint">Find a concept. Follow the evidence. <kbd>esc to close</kbd></div>
 </dialog>

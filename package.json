@@ -50,7 +50,10 @@
 	"dependencies": {
 		"@fontsource-variable/dm-sans": "^5.3.0",
 		"@fontsource-variable/manrope": "^5.3.0",
+		"@huggingface/transformers": "^4.3.0",
 		"@lucide/svelte": "^1.48.0",
+		"fast-formula-parser": "^1.0.19",
+		"gpt-tokenizer": "^4.0.0",
 		"three": "^0.186.1"
 	},
 	"engines": {

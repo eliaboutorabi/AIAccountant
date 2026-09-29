@@ -1,178 +1,258 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-test('home, navigation, and first lesson retain progress after reload', async ({
-	page
-}, testInfo) => {
+test('a module preserves reading, case writing, bookmarks, and attempts', async ({ page }) => {
 	await page.goto('./');
-	await expect(
-		page.getByRole('heading', { name: 'Accounting minds. AI possibilities.' })
-	).toBeVisible();
-	await page.getByRole('link', { name: 'Let’s begin your journey', exact: true }).click();
-	await expect(
-		page.getByRole('heading', { name: 'A new kind of number person', exact: true })
-	).toBeVisible();
-	const complete = page.getByRole('button', { name: 'Mark lesson complete', exact: true });
-	await expect(complete).toBeDisabled();
-	await page.getByRole('radio', { name: 'B A creative language model', exact: true }).check();
-	await expect(page.getByText('A useful pause. Let’s unpack it.')).toBeVisible();
-	await expect(complete).toBeDisabled();
+	await expect(page.locator('h1')).toContainText('Accounting minds.');
+	await page.getByRole('link', { name: 'Begin the five-day course' }).click();
+	await expect(page.locator('h1')).toContainText('AI history');
+	await page.getByLabel('I’ve studied this section and can explain its main idea.').first().check();
 	await page
-		.getByRole('radio', { name: 'A A spreadsheet formula or tested calculation', exact: true })
-		.check();
-	await page.getByRole('radio', { name: 'B It deserves investigation', exact: true }).check();
-	await page
-		.getByLabel('A thought worth keeping?')
-		.fill('Use deterministic calculations for exact totals.');
-	await page.getByRole('button', { name: 'Save this lesson', exact: true }).click();
-	await complete.click();
-	await expect(page.getByText('A little more confident. A little further along.')).toBeVisible();
+		.getByLabel('Your case response', { exact: true })
+		.fill(
+			'Validate the source, calculate the exact amount, and separate approval authority from extraction.'
+		);
+	await page.getByRole('button', { name: 'Bookmark module', exact: true }).click();
+	const check = page.locator('#knowledge-check fieldset').first();
+	await check.getByRole('radio').first().check();
+	await check.getByRole('button', { name: /Check my answer/ }).click();
 	await page.reload();
-	await expect(page.getByText('You’ve explored this lesson.')).toBeVisible();
-	await expect(page.getByLabel('A thought worth keeping?')).toHaveValue(
-		'Use deterministic calculations for exact totals.'
-	);
-	await page.goto('./progress/');
 	await expect(
-		page.getByRole('heading', { name: 'A new kind of number person', exact: true })
-	).toBeVisible();
-	await expect(page.getByText('Use deterministic calculations for exact totals.')).toBeVisible();
-	await page.screenshot({ path: `.work/progress-${testInfo.project.name}.png`, fullPage: true });
+		page.getByLabel('I’ve studied this section and can explain its main idea.').first()
+	).toBeChecked();
+	await expect(page.getByLabel('Your case response', { exact: true })).toHaveValue(
+		/Validate the source/
+	);
+	await expect(page.getByRole('button', { name: 'Bookmarked', exact: true })).toBeVisible();
+	await expect(page.locator('#knowledge-check')).toContainText('first recorded');
 });
 
-test('search, glossary filters, and mobile navigation work', async ({ page, isMobile }) => {
+test('search and glossary reach expanded chapters', async ({ page, isMobile }) => {
 	await page.goto('./');
 	await page.getByRole('button', { name: 'Search the course', exact: true }).click();
-	await page.getByRole('textbox', { name: 'Search the course', exact: true }).fill('overfitting');
-	await expect(
-		page.getByRole('dialog').getByRole('link', { name: /Overfitting Data science/ })
-	).toBeVisible();
+	await page.getByRole('textbox', { name: 'Search the course', exact: true }).fill('idempotency');
+	await expect(page.getByRole('dialog').getByRole('link').first()).toBeVisible();
 	await page.getByRole('button', { name: 'Close search' }).click();
-	if (isMobile) {
-		await page.getByRole('button', { name: 'Toggle navigation' }).click();
-	}
-	await page.getByRole('link', { name: 'The little glossary', exact: true }).click();
+	if (isMobile) await page.getByRole('button', { name: 'Toggle navigation' }).click();
+	await page.getByRole('link', { name: 'Technical glossary', exact: true }).click();
 	await page.getByRole('textbox', { name: 'Find a term' }).fill('idempotency');
-	await expect(page.getByRole('heading', { name: 'Idempotency', exact: true })).toBeVisible();
-	await page.getByRole('textbox', { name: 'Find a term' }).fill('no-such-concept');
-	await expect(page.getByText('We haven’t met that word yet.')).toBeVisible();
-	await page.getByRole('button', { name: 'Reset filters' }).click();
-	await expect(page.getByRole('heading', { name: 'AI', exact: true })).toBeVisible();
+	await expect(page.locator('.term-card')).toHaveCount(1);
+	await page.getByRole('link', { name: /Study the concept/ }).click();
+	await expect(page).toHaveURL(/course\/m17\//);
 });
 
-test('labs calculate real outcomes and hash deep links select the right experiment', async ({
+test('linked definitions work by keyboard and fit the viewport', async ({ page }) => {
+	await page.goto('./course/m11/');
+	const term = page.locator('button.technical-term').first();
+	await term.focus();
+	await term.press('Enter');
+	await expect(page.locator('.definition')).toHaveCount(1);
+	await expect(page.locator('.definition a')).toHaveAttribute('href', /course\/m\d+\/?$/);
+	expect(
+		await page.locator('.definition').evaluate((e) => {
+			const r = e.getBoundingClientRect();
+			return r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight;
+		})
+	).toBe(true);
+	await page.keyboard.press('Escape');
+	await expect(page.locator('.definition')).toHaveCount(0);
+});
+
+test('the spreadsheet calculates formulas and exposes join multiplication', async ({ page }) => {
+	await page.goto('./lab/spreadsheet/');
+	const b6 = page.getByRole('textbox', { name: 'B6 exercise cell', exact: true });
+	await b6.fill('=SUM(B3:B5)');
+	await b6.press('Tab');
+	await expect(b6).toHaveValue('720');
+	await page.getByRole('textbox', { name: 'B3', exact: true }).fill('610');
+	await page.getByRole('textbox', { name: 'B3', exact: true }).press('Tab');
+	await expect(b6).toHaveValue('730');
+	await page.reload();
+	await expect(b6).toHaveValue('730');
+	await expect(page.locator('.data-lens tfoot')).toContainText('520');
+	await page.getByLabel('Aggregate payments by invoice before joining').check();
+	await expect(page.locator('.data-lens tfoot')).toContainText('400');
+	await expect(page.locator('.data-lens tfoot')).toContainText('220');
+});
+
+test('real regression updates and commitment are accessible through the integrated route', async ({
 	page
 }) => {
-	await page.goto('./playground/#forecast');
-	await expect(
-		page.getByRole('heading', { name: 'Forecasting studio', exact: true })
-	).toBeVisible();
-	const previous = await page.locator('.metric-grid').innerText();
-	await page.getByLabel('Choose your baseline').selectOption('seasonal');
-	await expect(page.locator('.metric-grid')).not.toHaveText(previous);
-	await page.getByRole('link', { name: 'Catch or over-catch?', exact: true }).click();
-	await expect(page.locator('.metric-grid')).toContainText('57%');
-	await page.getByRole('slider').focus();
-	await page.getByRole('slider').press('End');
-	await expect(page.locator('.metric-grid')).toContainText('Undefined when nothing is flagged.');
-	await page.getByRole('link', { name: 'The Goldilocks fit', exact: true }).click();
-	await page.getByLabel('Model flexibility').selectOption('10');
-	await expect(page.getByText('Notice the gap between practice and new examples.')).toBeVisible();
-	await page.getByRole('link', { name: 'The prompt workshop', exact: true }).click();
-	await page.getByLabel('1. The task').fill('Explain the June cash variance.');
-	await expect(page.locator('.prompt-preview')).toContainText('Explain the June cash variance.');
+	await page.goto('./lab/training/');
+	const before = await page.locator('.regression-lab .metrics').innerText();
+	await page.getByRole('button', { name: /Train ?25 updates/ }).click();
+	await expect(page.locator('.regression-lab .metrics')).not.toHaveText(before);
+	await page.getByRole('button', { name: /Commit/ }).click();
+	await expect(page.getByRole('button', { name: 'One update' })).toBeDisabled();
+	await expect(page.locator('.regression-lab')).toContainText('40');
 });
 
-test('interview practice and dataset downloads are usable', async ({ page, request }) => {
-	await page.goto('./interview/');
-	await page.getByRole('button', { name: 'Agent engineering', exact: true }).click();
-	await expect(
-		page.getByRole('heading', { name: 'The payment tool timed out.', exact: true })
-	).toBeVisible();
-	await page
-		.getByLabel('Your first thoughts')
-		.fill('First check whether the payment was already created.');
-	await page.getByRole('button', { name: 'Explore a strong answer' }).click();
-	await expect(page.locator('.worked-answer')).toContainText('idempotency');
-	await page.getByRole('button', { name: 'Mark as practiced' }).click();
-	await expect(page.getByRole('button', { name: 'Practice recorded' })).toBeDisabled();
-	await page.goto('./projects/');
-	for (const anchor of await page.locator('a[download]').all()) {
-		const href = await anchor.getAttribute('href');
-		const response = await request.get(href!);
-		expect(response.ok(), href!).toBeTruthy();
-		expect((await response.body()).length).toBeGreaterThan(50);
-	}
-});
-
-test('every chapter deep link loads without client errors', async ({ page }) => {
+test('all chapters and laboratory components load without client errors', async ({ page }) => {
+	test.setTimeout(180000);
 	const errors: string[] = [];
-	page.on('pageerror', (error) => errors.push(error.message));
+	page.on('pageerror', (e) => errors.push(e.message));
 	await page.goto('./path/');
 	const links = await page
-		.locator('.chapter-lessons a')
-		.evaluateAll((elements) => elements.map((e) => (e as HTMLAnchorElement).href));
-	expect(links).toHaveLength(36);
-	// Every route is also checked during prerender; sample each chapter’s final lesson in a real browser.
-	for (const link of links.filter((_, i) => i % 3 === 2)) {
-		await page.goto(link);
-		await expect(page.locator('.question')).toHaveCount(2);
-		await expect(page.locator('h1')).not.toBeEmpty();
+		.locator('.module-row')
+		.evaluateAll((es) => es.map((e) => (e as HTMLAnchorElement).href));
+	expect(links).toHaveLength(25);
+	for (const link of links) {
+		// The course's prerendered canonical URLs use a trailing slash.
+		// Vite preview's directory redirect drops the configured base prefix.
+		await page.goto(link.endsWith('/') ? link : `${link}/`);
+		await expect(page.locator('#knowledge-check fieldset')).toHaveCount(6);
+		await expect(page.locator('#transfer-check')).toBeVisible();
+		expect(
+			await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1),
+			link
+		).toBe(true);
+		const audit = await new AxeBuilder({ page })
+			.withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+			.analyze();
+		expect(
+			audit.violations.map((v) => ({ id: v.id, targets: v.nodes.map((n) => n.target) })),
+			link
+		).toEqual([]);
+	}
+	for (const slug of [
+		'training',
+		'network',
+		'representations',
+		'forecast',
+		'spreadsheet',
+		'value',
+		'tokens',
+		'transformer',
+		'adaptation',
+		'denoising',
+		'documents',
+		'retrieval',
+		'tools',
+		'harness',
+		'evaluation',
+		'pipeline',
+		'capstone',
+		'local-agent'
+	]) {
+		await page.goto(`./lab/${slug}/`);
+		await expect(page.locator('.loading')).toHaveCount(0);
+		await expect(page.locator('main [role="alert"]')).toHaveCount(0);
+		await expect(page.locator('.lab-page h2').first()).toBeVisible();
 	}
 	expect(errors).toEqual([]);
 });
 
-test('home is accessible and fits the viewport', async ({ page }, testInfo) => {
-	await page.goto('./');
-	await page.screenshot({ path: `.work/home-${testInfo.project.name}.png`, fullPage: true });
-	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(
-		true
+test('portfolio downloads and interview notebook are usable', async ({ page, request }) => {
+	await page.goto('./interview/');
+	await page
+		.getByLabel('Your answer, before the worked response')
+		.fill('I would begin with the decision, source records, and a tested baseline.');
+	await page.reload();
+	await expect(page.getByLabel('Your answer, before the worked response')).toHaveValue(
+		/tested baseline/
 	);
-	const result = await new AxeBuilder({ page })
-		.withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
-		.analyze();
-	expect(
-		result.violations.map((v) => ({
-			id: v.id,
-			impact: v.impact,
-			nodes: v.nodes.map((n) => ({ target: n.target, details: n.failureSummary }))
-		}))
-	).toEqual([]);
+	await page.goto('./projects/');
+	for (const a of await page.locator('a[download]').all()) {
+		const href = await a.getAttribute('href');
+		const res = await request.get(href!);
+		expect(res.ok(), href!).toBe(true);
+		expect((await res.body()).length).toBeGreaterThan(100);
+	}
+	const manifest = await request.get('./downloads/data-manifest.json');
+	expect((await manifest.json()).pipeline.outstanding).toBe(900);
 });
 
-test('3D controls react and important learning pages meet accessibility checks', async ({
-	page
-}, testInfo) => {
-	const hydrationWarnings: string[] = [];
-	page.on('console', (message) => {
-		if (message.text().includes('hydration')) hydrationWarnings.push(message.text());
+test('legacy writing survives import without claiming expanded completion', async ({ page }) => {
+	await page.goto('./progress/');
+	const record = {
+		course: 'AI Accountant',
+		version: 1,
+		progress: {
+			completed: ['foundations/1'],
+			notes: { 'foundations/1': 'Preserved original accounting note.' },
+			bookmarks: ['foundations/1']
+		}
+	};
+	await expect(page.getByLabel('Restore / merge a record')).toBeEnabled();
+	await page.getByLabel('Restore / merge a record').setInputFiles({
+		name: 'record.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from(JSON.stringify(record))
 	});
-	await page.goto('./playground/#network');
-	await expect(page.getByText('Growing a little network…')).not.toBeVisible();
-	await page.getByLabel('Invoice age').focus();
-	await page.getByLabel('Invoice age').press('End');
-	await expect(page.locator('.network-output')).not.toContainText('47 / 100');
-	await page.getByRole('button', { name: 'Pause motion' }).click();
-	await expect(page.getByRole('button', { name: 'Play motion' })).toBeVisible();
-	await page.screenshot({ path: `.work/network-${testInfo.project.name}.png`, fullPage: true });
-	const auditFailures: unknown[] = [];
+	await page.locator('.legacy-record summary').click();
+	await expect(
+		page.getByText('Preserved original accounting note.', { exact: true })
+	).toBeVisible();
+	await expect(page.locator('.evidence-stats').first()).toContainText('0');
+	await page.getByRole('link', { name: 'A new kind of number person', exact: true }).click();
+	await expect(page.getByText('Introductory edition archive', { exact: true })).toBeVisible();
+	await expect(page.getByLabel('A thought worth keeping?')).toHaveValue(
+		'Preserved original accounting note.'
+	);
+});
+
+test('storage denial remains usable and malformed imports do not destroy notes', async ({
+	page,
+	isMobile
+}) => {
+	await page.addInitScript(() => {
+		Storage.prototype.getItem = () => {
+			throw Error('Denied for test');
+		};
+		Storage.prototype.setItem = () => {
+			throw Error('Denied for test');
+		};
+	});
+	await page.goto('./course/m01/');
+	await page.getByLabel('Your case response', { exact: true }).fill('Keep this working note.');
+	if (isMobile) await page.getByRole('button', { name: 'Toggle navigation' }).click();
+	await page.getByRole('link', { name: 'Your progress', exact: true }).click();
+	await expect(page).toHaveURL(/progress\//);
+	await expect(page.getByText('Browser storage is unavailable.', { exact: false })).toBeVisible();
+	const download = page.waitForEvent('download');
+	await page.getByRole('button', { name: 'Export learning record' }).click();
+	expect((await download).suggestedFilename()).toBe('ai-accountant-learning-record-v2.json');
+	await expect(page.getByLabel('Restore / merge a record')).toBeEnabled();
+	await page.getByLabel('Restore / merge a record').setInputFiles({
+		name: 'broken.json',
+		mimeType: 'application/json',
+		buffer: Buffer.from('{invalid')
+	});
+	await expect(page.locator('.notice')).toBeVisible();
+	await page.getByText('Read this module’s saved writing', { exact: true }).click();
+	await expect(page.getByText('Keep this working note.', { exact: true })).toBeVisible();
+});
+
+test('principal pages and core workbenches are accessible and responsive', async ({
+	page
+}, info) => {
+	test.setTimeout(180000);
+	const failures: unknown[] = [];
 	for (const route of [
-		'./playground/#network',
-		'./playground/#forecast',
-		'./learn/foundations/1/',
+		'./',
 		'./path/',
+		'./course/m14/',
+		'./diagnostic/',
 		'./interview/',
 		'./projects/',
-		'./progress/'
+		'./progress/',
+		'./glossary/',
+		'./resources/',
+		'./lab/spreadsheet/',
+		'./lab/training/',
+		'./lab/documents/',
+		'./lab/value/',
+		'./lab/tokens/'
 	]) {
 		await page.goto(route);
-		const result = await new AxeBuilder({ page })
+		if (route.includes('/lab/')) await expect(page.locator('.loading')).toHaveCount(0);
+		const audit = await new AxeBuilder({ page })
 			.withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
 			.analyze();
-		if (result.violations.length)
-			auditFailures.push({
+		if (audit.violations.length)
+			failures.push({
 				route,
-				violations: result.violations.map((v) => ({
+				violations: audit.violations.map((v) => ({
 					id: v.id,
 					nodes: v.nodes.map((n) => ({ target: n.target, details: n.failureSummary }))
 				}))
@@ -182,39 +262,7 @@ test('3D controls react and important learning pages meet accessibility checks',
 			route
 		).toBe(true);
 	}
-	expect(auditFailures).toEqual([]);
-	expect(hydrationWarnings).toEqual([]);
-});
-
-test('export and restore work and storage denial is handled', async ({ page }) => {
-	await page.addInitScript(() => {
-		Storage.prototype.getItem = () => {
-			throw new Error('Storage is disabled for this test');
-		};
-		Storage.prototype.setItem = () => {
-			throw new Error('Storage is disabled for this test');
-		};
-	});
-	await page.goto('./progress/');
-	await expect(page.getByText('Browser storage is unavailable.', { exact: false })).toBeVisible();
-	const download = page.waitForEvent('download');
-	await page.getByRole('button', { name: 'Export learning record' }).click();
-	expect((await download).suggestedFilename()).toBe('ai-accountant-learning-record.json');
-	const record = {
-		course: 'AI Accountant',
-		version: 1,
-		progress: {
-			completed: ['foundations/1'],
-			answers: { 'foundations/1': [0, 1] },
-			notes: { 'foundations/1': 'A restored thought.' },
-			bookmarks: ['foundations/1']
-		}
-	};
-	await page.getByLabel('Restore a learning record').setInputFiles({
-		name: 'record.json',
-		mimeType: 'application/json',
-		buffer: Buffer.from(JSON.stringify(record))
-	});
-	await expect(page.getByText('A restored thought.', { exact: true })).toBeVisible();
-	await expect(page.getByText('Learning record merged.', { exact: false })).toBeVisible();
+	expect(failures).toEqual([]);
+	await page.goto('./course/m14/');
+	await page.screenshot({ path: `.work/course-reader-${info.project.name}.png` });
 });

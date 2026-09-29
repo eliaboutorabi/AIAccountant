@@ -1,5 +1,5 @@
 import type { CourseModule } from '../types';
-import { p, note, table, worked, steps, reflect, lab, section, check } from './content-helpers';
+import { p, note, table, worked, reflect, lab, section, check } from './content-helpers';
 export const m13: CourseModule = {
 	id: 'M13',
 	day: 3,
@@ -53,16 +53,16 @@ export const m13: CourseModule = {
 				'The training/validation/test distinction remains essential. Use training data for parameter updates, validation data to compare settings, and a held-out final set for a committed assessment. A final set repeatedly consulted to select prompts or models becomes development evidence, even if no gradient update touches it. Language corpora make leakage subtle: near-duplicate paragraphs, template variants, and repeated document fragments may cross splits. A low held-out loss is less persuasive if the supposedly new text largely reproduces training material.'
 			),
 			lab(
-				'language-training',
-				'Train a small language model in your browser',
-				'Train the local character-level transformer in short batches. Record training and validation loss at several points, inspect real next-character probabilities, then commit the run before opening its final score. Compare generated text with the actual held-out measurements.',
-				'Will training loss and validation loss improve at exactly the same rate? Will a more readable sample establish competence on an unseen financial question?',
+				'adaptation',
+				'Keep learned weights and change the training domain',
+				'Train the actual CPU character transformer for 50 general-language updates. Record both general and finance validation loss, then keep the weights and switch to finance training for 50 updates. Compare both domains before and after; the final document sets remain hidden until commitment.',
+				'Will finance adaptation help finance prediction? Must general prediction worsen? What would either result actually establish?',
 				[
-					'Record seed, number of updates, and measured losses rather than only the generated text.',
-					'Compare a familiar finance phrase with a different input, describing the distribution and model limitations.',
-					'After commitment, record the final score and state whether it influenced any later design change.'
+					'Record seed, learning rate, stage update counts, and both validation scores. Switching the corpus alone must leave weights and scores unchanged; subsequent training performs the real updates.',
+					'Compare the observed general and finance loss changes. If general performance improves too, report that honestly rather than claiming forgetting. Write a recommendation, freeze weights, and reveal both separate final sets.',
+					'In the same lab, move the authored reward-proxy weights toward confident wording, then toward evidence grounding. Explain why the highest-scoring answer changes. This selector performs no reinforcement-learning training.'
 				],
-				'This small model learns from an original, deliberately tiny synthetic finance corpus on the CPU. It demonstrates real parameter learning and causal attention, not the scale, factual coverage, or professional ability of a commercial LLM. Reusing a revealed final set turns it into development evidence.'
+				'The same character and position embeddings, attention and feed-forward parameters, Adam optimizer state, and training RNG continue across the domain switch. Each corpus has separate training, validation, and final sentences. This tiny continued language-model pretraining experiment demonstrates parameter adaptation, not instruction tuning or commercial-model competence. Before/after comparisons use development validation; final scores evaluate the committed adapted model. Reusing revealed final sentences is development work.'
 			)
 		),
 		section(
@@ -72,7 +72,7 @@ export const m13: CourseModule = {
 			p(
 				'A base pretrained model is optimized for its training objective, which may be continuing text. It has not necessarily been optimized to respond as a cooperative assistant to a user instruction. Supervised fine-tuning uses selected input–response examples to update parameters toward desired behavior. Examples can teach response formats, task patterns, style, and how to respond when evidence is missing. Their quality and coverage matter: a polished but unsupported target answer teaches the wrong behavior.',
 				'Preference-based methods use comparisons or other feedback about outputs. One historical pipeline collects human preferences, trains a reward model to predict them, and optimizes the language model toward higher reward with constraints. This is commonly associated with reinforcement learning from human feedback, or RLHF. Other methods optimize preferences differently, and current post-training recipes vary. The important common question is what signal is being optimized and how well that signal represents the behavior we actually want.',
-				'Reinforcement learning studies how a policy chooses actions and is adjusted using reward signals. Here “policy” means a strategy for selecting outputs, not Willow’s expense manual. In a language-model setting, generating tokens or responses can be treated as actions, and a reward model may score completed responses. An optimization procedure changes the language model to favor higher-scoring behavior, often while limiting departure from a reference model. The reward is not a verified ledger: it is a numerical training signal whose connection to financial quality must be examined. A classroom selector that ranks two authored answers by confidence is an analogy for a poor reward proxy, not a complete implementation of RLHF.',
+				'Reinforcement learning studies how a policy chooses actions and is adjusted using reward signals. Here “policy” means a strategy for selecting outputs, not Willow’s expense manual. In a language-model setting, generating tokens or responses can be treated as actions, and a reward model may score completed responses. An optimization procedure changes the language model to favor higher-scoring behavior, often while limiting departure from a reference model. The reward is not a verified ledger: it is a numerical training signal whose connection to financial quality must be examined. A classroom selector that ranks authored answers by confidence is an analogy for a poor reward proxy, not a complete implementation of RLHF.',
 				'Suppose reviewers favor a confident short variance explanation over a cautious accurate one. Optimizing that preference can teach a harmful tradeoff. A reward or preference label is a proxy for quality, not quality itself. Evaluation therefore needs separate criteria for factual support, numerical correctness, instruction following, usefulness, and appropriate uncertainty. A single thumbs-up average can hide a serious failure dimension.',
 				'Post-training can improve assistant behavior without supplying Willow’s current figures. It also cannot make application permissions enforce themselves. A model trained to avoid unauthorized actions still needs a harness that restricts which tools can execute and under whose authority. Learned behavior and enforced controls are complementary; substituting one for the other creates fragile systems.'
 			),
