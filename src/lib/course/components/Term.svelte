@@ -19,12 +19,17 @@
 	function leave() {
 		timer = setTimeout(() => (open = false), 220);
 	}
+	function close() {
+		clearTimeout(timer);
+		open = false;
+		wrapper.querySelector<HTMLButtonElement>('.technical-term')?.focus();
+	}
 	onDestroy(() => clearTimeout(timer));
 </script>
 
 <svelte:window
 	onkeydown={(event) => {
-		if (event.key === 'Escape') open = false;
+		if (event.key === 'Escape' && open) close();
 	}}
 	onpointerdown={(event) => {
 		if (open && event.target instanceof Node && !wrapper.contains(event.target)) open = false;
@@ -43,8 +48,7 @@
 >
 	<button class="technical-term" aria-expanded={open} aria-controls={id} onclick={show}
 		>{text}</button
-	>
-	{#if open}<span
+	>{#if open}<span
 			class="definition"
 			style:left={`${left}px`}
 			style:top={`${top}px`}
@@ -56,10 +60,8 @@
 			><strong>{entry.term}</strong><span>{entry.definition}</span><em>{entry.example}</em><a
 				href={resolve('/course/[slug]', { slug: entry.module.toLowerCase() })}
 				>Study this concept · {entry.module} →</a
-			><button
-				class="close-term"
-				onclick={() => (open = false)}
-				aria-label={`Close definition of ${entry.term}`}>×</button
+			><button class="close-term" onclick={close} aria-label={`Close definition of ${entry.term}`}
+				>×</button
 			></span
 		>{/if}
 </span>

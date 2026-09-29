@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChartViewport from './ChartViewport.svelte';
 	import { onMount } from 'svelte';
 	import {
 		readFinalExposure,
@@ -297,7 +298,7 @@
 			class="run-button"
 			onclick={() => train(200)}
 			disabled={!metrics || running || !!final || metrics.step >= 2000}
-			><Icon name="play" size={16} />Train 200 updates</button
+			><Icon name="calculator" size={16} />Train 200 updates</button
 		><button
 			onclick={() => train(1)}
 			disabled={!metrics || running || !!final || metrics.step >= 2000}>One update</button
@@ -352,34 +353,36 @@
 					<h3>Does learning carry over?</h3>
 					<span class="chart-kicker">LOWER LOSS IS BETTER</span>
 				</div>
-				<svg viewBox="0 0 620 225" role="img" aria-labelledby={`${id}-loss-title`}
-					><title id={`${id}-loss-title`}
-						>Measured cross-entropy loss across training updates. Training {metrics.train.loss.toFixed(
-							3
-						)}, validation {metrics.validation.loss.toFixed(3)}.</title
-					>{#each [0, 1, 2, 3] as tick (tick)}<line
-							x1="48"
-							x2="588"
-							y1={186 - (tick / 3) * 158}
-							y2={186 - (tick / 3) * 158}
-							stroke="#e4e8e2"
-						/><text x="39" y={190 - (tick / 3) * 158} text-anchor="end"
-							>{((tick / 3) * chartMax).toFixed(2)}</text
-						>{/each}<path
-						d={lossPath('train')}
-						fill="none"
-						stroke="#286a51"
-						stroke-width="3"
-					/><path
-						d={lossPath('validation')}
-						fill="none"
-						stroke="#8061a5"
-						stroke-width="3"
-						stroke-dasharray="7 4"
-					/><text x="48" y="206">0</text><text x="588" y="206" text-anchor="end"
-						>{lastStep} updates</text
-					></svg
-				>
+				<ChartViewport label="Classifier training loss chart" minimum={520}>
+					<svg viewBox="0 0 620 225" role="img" aria-labelledby={`${id}-loss-title`}
+						><title id={`${id}-loss-title`}
+							>Measured cross-entropy loss across training updates. Training {metrics.train.loss.toFixed(
+								3
+							)}, validation {metrics.validation.loss.toFixed(3)}.</title
+						>{#each [0, 1, 2, 3] as tick (tick)}<line
+								x1="48"
+								x2="588"
+								y1={186 - (tick / 3) * 158}
+								y2={186 - (tick / 3) * 158}
+								stroke="#e4e8e2"
+							/><text x="39" y={190 - (tick / 3) * 158} text-anchor="end"
+								>{((tick / 3) * chartMax).toFixed(2)}</text
+							>{/each}<path
+							d={lossPath('train')}
+							fill="none"
+							stroke="#286a51"
+							stroke-width="3"
+						/><path
+							d={lossPath('validation')}
+							fill="none"
+							stroke="#8061a5"
+							stroke-width="3"
+							stroke-dasharray="7 4"
+						/><text x="48" y="206">0</text><text x="588" y="206" text-anchor="end"
+							>{lastStep} updates</text
+						></svg
+					>
+				</ChartViewport>
 				<div class="chart-legend">
 					<span><i class="green"></i>Training</span><span><i class="purple"></i>Validation</span>
 				</div>
@@ -513,7 +516,7 @@
 						syncScene();
 					}}
 					aria-pressed={motion}
-					><Icon name={motion ? 'pause' : 'play'} size={14} />{motion
+					><Icon name={motion ? 'pause' : 'orbit'} size={14} />{motion
 						? 'Pause motion'
 						: 'Gentle motion'}</button
 				>
@@ -526,7 +529,14 @@
 			</p>
 			<details>
 				<summary>Inspect every weight, bias and activation</summary>
-				<div class="table-scroll">
+				<!-- Keyboard focus supports horizontal table inspection. -->
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<div
+					class="table-scroll"
+					role="region"
+					aria-label="Learned weights, biases and activations"
+					tabindex="0"
+				>
 					<table>
 						<caption
 							>Actual forward pass · update {metrics.step}. Inputs are scaled to −1…1: {trace.scaledInput
@@ -690,7 +700,9 @@
 		</section>
 		<details>
 			<summary>Read the measured results as tables</summary>
-			<div class="table-scroll">
+			<!-- Keyboard focus supports horizontal table inspection. -->
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+			<div class="table-scroll" role="region" aria-label="Classifier loss checkpoints" tabindex="0">
 				<table>
 					<caption>Loss checkpoints · cross-entropy without the L2 training penalty</caption><thead
 						><tr
@@ -707,7 +719,9 @@
 					>
 				</table>
 			</div>
-			<div class="table-scroll">
+			<!-- Keyboard focus supports horizontal table inspection. -->
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+			<div class="table-scroll" role="region" aria-label="Classifier record scores" tabindex="0">
 				<table>
 					<caption>Every displayed record and its current score</caption><thead
 						><tr
@@ -775,6 +789,7 @@
 		--lab-green: #286a51;
 		--lab-purple: #8061a5;
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 20px;
 		min-width: 0;
 		color: var(--ink);
@@ -956,7 +971,7 @@
 		margin-top: 10px;
 	}
 	.chart-card svg text {
-		font-size: 11px;
+		font-size: 16px;
 		fill: #55655c;
 	}
 	.compact-label {
@@ -1184,6 +1199,7 @@
 		background: #493962;
 	}
 	details {
+		min-width: 0;
 		padding: 16px 18px;
 		background: #f7f8f3;
 		border: 1px solid var(--line);
@@ -1338,5 +1354,9 @@
 		.section-heading p {
 			font-size: 12px;
 		}
+	}
+
+	svg text {
+		font-size: 16px;
 	}
 </style>

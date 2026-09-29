@@ -273,11 +273,13 @@
 	}
 	@media (max-width: 650px) {
 		.project header {
+			flex-direction: column;
+			align-items: stretch;
 			padding: 23px;
 		}
 		.project header img {
-			width: 90px;
-			height: 130px;
+			width: 100%;
+			height: 140px;
 		}
 		.project h2 {
 			font-size: 22px;

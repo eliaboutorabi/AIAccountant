@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { labs } from '../src/lib/course/labs';
 
 test('the visual atlas filters, links into lessons, and supports readable image zoom', async ({
 	page
@@ -185,26 +186,7 @@ test('all chapters and laboratory components load without client errors', async 
 			link
 		).toEqual([]);
 	}
-	for (const slug of [
-		'training',
-		'network',
-		'representations',
-		'forecast',
-		'spreadsheet',
-		'value',
-		'tokens',
-		'transformer',
-		'adaptation',
-		'denoising',
-		'documents',
-		'retrieval',
-		'tools',
-		'harness',
-		'evaluation',
-		'pipeline',
-		'capstone',
-		'local-agent'
-	]) {
+	for (const { id: slug } of labs) {
 		await page.goto(`./lab/${slug}/`);
 		await expect(page.locator('.loading')).toHaveCount(0);
 		await expect(page.locator('main [role="alert"]')).toHaveCount(0);
@@ -294,7 +276,7 @@ test('storage denial remains usable and malformed imports do not destroy notes',
 	await expect(page.getByText('Keep this working note.', { exact: true })).toBeVisible();
 });
 
-test('principal pages and core workbenches are accessible and responsive', async ({
+test('principal pages and all workbenches are accessible and responsive', async ({
 	page
 }, info) => {
 	test.setTimeout(180000);
@@ -310,11 +292,7 @@ test('principal pages and core workbenches are accessible and responsive', async
 		'./progress/',
 		'./glossary/',
 		'./resources/',
-		'./lab/spreadsheet/',
-		'./lab/training/',
-		'./lab/documents/',
-		'./lab/value/',
-		'./lab/tokens/'
+		...labs.map(({ id }) => `./lab/${id}/`)
 	]) {
 		await page.goto(route);
 		if (route.includes('/lab/')) await expect(page.locator('.loading')).toHaveCount(0);

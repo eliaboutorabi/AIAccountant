@@ -223,7 +223,7 @@
 			class="primary"
 			onclick={() => train(200)}
 			disabled={!metrics || running || !!final || metrics.step >= 1000}
-			><Icon name="play" size={15} />Learn for 200 updates</button
+			><Icon name="calculator" size={15} />Learn for 200 updates</button
 		><button
 			onclick={() => train(1)}
 			disabled={!metrics || running || !!final || metrics.step >= 1000}>One update</button

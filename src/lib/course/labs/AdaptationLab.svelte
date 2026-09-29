@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChartViewport from './ChartViewport.svelte';
 	import { onMount } from 'svelte';
 	import {
 		ArrowRight,
@@ -7,7 +8,7 @@
 		Download,
 		LockKeyhole,
 		Pause,
-		Play,
+		Calculator,
 		RotateCcw,
 		SlidersHorizontal
 	} from '@lucide/svelte';
@@ -83,6 +84,7 @@
 		runIdentity++;
 		clearTimeout(timer);
 		running = false;
+		if (announce && experiment && report?.step !== experiment.model.step) refresh();
 		if (announce && experiment)
 			message = `Paused at update ${experiment.model.step}. Current weights and Adam state are retained.`;
 	}
@@ -104,6 +106,7 @@
 		const token = ++runIdentity;
 		const target = experiment.model.step + Math.min(chunkSize, 500 - currentStageSteps);
 		running = true;
+		generated = '';
 		message = `Updating weights on ${experiment.model.trainingDomain} training sentences. Validation sentences do not enter these updates.`;
 		const work = () => {
 			if (token !== runIdentity || !experiment) return;
@@ -296,7 +299,7 @@
 				class="primary"
 				onclick={train}
 				disabled={running || !!pending || report.phase === 'committed' || currentStageSteps >= 500}
-				><Play size={16} />Train {report.phase === 'general' ? 'general' : 'finance'} stage</button
+				><Calculator size={16} />Train {report.phase === 'general' ? 'general' : 'finance'} stage</button
 			><button class="secondary" onclick={() => pause()} disabled={!running}
 				><Pause size={16} />Pause</button
 			><button
@@ -324,50 +327,52 @@
 					>
 				</div>
 			</div>
-			<svg
-				viewBox="0 0 700 280"
-				role="img"
-				aria-labelledby={uid + '-chart-title ' + uid + '-chart-desc'}
-				><title id={uid + '-chart-title'}
-					>General and finance validation loss over actual training updates</title
-				><desc id={uid + '-chart-desc'}
-					>The table below provides current and pre-adaptation values. Vertical dashed line marks
-					the switch to finance training. Curves connect measured checkpoints; no outcome is
-					guaranteed.</desc
-				>{#each [0, 1, 2, 3, 4] as tick (tick)}<line
-						x1="48"
-						y1={244 - (tick / 4) * 208}
-						x2="658"
-						y2={244 - (tick / 4) * 208}
-						stroke="#dce5dc"
-					/><text x="38" y={248 - (tick / 4) * 208} text-anchor="end"
-						>{((chartMax * tick) / 4).toFixed(1)}</text
-					>{/each}{#if report.before}<line
-						x1={48 + (report.before.step / chartSteps) * 610}
-						y1="26"
-						x2={48 + (report.before.step / chartSteps) * 610}
-						y2="244"
-						stroke="#977333"
-						stroke-dasharray="5 5"
-					/>{/if}<path d={line('general')} fill="none" stroke="#356546" stroke-width="3" /><path
-					d={line('finance')}
-					fill="none"
-					stroke="#78579d"
-					stroke-width="3"
-				/>{#each report.history as point, i (i)}<circle
-						cx={48 + (point.step / chartSteps) * 610}
-						cy={244 - (point.general / chartMax) * 208}
-						r="3"
-						fill="#356546"
-					/><circle
-						cx={48 + (point.step / chartSteps) * 610}
-						cy={244 - (point.finance / chartMax) * 208}
-						r="3"
-						fill="#78579d"
-					/>{/each}<text x="48" y="267">0 updates</text><text x="658" y="267" text-anchor="end"
-					>{chartSteps} updates</text
-				></svg
-			>
+			<ChartViewport label="General and finance validation chart" minimum={600}>
+				<svg
+					viewBox="0 0 700 280"
+					role="img"
+					aria-labelledby={uid + '-chart-title ' + uid + '-chart-desc'}
+					><title id={uid + '-chart-title'}
+						>General and finance validation loss over actual training updates</title
+					><desc id={uid + '-chart-desc'}
+						>The table below provides current and pre-adaptation values. Vertical dashed line marks
+						the switch to finance training. Curves connect measured checkpoints; no outcome is
+						guaranteed.</desc
+					>{#each [0, 1, 2, 3, 4] as tick (tick)}<line
+							x1="48"
+							y1={244 - (tick / 4) * 208}
+							x2="658"
+							y2={244 - (tick / 4) * 208}
+							stroke="#dce5dc"
+						/><text x="38" y={248 - (tick / 4) * 208} text-anchor="end"
+							>{((chartMax * tick) / 4).toFixed(1)}</text
+						>{/each}{#if report.before}<line
+							x1={48 + (report.before.step / chartSteps) * 610}
+							y1="26"
+							x2={48 + (report.before.step / chartSteps) * 610}
+							y2="244"
+							stroke="#977333"
+							stroke-dasharray="5 5"
+						/>{/if}<path d={line('general')} fill="none" stroke="#356546" stroke-width="3" /><path
+						d={line('finance')}
+						fill="none"
+						stroke="#78579d"
+						stroke-width="3"
+					/>{#each report.history as point, i (i)}<circle
+							cx={48 + (point.step / chartSteps) * 610}
+							cy={244 - (point.general / chartMax) * 208}
+							r="3"
+							fill="#356546"
+						/><circle
+							cx={48 + (point.step / chartSteps) * 610}
+							cy={244 - (point.finance / chartMax) * 208}
+							r="3"
+							fill="#78579d"
+						/>{/each}<text x="48" y="267">0 updates</text><text x="658" y="267" text-anchor="end"
+						>{chartSteps} updates</text
+					></svg
+				>
+			</ChartViewport>
 			<div class="score-grid">
 				{#each ['general', 'finance'] as domain (domain)}{@const key = domain as
 						'general' | 'finance'}
@@ -432,11 +437,15 @@
 						<h3>{corpus.label} corpus</h3>
 						<small>{corpus.data.version}</small>
 						<h4>Training: {corpus.data.train.length} documents</h4>
-						<ol>
+						<!-- Keyboard focus supports scrolling the full corpus. -->
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<ol tabindex="0" aria-label={`${corpus.label} training sentences`}>
 							{#each corpus.data.train as sentence (sentence)}<li>{sentence}</li>{/each}
 						</ol>
 						<h4>Validation: {corpus.data.validation.length} separate documents</h4>
-						<ol>
+						<!-- Keyboard focus supports scrolling the full corpus. -->
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<ol tabindex="0" aria-label={`${corpus.label} validation sentences`}>
 							{#each corpus.data.validation as sentence (sentence)}<li>{sentence}</li>{/each}
 						</ol>
 					</article>{/each}
@@ -833,7 +842,7 @@
 		margin: 10px 0;
 	}
 	svg text {
-		font: 11px sans-serif;
+		font: 16px sans-serif;
 		fill: #576751;
 	}
 	.score-grid {

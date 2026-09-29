@@ -78,7 +78,8 @@
 		</p>{:else if error}<p class="ie-note" role="alert">{error}</p>{:else}
 		<div class="ie-token-heading">
 			<strong>2 · Vocabulary lookup</strong><span
-				>{tokens.length} tokens · {[...input].length} Unicode characters</span
+				>{tokens.length}
+				{tokens.length === 1 ? 'token' : 'tokens'} · {[...input].length} Unicode characters</span
 			>
 		</div>
 		<div class="ie-token-stream" role="group" aria-label="Actual token pieces and vocabulary IDs">

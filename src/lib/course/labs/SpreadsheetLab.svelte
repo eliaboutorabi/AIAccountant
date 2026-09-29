@@ -14,7 +14,7 @@
 	let preset = $state(0);
 	let cells = $state<Cells>(workbooks[0].cells.map((r) => [...r]));
 	let selected = $state<[number, number]>([0, 0]);
-	let editing = $state('');
+	let editing = $state(workbooks[0].cells[0][0]);
 	let checked = $state(false);
 	let showFormulas = $state(false);
 	let storage = $state(true);
@@ -51,12 +51,13 @@
 		} catch {
 			storage = false;
 		}
+		editing = cells[selected[0]][selected[1]];
 	}
 	function choose(index: number) {
 		preset = index;
 		cells = workbooks[index].cells.map((r) => [...r]);
 		selected = [0, 0];
-		editing = '';
+		editing = cells[0][0];
 		checked = false;
 		notice = '';
 		restore();
@@ -99,6 +100,7 @@
 			for (let c = 0; c < entries.length && col + c < 6; c++)
 				cells[row + r][col + c] = entries[c].slice(0, 500);
 		}
+		editing = cells[selected[0]][selected[1]];
 		save();
 		notice = 'Pasted cells and recalculated the sheet.';
 	}

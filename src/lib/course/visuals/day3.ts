@@ -474,7 +474,7 @@ export const day3Visuals: TeachingVisual[] = [
 				label: 'Audio',
 				value: 'Sound or speech',
 				detail: 'Check intelligibility, fidelity and the meaning communicated.',
-				icon: 'play'
+				icon: 'mic'
 			}
 		],
 		takeaway:

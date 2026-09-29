@@ -62,9 +62,9 @@
 				syncScene();
 			}}
 			aria-pressed={!playing}
-			><Icon name={playing ? 'pause' : 'play'} size={14} />{playing
+			><Icon name={playing ? 'pause' : 'orbit'} size={14} />{playing
 				? 'Pause motion'
-				: 'Play motion'}</button
+				: 'Resume motion'}</button
 		>
 	</div>
 	<div class="network-controls">

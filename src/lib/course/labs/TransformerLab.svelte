@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChartViewport from './ChartViewport.svelte';
 	import { onMount } from 'svelte';
 	import {
 		readFinalExposure,
@@ -93,6 +94,7 @@
 		clearTimeout(timer);
 		running = false;
 		generating = false;
+		if (announce && model && metrics?.step !== model.step) refresh();
 		if (announce && model)
 			status = `Paused at update ${model.step}. These learned weights are retained.`;
 	}
@@ -134,6 +136,7 @@
 				}
 			} catch (reason) {
 				pause(false);
+				refresh();
 				error = reason instanceof Error ? reason.message : 'Training stopped.';
 			}
 		};
@@ -193,10 +196,7 @@
 	onMount(() => {
 		reset();
 		const visibility = () => {
-			if (document.hidden && running) {
-				pause();
-				refresh();
-			}
+			if (document.hidden && running) pause();
 		};
 		document.addEventListener('visibilitychange', visibility);
 		return () => {
@@ -275,16 +275,12 @@
 						class="primary"
 						onclick={() => train(100)}
 						disabled={running || generating || !!final || metrics.step >= 3000}
-						><Icon name="play" size={15} />Train 100 updates</button
+						><Icon name="calculator" size={15} />Train 100 updates</button
 					><button
 						onclick={() => train(500)}
 						disabled={running || generating || !!final || metrics.step >= 3000}>Train 500</button
-					><button
-						onclick={() => {
-							pause();
-							refresh();
-						}}
-						disabled={!running}><Icon name="pause" size={15} />Pause</button
+					><button onclick={() => pause()} disabled={!running}
+						><Icon name="pause" size={15} />Pause</button
 					><button onclick={reset}
 						><Icon name="reset" size={15} />{pending
 							? 'Apply settings & reset'
@@ -326,29 +322,31 @@
 					<h3>Learning is a change you can measure.</h3>
 					<span>MEAN NEXT-CHARACTER CROSS-ENTROPY</span>
 				</div>
-				<svg viewBox="0 0 620 225" role="img" aria-labelledby={`${id}-loss`}
-					><title id={`${id}-loss`}
-						>Training loss {metrics.train.loss.toFixed(3)} and validation loss {metrics.validation.loss.toFixed(
-							3
-						)} at update {metrics.step}.</title
-					>{#each [0, 1, 2, 3] as tick (tick)}<line
-							x1="48"
-							x2="588"
-							y1={186 - (tick / 3) * 158}
-							y2={186 - (tick / 3) * 158}
-							stroke="#e6e2eb"
-						/><text x="39" y={190 - (tick / 3) * 158} text-anchor="end"
-							>{((tick / 3) * chartMax).toFixed(1)}</text
-						>{/each}<path d={line('train')} stroke="#286a51" stroke-width="3" fill="none" /><path
-						d={line('validation')}
-						stroke="#8460a6"
-						stroke-width="3"
-						stroke-dasharray="7 4"
-						fill="none"
-					/><text x="48" y="207">0</text><text x="588" y="207" text-anchor="end"
-						>{lastStep} updates</text
-					></svg
-				>
+				<ChartViewport label="Language model training loss chart" minimum={520}>
+					<svg viewBox="0 0 620 225" role="img" aria-labelledby={`${id}-loss`}
+						><title id={`${id}-loss`}
+							>Training loss {metrics.train.loss.toFixed(3)} and validation loss {metrics.validation.loss.toFixed(
+								3
+							)} at update {metrics.step}.</title
+						>{#each [0, 1, 2, 3] as tick (tick)}<line
+								x1="48"
+								x2="588"
+								y1={186 - (tick / 3) * 158}
+								y2={186 - (tick / 3) * 158}
+								stroke="#e6e2eb"
+							/><text x="39" y={190 - (tick / 3) * 158} text-anchor="end"
+								>{((tick / 3) * chartMax).toFixed(1)}</text
+							>{/each}<path d={line('train')} stroke="#286a51" stroke-width="3" fill="none" /><path
+							d={line('validation')}
+							stroke="#8460a6"
+							stroke-width="3"
+							stroke-dasharray="7 4"
+							fill="none"
+						/><text x="48" y="207">0</text><text x="588" y="207" text-anchor="end"
+							>{lastStep} updates</text
+						></svg
+					>
+				</ChartViewport>
 				<div class="legend">
 					<span><i class="green"></i>Training</span><span><i class="purple"></i>Validation</span>
 				</div>
@@ -371,7 +369,14 @@
 								>{i + 1}. {sentence}</option
 							>{/each}</select
 					></label
-				>{#if example}<div class="shifted-sequence">
+				>{#if example}<!-- Keyboard focus supports inspecting the complete supervised sequence. -->
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<div
+						class="shifted-sequence"
+						role="region"
+						aria-label="Training input and shifted target sequence"
+						tabindex="0"
+					>
 						<div><span>INPUT</span><code>{example.inputText.replaceAll('\n', '↵')}</code></div>
 						<div>
 							<span>NEXT-CHARACTER TARGET</span><code
@@ -416,7 +421,14 @@
 			</section>
 			<details>
 				<summary>Read loss history and original corpus</summary>
-				<div class="table-scroll">
+				<!-- Keyboard focus supports horizontal table inspection. -->
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<div
+					class="table-scroll"
+					role="region"
+					aria-label="Language model loss checkpoints"
+					tabindex="0"
+				>
 					<table>
 						<caption>Measured evaluation checkpoints</caption><thead
 							><tr
@@ -578,7 +590,14 @@
 				</div>
 				<details>
 					<summary>Inspect all 16 values at position {query}</summary>
-					<div class="table-scroll">
+					<!-- Keyboard focus supports horizontal table inspection. -->
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<div
+						class="table-scroll"
+						role="region"
+						aria-label="Learned representation values"
+						tabindex="0"
+					>
 						<table>
 							<caption
 								>Measured forward trace. Dimensions are features; embedding ID proximity has no
@@ -648,7 +667,9 @@
 			</section>
 			<details>
 				<summary>Token IDs, original characters and exact attention scores</summary>
-				<div class="table-scroll">
+				<!-- Keyboard focus supports horizontal table inspection. -->
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<div class="table-scroll" role="region" aria-label="Exact attention scores" tabindex="0">
 					<table>
 						<caption>Selected attention row before and after normalization</caption><thead
 							><tr
@@ -734,7 +755,14 @@
 					</p>
 					<details>
 						<summary>Inspect each generated token and its selection probability</summary>
-						<div class="table-scroll">
+						<!-- Keyboard focus supports horizontal table inspection. -->
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<div
+							class="table-scroll"
+							role="region"
+							aria-label="Generated token probabilities"
+							tabindex="0"
+						>
 							<table>
 								<caption
 									>Model probability uses temperature 1. Sampling probability uses the selected
@@ -867,7 +895,7 @@
 	}
 	.switcher button span {
 		font-size: 10px;
-		color: #73806b;
+		color: #59674f;
 		margin-right: 2px;
 	}
 	.switcher button.chosen {
@@ -1039,7 +1067,7 @@
 		display: block;
 	}
 	.loss-panel svg text {
-		font-size: 11px;
+		font-size: 16px;
 		fill: #647064;
 	}
 	.legend {
@@ -1136,6 +1164,7 @@
 		background: #1e533e;
 	}
 	details {
+		min-width: 0;
 		border: 1px solid var(--line);
 		border-radius: 12px;
 		background: #f8f8f4;

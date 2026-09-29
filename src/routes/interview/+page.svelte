@@ -85,11 +85,20 @@
 							<span aria-live="off"
 								>{Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}</span
 							><button
-								aria-label={running ? 'Pause timer' : 'Start two-minute timer'}
+								aria-label={running
+									? 'Pause timer'
+									: seconds > 0 && seconds < 120
+										? 'Resume timer'
+										: 'Start two-minute timer'}
 								onclick={() => {
 									if (seconds === 0) seconds = 120;
 									running = !running;
-								}}><Icon name={running ? 'pause' : 'play'} size={15} /></button
+								}}
+								><Icon name={running ? 'pause' : 'timer'} size={15} />{running
+									? 'Pause'
+									: seconds > 0 && seconds < 120
+										? 'Resume'
+										: 'Start'}</button
 							><button
 								aria-label="Reset timer"
 								onclick={() => {
@@ -253,6 +262,7 @@
 	}
 	.question-meta {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
 		gap: 15px;
@@ -277,6 +287,10 @@
 		margin-right: 5px;
 	}
 	.timer button {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		min-height: 32px;
 		border: 0;
 		background: transparent;
 		padding: 3px;

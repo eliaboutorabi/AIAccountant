@@ -176,7 +176,7 @@
 	margin: 14px 0 5px;
 }
 .numerical-lab svg text {
-	font-size: 10px;
+	font-size: 16px;
 	fill: #5a685a;
 }
 .numerical-lab .plot-score {
@@ -478,23 +478,24 @@
 		gap: 12px;
 	}
 	.numerical-lab .lab-grid.four {
+		grid-template-columns: 1fr;
 		gap: 10px;
 	}
 	.numerical-lab .plot-card {
 		padding: 12px;
 	}
 	.numerical-lab .plot-card h4 {
-		font-size: 11px;
+		font-size: 14px;
 	}
 	.numerical-lab .plot-score {
 		flex-wrap: wrap;
-		font-size: 9px;
+		font-size: 11px;
 	}
 	.numerical-lab .plot-score strong {
 		font-size: 16px;
 	}
 	.numerical-lab .plot-card p {
-		font-size: 10px;
+		font-size: 13px;
 	}
 	.numerical-lab .metric-strip > div {
 		padding: 13px;
@@ -503,11 +504,11 @@
 		font-size: 25px;
 	}
 	.numerical-lab .metric-strip span {
-		font-size: 7px;
+		font-size: 11px;
 		letter-spacing: 0.5px;
 	}
 	.numerical-lab .metric-strip small {
-		font-size: 9px;
+		font-size: 11px;
 	}
 	.numerical-lab .commit-panel {
 		padding: 18px;

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChartViewport from './ChartViewport.svelte';
 	import { onMount } from 'svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import {
@@ -363,83 +364,88 @@
 				>Selected rolling forecasts</span
 			><span class="band-key">Empirical error band</span>
 		</div>
-		<svg viewBox="0 0 900 320" role="img" aria-labelledby={`${id}-chart-title ${id}-chart-desc`}>
-			<title id={`${id}-chart-title`}
-				>Collections history and {methodDescription.label} forecasts</title
-			>
-			<desc id={`${id}-chart-desc`}
-				>Observed and forecast values in USD thousands. Final-year actuals and forecasts remain
-				hidden until commitment. The exact values and origin-specific calibration are provided in
-				the table below.</desc
-			>
-			<rect x={x(42)} y="28" width={x(60) - x(42)} height="242" fill="#f3edf9" />
-			<rect
-				x={x(60)}
-				y="28"
-				width={864 - x(60)}
-				height="242"
-				fill={commitment ? '#fff0df' : '#f1f1eb'}
-			/>
-			{#each [0, 1, 2, 3, 4] as tick (tick)}{@const value =
-					chartMin + ((chartMax - chartMin) * tick) / 4}<line
-					x1="56"
-					x2="864"
-					y1={y(value)}
-					y2={y(value)}
-					stroke="#d8ddd5"
-				/><text x="45" y={y(value) + 4} text-anchor="end">{value.toFixed(0)}</text>{/each}
-			<path d={band(selectedValidation.rows)} fill="#d6c5eb" opacity="0.55" />
-			{#if finalResult}<path d={band(finalResult.rows)} fill="#f3c99c" opacity="0.55" />{/if}
-			<path d={line(visibleSeries)} fill="none" stroke="#246250" stroke-width="2.8" />
-			<path
-				d={line(selectedValidation.rows.map((row) => ({ index: row.target, value: row.forecast })))}
-				fill="none"
-				stroke="#725294"
-				stroke-width="2.4"
-				stroke-dasharray="7 4"
-			/>
-			{#if finalResult}<path
-					d={line(finalResult.rows.map((row) => ({ index: row.target, value: row.forecast })))}
+		<ChartViewport label="Monthly forecast and observed cash chart" minimum={800}>
+			<svg viewBox="0 0 900 320" role="img" aria-labelledby={`${id}-chart-title ${id}-chart-desc`}>
+				<title id={`${id}-chart-title`}
+					>Collections history and {methodDescription.label} forecasts</title
+				>
+				<desc id={`${id}-chart-desc`}
+					>Observed and forecast values in USD thousands. Final-year actuals and forecasts remain
+					hidden until commitment. The exact values and origin-specific calibration are provided in
+					the table below.</desc
+				>
+				<rect x={x(42)} y="28" width={x(60) - x(42)} height="242" fill="#f3edf9" />
+				<rect
+					x={x(60)}
+					y="28"
+					width={864 - x(60)}
+					height="242"
+					fill={commitment ? '#fff0df' : '#f1f1eb'}
+				/>
+				{#each [0, 1, 2, 3, 4] as tick (tick)}{@const value =
+						chartMin + ((chartMax - chartMin) * tick) / 4}<line
+						x1="56"
+						x2="864"
+						y1={y(value)}
+						y2={y(value)}
+						stroke="#d8ddd5"
+					/><text x="45" y={y(value) + 4} text-anchor="end">{value.toFixed(0)}</text>{/each}
+				<path d={band(selectedValidation.rows)} fill="#d6c5eb" opacity="0.55" />
+				{#if finalResult}<path d={band(finalResult.rows)} fill="#f3c99c" opacity="0.55" />{/if}
+				<path d={line(visibleSeries)} fill="none" stroke="#246250" stroke-width="2.8" />
+				<path
+					d={line(
+						selectedValidation.rows.map((row) => ({ index: row.target, value: row.forecast }))
+					)}
 					fill="none"
-					stroke="#a85523"
+					stroke="#725294"
 					stroke-width="2.4"
 					stroke-dasharray="7 4"
-				/>{/if}
-			<line
-				x1={x(inspected.target)}
-				x2={x(inspected.target)}
-				y1="28"
-				y2="270"
-				stroke="#4a5149"
-				stroke-dasharray="3 4"
-			/>
-			<circle
-				cx={x(inspected.target)}
-				cy={y(inspected.forecast)}
-				r="5"
-				fill="#725294"
-				stroke="white"
-				stroke-width="2"
-			/>
-			<circle
-				cx={x(inspected.target)}
-				cy={y(inspected.actual)}
-				r="5"
-				fill="#246250"
-				stroke="white"
-				stroke-width="2"
-			/>
-			{#each [{ index: 0, label: 'Jan 2021' }, { index: 24, label: 'Jan 2023' }, { index: 42, label: 'Jul 2024' }, { index: 59, label: 'Dec 2025' }, { index: 71, label: 'Dec 2026' }] as tick (tick.index)}<text
-					x={x(tick.index)}
-					y="294"
-					text-anchor={tick.index === 0 ? 'start' : tick.index === 71 ? 'end' : 'middle'}
-					>{tick.label}</text
-				>{/each}
-			{#if !commitment}<text x={x(65.5)} y="145" text-anchor="middle" class="hidden-label"
-					>Final year</text
-				><text x={x(65.5)} y="165" text-anchor="middle" class="hidden-label">not yet revealed</text
-				>{/if}
-		</svg>
+				/>
+				{#if finalResult}<path
+						d={line(finalResult.rows.map((row) => ({ index: row.target, value: row.forecast })))}
+						fill="none"
+						stroke="#a85523"
+						stroke-width="2.4"
+						stroke-dasharray="7 4"
+					/>{/if}
+				<line
+					x1={x(inspected.target)}
+					x2={x(inspected.target)}
+					y1="28"
+					y2="270"
+					stroke="#4a5149"
+					stroke-dasharray="3 4"
+				/>
+				<circle
+					cx={x(inspected.target)}
+					cy={y(inspected.forecast)}
+					r="5"
+					fill="#725294"
+					stroke="white"
+					stroke-width="2"
+				/>
+				<circle
+					cx={x(inspected.target)}
+					cy={y(inspected.actual)}
+					r="5"
+					fill="#246250"
+					stroke="white"
+					stroke-width="2"
+				/>
+				{#each [{ index: 0, label: 'Jan 2021' }, { index: 24, label: 'Jan 2023' }, { index: 42, label: 'Jul 2024' }, { index: 59, label: 'Dec 2025' }, { index: 71, label: 'Dec 2026' }] as tick (tick.index)}<text
+						x={x(tick.index)}
+						y="294"
+						text-anchor={tick.index === 0 ? 'start' : tick.index === 71 ? 'end' : 'middle'}
+						>{tick.label}</text
+					>{/each}
+				{#if !commitment}<text x={x(65.5)} y="145" text-anchor="middle" class="hidden-label"
+						>Final year</text
+					><text x={x(65.5)} y="165" text-anchor="middle" class="hidden-label"
+						>not yet revealed</text
+					>{/if}
+			</svg>
+		</ChartViewport>
 		<figcaption>
 			Each forecast is refitted using its own past. The purple region contains validation targets;
 			the final year begins in the shaded region at right. Band width is calibrated from up to 24
@@ -844,7 +850,7 @@
 		font-size: 0.61rem;
 		font-weight: 800;
 		letter-spacing: 0.08em;
-		color: #66705f;
+		color: #56604f;
 	}
 	.timeline strong {
 		font-size: 0.92rem;
@@ -945,12 +951,12 @@
 		display: block;
 	}
 	.forecast-chart text {
-		font-size: 11px;
+		font-size: 16px;
 		fill: #64715f;
 		font-family: inherit;
 	}
 	.forecast-chart .hidden-label {
-		font-size: 10px;
+		font-size: 16px;
 	}
 	.chart-key {
 		display: flex;

@@ -364,14 +364,15 @@
 	}
 	@media (max-width: 650px) {
 		.plan-note {
-			flex-wrap: wrap;
+			display: grid;
+			grid-template-columns: 25px minmax(0, 1fr);
+			align-items: start;
+			gap: 16px;
 			padding: 23px;
 		}
-		.plan-note > div {
-			flex: 1;
-		}
 		.plan-note .button {
-			margin-left: 40px;
+			grid-column: 2;
+			justify-self: start;
 		}
 		.course-day header {
 			padding: 25px;

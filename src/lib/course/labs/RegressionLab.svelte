@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChartViewport from './ChartViewport.svelte';
 	import { onMount } from 'svelte';
 	import {
 		readFinalExposure,
@@ -61,26 +62,28 @@
 	const inspected = $derived(regressionData.train[row]);
 	const prediction = $derived(predictCollection(params, inspected.receivable));
 	const plotMax = $derived(
-		Math.max(150, Math.abs(predictCollection(params, 140)), Math.abs(predictCollection(params, 40)))
+		Math.max(150, predictCollection(params, 140), predictCollection(params, 40))
 	);
+	const plotMin = $derived(
+		Math.min(0, predictCollection(params, 40), predictCollection(params, 140))
+	);
+	const plotY = (value: number) => 260 - ((value - plotMin) / (plotMax - plotMin)) * 240;
+	const axisLabel = (n: number) => (Math.abs(n) >= 10000 ? n.toExponential(1) : fmt(n, 0));
 	function step(count: number) {
 		if (final) return;
 		error = '';
+		const initialStep = params.step;
 		try {
 			for (let i = 0; i < count; i++) {
 				update = regressionStep(params, rate);
 				params = update.next;
 			}
-			history = [
-				...history,
-				{
-					step: params.step,
-					train: regressionMetrics(params, regressionData.train).mse,
-					validation: regressionMetrics(params, regressionData.validation).mse
-				}
-			];
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Training failed';
+		} finally {
+			// Keep the last successful weights visible even when a later update is rejected.
+			if (params.step > initialStep)
+				history = [...history, { step: params.step, train: train.mse, validation: validation.mse }];
 		}
 	}
 	function reset() {
@@ -135,51 +138,62 @@
 		<div><strong>{fmt(validation.mae, 2)}</strong><span>validation MAE · USD thousands</span></div>
 	</div>
 	<figure>
-		<svg
-			viewBox="0 0 620 300"
-			role="img"
-			aria-label="Opening receivables against subsequent collections, with the actual learned regression line"
-			><rect
-				x="50"
-				y="15"
-				width="545"
-				height="245"
-				rx="12"
-				fill="#f5f7f0"
-			/>{#each [0, 1, 2, 3] as t (t)}<line
+		<ChartViewport label="Collections regression chart" minimum={520}>
+			<svg
+				viewBox="0 0 620 300"
+				role="img"
+				aria-label="Opening receivables against subsequent collections, with the actual learned regression line"
+				><rect
+					x="50"
+					y="15"
+					width="545"
+					height="245"
+					rx="12"
+					fill="#f5f7f0"
+				/>{#each [0, 1, 2, 3] as t (t)}<line
+						x1="50"
+						x2="595"
+						y1={260 - t * 75}
+						y2={260 - t * 75}
+						stroke="#dfe7d8"
+					/><text x="40" y={264 - t * 75} text-anchor="end"
+						>{axisLabel(plotMin + ((plotMax - plotMin) * t * 75) / 240)}</text
+					>{/each}<line
 					x1="50"
 					x2="595"
-					y1={260 - t * 75}
-					y2={260 - t * 75}
-					stroke="#dfe7d8"
-				/><text x="40" y={264 - t * 75} text-anchor="end">{fmt((plotMax * t * 75) / 240, 0)}</text
-				>{/each}{#each regressionData.train as point (point.id)}<circle
-					cx={50 + ((point.receivable - 40) / 100) * 545}
-					cy={260 - (point.collected / plotMax) * 240}
-					r="4"
-					fill="#37764b"
-				/>{/each}{#each regressionData.validation as point (point.id)}<circle
-					cx={50 + ((point.receivable - 40) / 100) * 545}
-					cy={260 - (point.collected / plotMax) * 240}
-					r="4"
-					fill="#8871ad"
-				/>{/each}<line
-				x1="50"
-				x2="595"
-				y1={260 - (Math.max(0, predictCollection(params, 40)) / plotMax) * 240}
-				y2={260 - (Math.max(0, predictCollection(params, 140)) / plotMax) * 240}
-				stroke="#c37532"
-				stroke-width="3"
-			/><text x="50" y="282">40</text><text x="575" y="282">140</text><text
-				x="320"
-				y="297"
-				text-anchor="middle">Opening receivables · USD thousands</text
-			></svg
-		>
+					y1={plotY(0)}
+					y2={plotY(0)}
+					stroke="#65705e"
+					stroke-dasharray="4 4"
+				/>{#each regressionData.train as point (point.id)}<circle
+						cx={50 + ((point.receivable - 40) / 100) * 545}
+						cy={plotY(point.collected)}
+						r="4"
+						fill="#37764b"
+					/>{/each}{#each regressionData.validation as point (point.id)}<circle
+						cx={50 + ((point.receivable - 40) / 100) * 545}
+						cy={plotY(point.collected)}
+						r="4"
+						fill="#8871ad"
+					/>{/each}<line
+					x1="50"
+					x2="595"
+					y1={plotY(predictCollection(params, 40))}
+					y2={plotY(predictCollection(params, 140))}
+					stroke="#c37532"
+					stroke-width="3"
+				/><text x="50" y="282">40</text><text x="575" y="282">140</text><text
+					x="320"
+					y="297"
+					text-anchor="middle">Opening receivables · USD thousands</text
+				></svg
+			>
+		</ChartViewport>
 		<figcaption>
-			Green: training customers. Lavender: validation customers. Gold: current prediction. Negative
-			predictions are clipped at the chart’s lower edge; the exact table and errors below retain
-			them. Vertical axis: collections in USD thousands.
+			Green: training customers. Lavender: validation customers. Gold: current prediction. The
+			vertical scale expands to include negative predictions; the dashed line marks zero. Extreme
+			learning rates can compress the data points as predictions diverge. Vertical axis: collections
+			in USD thousands.
 		</figcaption>
 	</figure>
 	<div class="trace">
@@ -228,7 +242,14 @@
 		</div>{/if}
 	<details>
 		<summary>Training checkpoints & exact record table</summary>
-		<div class="table-scroll">
+		<!-- Keyboard focus supports horizontal table inspection. -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+		<div
+			class="table-scroll"
+			role="region"
+			aria-label="Regression checkpoints and record data"
+			tabindex="0"
+		>
 			<table>
 				<thead><tr><th>Update</th><th>Training MSE</th><th>Validation MSE</th></tr></thead><tbody
 					>{#each history as item, i (i)}<tr
@@ -355,7 +376,7 @@
 		max-height: 420px;
 	}
 	svg text {
-		font-size: 10px;
+		font-size: 16px;
 		fill: #5d7055;
 	}
 	figcaption {

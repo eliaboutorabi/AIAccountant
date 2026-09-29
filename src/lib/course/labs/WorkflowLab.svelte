@@ -8,7 +8,6 @@
 		ShieldCheck,
 		ClipboardCheck,
 		Download,
-		Play,
 		RotateCcw
 	} from '@lucide/svelte';
 	import {
@@ -112,6 +111,10 @@
 	);
 	let firstCommit = $state<typeof committed>(null);
 	let currentEvaluation = $state<ReturnType<typeof evaluateWorkflow> | null>(null);
+	let evaluationConfig = $state<PipelineConfig | null>(null);
+	const evaluationStale = $derived(
+		evaluationConfig !== null && JSON.stringify(evaluationConfig) !== JSON.stringify(config)
+	);
 	const trialMetrics = gradeTrialFixture();
 	let notice = $state('');
 	const checkpointKey = 'ai-accountant-workflow-checkpoint-v1';
@@ -260,7 +263,8 @@
 		document.getElementById(`${uid}-records`)?.scrollIntoView({ block: 'start' });
 	}
 	function evaluate() {
-		currentEvaluation = evaluateWorkflow({ ...config });
+		evaluationConfig = { ...config };
+		currentEvaluation = evaluateWorkflow(evaluationConfig);
 		notice = 'Development suite executed against the current configuration.';
 	}
 	function download(name: string, text: string, type = 'application/json') {
@@ -296,6 +300,8 @@
 					firstFinal,
 					firstCommit,
 					currentEvaluation,
+					evaluationConfig,
+					evaluationStale,
 					finalPack: CAPSTONE_FINAL_PACK,
 					finalProvenance: CAPSTONE_FINAL_PROVENANCE,
 					finalEvaluation,
@@ -535,7 +541,9 @@
 						rows="12"
 						bind:value={toolText}
 						spellcheck="false"></textarea></label
-				><button class="primary" onclick={runTool}><Play size={16} /> Validate and execute</button>
+				><button class="primary" onclick={runTool}
+					><Calculator size={16} /> Validate and execute</button
+				>
 			</div>
 			<div>
 				<h4>Actual local result</h4>
@@ -567,7 +575,7 @@
 		</div>
 		<div class="mini-buttons">
 			<button class="primary" onclick={() => recover('send')}
-				><Play size={16} /> Send D8 · lose response</button
+				><Workflow size={16} /> Send D8 · lose response</button
 			><button class="secondary" onclick={() => recover('status')}>Check D8 status</button><button
 				class="secondary"
 				onclick={() => recover('retry')}>Retry same D8</button
@@ -688,7 +696,7 @@ Do not claim approval, posting, or payment.</pre>
 			></textarea></label
 		>
 		<div class="mini-buttons">
-			<button class="primary" onclick={run}><Play size={16} /> Run original/local case</button
+			<button class="primary" onclick={run}><Workflow size={16} /> Run original/local case</button
 			><button class="secondary" onclick={commit} disabled={!prediction.trim() || revealed}
 				>Commit configuration</button
 			>{#if committed && !revealed}<button class="secondary" onclick={reveal}
@@ -910,6 +918,10 @@ Do not claim approval, posting, or payment.</pre>
 			</details>{/if}
 		{#if currentEvaluation}<div class="assessment">
 				<h4>Development evaluation · public PIPE-01 cases</h4>
+				{#if evaluationStale}<p class="result-note" role="status">
+						Settings changed after this evaluation. The results below retain the previous
+						configuration; run the development suite again to evaluate your current choices.
+					</p>{/if}
 				<p>
 					{currentEvaluation.filter((c) => c.pass).length}/{currentEvaluation.length} cases meet their
 					declared local criteria. Correct escalation counts as success. This small suite does not establish

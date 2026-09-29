@@ -143,7 +143,7 @@
 					? 'page'
 					: undefined}
 				><Icon name={item.icon} size={19} /><span>{item.label}</span
-				>{#if item.icon === 'flask'}<span class="tiny-new">PLAY</span>{/if}</a
+				>{#if item.icon === 'flask'}<span class="tiny-new">LABS</span>{/if}</a
 			>
 		{/each}
 	</nav>

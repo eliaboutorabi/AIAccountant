@@ -750,21 +750,6 @@ main:focus {
 	height: 100%;
 	object-fit: cover;
 }
-.play-circle {
-	position: absolute;
-	inset: 0;
-	margin: auto;
-	display: grid;
-	place-items: center;
-	background: #ffffffe0;
-	border: 4px solid #ffffff77;
-	background-clip: padding-box;
-	color: #3f6b43;
-	width: 44px;
-	height: 44px;
-	border-radius: 50%;
-	padding-left: 3px;
-}
 .first-lesson-copy h3 {
 	font-size: 17px;
 	letter-spacing: -0.5px;

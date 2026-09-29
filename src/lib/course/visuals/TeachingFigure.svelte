@@ -214,9 +214,6 @@
 						</p>{/each}
 				</div>
 			{:else}
-				{#if visual.layout === 'cycle'}<div class="tf-cycle-center" aria-hidden="true">
-						<Icon name="reset" size={32} /><span>Return to the beginning</span>
-					</div>{/if}
 				<ol
 					class="tf-nodes"
 					style={`--tf-count:${visual.nodes.length};--tf-flow-cols:${flowColumns}`}
@@ -239,13 +236,19 @@
 							{#if node.value}<span class="tf-node-value">{node.value}</span>{/if}
 							<h4>{node.label}</h4>
 							<p>{node.detail}</p>
-							{#if visual.layout === 'flow' || visual.layout === 'cycle'}<span
+							{#if (visual.layout === 'flow' || visual.layout === 'cycle') && i < visual.nodes.length - 1}<span
 									class="tf-connector"
 									aria-hidden="true"><Icon name="arrow" size={23} /></span
 								>{/if}
 						</li>
 					{/each}
 				</ol>
+				{#if visual.layout === 'cycle'}
+					<div class="tf-cycle-return">
+						<Icon name="reset" size={23} />
+						<span>Repeat the cycle from <strong>01 · {visual.nodes[0]?.label}</strong></span>
+					</div>
+				{/if}
 			{/if}
 		</div>
 	{/if}
@@ -583,31 +586,24 @@
 		background: #547448;
 		box-shadow: 0 0 0 5px #edf1e3;
 	}
-	.tf-cycle-center {
+	.tf-cycle-return {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		gap: 12px;
-		margin: -4px 0 23px;
-		color: #5e7550;
+		gap: 10px;
+		margin-top: 22px;
+		padding: 15px 18px;
+		border: 1px solid #c6d3ba;
+		border-radius: 13px;
+		background: #eaf0e2;
+		color: #405836;
 	}
-	.tf-cycle-center span {
-		font-size: 11px;
-		font-weight: 750;
-		letter-spacing: 0.5px;
+	.tf-cycle-return span {
+		font-size: 12px;
+		line-height: 1.6;
 	}
-	.tf-layout-cycle .tf-nodes {
-		border-bottom: 2px dashed #a9ba9c;
-		padding-bottom: 22px;
-		border-radius: 0 0 24px 24px;
-	}
-	.tf-layout-cycle .tf-node:last-child .tf-connector {
-		display: flex;
-		right: 15px;
-		top: auto;
-		bottom: -33px;
-		transform: rotate(180deg);
-		background: #f3f4ec;
+	.tf-cycle-return :global(svg) {
+		flex-shrink: 0;
 	}
 	.tf-bars {
 		display: grid;
@@ -876,10 +872,6 @@
 			top: auto;
 			bottom: -24px;
 			transform: rotate(90deg);
-		}
-		.tf-layout-cycle .tf-node:last-child .tf-connector {
-			right: 15px;
-			transform: rotate(180deg);
 		}
 		.tf-layout-timeline .tf-nodes {
 			border-top: 0;

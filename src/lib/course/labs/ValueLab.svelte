@@ -15,6 +15,30 @@
 		(volume * (manual - prep - review - (correctionRate / 100) * correctionTime)) / 60
 	);
 	const net = $derived(hours * hourly - volume * modelCost - maintenance - setup / weeks);
+	const invalid = $derived(
+		[
+			volume,
+			manual,
+			prep,
+			review,
+			correctionRate,
+			correctionTime,
+			hourly,
+			modelCost,
+			maintenance,
+			setup,
+			weeks
+		].some((v) => !Number.isFinite(v) || v < 0) ||
+			volume > 100000 ||
+			[manual, prep, review, correctionTime].some((v) => v > 60) ||
+			correctionRate > 100 ||
+			hourly > 1000 ||
+			modelCost > 100 ||
+			maintenance > 100000 ||
+			setup > 1000000 ||
+			weeks < 1 ||
+			weeks > 520
+	);
 	const inputs = [
 		{ key: 'volume', label: 'Weekly documents' },
 		{ key: 'manual', label: 'Baseline minutes per document' }
@@ -104,10 +128,10 @@
 			>Weeks to allocate setup<input type="number" min="1" max="520" bind:value={weeks} /></label
 		>
 	</div>
-	{#if [volume, manual, prep, review, correctionRate, correctionTime, hourly, modelCost, maintenance, setup, weeks].some((v) => !Number.isFinite(v) || v < 0) || weeks < 1 || correctionRate > 100}<p
-			role="alert"
-		>
-			Enter nonnegative finite values, a correction rate of 0–100%, and at least one week.
+	{#if invalid}<p role="alert">
+			Enter finite values within the input limits: up to 100,000 documents, 60 minutes per task,
+			100% corrections, $1,000 per hour, $100 per model call, $100,000 maintenance, $1,000,000
+			setup, and 1–520 weeks.
 		</p>{:else}<div class="value-results">
 			<div>
 				<Icon name="clock" size={25} /><strong>{hours.toFixed(1)} hours</strong><span

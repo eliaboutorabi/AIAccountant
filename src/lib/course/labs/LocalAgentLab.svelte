@@ -3,7 +3,7 @@
 	import {
 		Cpu,
 		Download,
-		Play,
+		Workflow,
 		Square,
 		Search,
 		Braces,
@@ -354,7 +354,7 @@
 			></textarea>
 			<div class="actions">
 				<button class="primary" onclick={run} disabled={status !== 'ready'}
-					><Play size={16} /> Run actual model</button
+					><Workflow size={16} /> Run actual model</button
 				><button class="secondary" onclick={unload} disabled={!worker}
 					><Square size={15} />{busy ? 'Stop and unload' : 'Unload model'}</button
 				>
@@ -379,7 +379,9 @@
 
 	<details class="prompt">
 		<summary>Inspect the exact current prompt and available evidence</summary>
-		<pre>{JSON.stringify(preview, null, 2)}</pre>
+		<!-- Keyboard focus supports scrolling exact evidence. -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+		<pre tabindex="0">{JSON.stringify(preview, null, 2)}</pre>
 	</details>
 	<div class="explain">
 		<h3>3. Inspect proposals, effects, and claims separately</h3>
@@ -402,13 +404,17 @@
 						>
 					</div>
 					<h4>Raw model output</h4>
-					<pre>{event.raw}</pre>
+					<!-- Keyboard focus supports scrolling exact evidence. -->
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<pre tabindex="0">{event.raw}</pre>
 					{#if event.error}<p class="error">{event.error}</p>{/if}{#if event.result}<h4>
 							{event.proposal && 'final' in event.proposal
 								? 'Harness final-answer check'
 								: 'Actual local tool result'}
 						</h4>
-						<pre>{JSON.stringify(
+						<!-- Keyboard focus supports scrolling exact evidence. -->
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<pre tabindex="0">{JSON.stringify(
 								event.result,
 								null,
 								2
@@ -425,7 +431,9 @@
 							>Turn {currentTurn} · {status === 'running' ? 'generating' : 'partial output'}</span
 						><span>Not executed</span>
 					</div>
-					<pre aria-live="off">{partial}</pre>
+					<!-- Keyboard focus supports scrolling partial model output. -->
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<pre tabindex="0" aria-live="off">{partial}</pre>
 				</li>{/if}
 		</ol>
 	{:else}

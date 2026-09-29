@@ -115,7 +115,7 @@
 					loading="lazy"
 					width="960"
 					height="640"
-				/><span class="play-circle"><Icon name="play" size={22} /></span>
+				/>
 			</div>
 			<div class="first-lesson-copy">
 				<span class="micro-label">DAY {next.day} · {next.id}</span>

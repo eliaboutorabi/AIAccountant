@@ -37,9 +37,19 @@
 	const source = $derived(cases[index]);
 	const numbers = $derived([subtotal, tax, freight, total].map(Number));
 	const valid = $derived(
-		[subtotal, tax, freight, total].every((v) => v.trim() !== '' && /^\d+(\.\d{1,2})?$/.test(v))
+		[subtotal, tax, freight, total].every(
+			(v) =>
+				v.trim() !== '' &&
+				/^\d+(\.\d{1,2})?$/.test(v) &&
+				Number.isSafeInteger(Math.round(Number(v) * 100))
+		) &&
+			Number.isSafeInteger(
+				numbers.slice(0, 3).reduce((sum, value) => sum + Math.round(value * 100), 0)
+			)
 	);
-	const sum = $derived(Math.round((numbers[0] + numbers[1] + numbers[2]) * 100) / 100);
+	const sum = $derived(
+		numbers.slice(0, 3).reduce((sum, value) => sum + Math.round(value * 100), 0) / 100
+	);
 	const match = $derived(
 		valid &&
 			invoice === source.invoice &&
@@ -205,7 +215,8 @@
 						Subtotal + tax + freight = ${money(sum)}. Entered total = ${money(numbers[3])}.
 						Difference = ${money(numbers[3] - sum)}.
 					</p>{:else}<p>
-						Enter nonnegative decimal amounts with up to two decimal places, without commas.
+						Enter nonnegative decimal amounts with up to two decimal places, without commas, within
+						safe integer-cent precision.
 					</p>{/if}
 			</div>
 			<label

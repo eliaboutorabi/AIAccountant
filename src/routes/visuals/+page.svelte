@@ -152,9 +152,7 @@
 										size={43}
 									/>
 								</div>
-								<span class="atlas-play"><Icon name="play" size={22} /></span><span
-									>Explore it yourself</span
-								>
+								<span>Try the controls</span>
 							</div>
 						{/if}
 						<div class="atlas-card-copy">
@@ -163,7 +161,7 @@
 									name={visual.kind === 'art'
 										? 'sparkles'
 										: visual.kind === 'interactive'
-											? 'play'
+											? 'sliders'
 											: 'network'}
 									size={14}
 								/>{visual.kind === 'art'
@@ -454,19 +452,6 @@
 		outline-offset: 10px;
 		background: #fffdf2;
 		box-shadow: 0 10px 22px #2f513b12;
-	}
-	.atlas-play {
-		position: absolute;
-		top: 27%;
-		right: 22%;
-		width: 42px;
-		height: 42px;
-		border-radius: 50%;
-		background: #2c624d;
-		color: #fff;
-		display: grid;
-		place-items: center;
-		border: 4px solid #edf0e7;
 	}
 	.atlas-interactive-preview > span:last-child {
 		font-size: 11px;

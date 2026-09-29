@@ -368,7 +368,7 @@
 	font-variant-numeric: tabular-nums;
 }
 .ie-cm-cell span {
-	font-size: 8px;
+	font-size: 10px;
 	line-height: 1.6;
 	display: block;
 	margin-top: 4px;
@@ -735,7 +735,7 @@
 .ie-value span,
 .ie-contribution span {
 	display: block;
-	font-size: 8px;
+	font-size: 10px;
 	line-height: 1.5;
 	color: #65705b;
 }
@@ -1002,6 +1002,9 @@
 	margin: 6px 0 0;
 }
 @media (max-width: 700px) {
+	.ie-chart text {
+		font-size: 16px;
+	}
 	.ie-attention-lane {
 		grid-template-columns: 1fr 1fr 1.5fr;
 		gap: 10px 15px;
@@ -1055,20 +1058,28 @@
 		flex-direction: column;
 		gap: 3px;
 	}
+	.ie-chart text {
+		/* A 560-unit viewBox scales to about 290px here: preserve readable axis labels. */
+		font-size: 20px;
+	}
 	.ie-stats {
-		gap: 6px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+	}
+	.ie-stats > div:last-child:nth-child(odd) {
+		grid-column: 1 / -1;
 	}
 	.ie-stats > div {
 		padding: 11px 9px;
 	}
 	.ie-stats span {
-		font-size: 9px;
+		font-size: 11px;
 	}
 	.ie-stats strong {
-		font-size: 17px;
+		font-size: 20px;
 	}
 	.ie-stats small {
-		font-size: 9px;
+		font-size: 10px;
 	}
 	.ie-equation {
 		padding: 15px;
@@ -1077,7 +1088,8 @@
 		font-size: 14px;
 	}
 	.ie-case-strip {
-		gap: 5px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 7px;
 	}
 	.ie-case {
 		padding: 10px 2px;
@@ -1086,10 +1098,10 @@
 		font-size: 17px;
 	}
 	.ie-case b {
-		font-size: 8px;
+		font-size: 10px;
 	}
 	.ie-case small {
-		font-size: 8px;
+		font-size: 10px;
 	}
 	.ie-threshold-bottom {
 		grid-template-columns: 1fr;

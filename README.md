@@ -55,6 +55,8 @@ The optional local language-model verification is separate from normal tests bec
 
 The chapter content is independent of presentation. A new concept needs an explanation, a concrete case, appropriate practice, a check of transfer, and a source where applicable; a larger word count alone is not the acceptance test.
 
+The [visual and interaction audit](docs/visual-audit/README.md) records the course-wide image review, desktop/mobile checks, defects repaired, and verification limits.
+
 ## Computation and privacy
 
 The core numerical engines train locally on small original synthetic datasets. Formulas, forecast errors, token IDs, retrieval scores, tool validation, queue state, and evaluation grades are computed from declared inputs. Authored extraction candidates, agent decision traces, proxy-reward examples, and trial fixtures are explicitly labeled. The tiny transformer and point denoiser teach mechanisms; they are not competent finance assistants or a full image diffusion system.

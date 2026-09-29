@@ -135,7 +135,7 @@
 					class="ie-button ie-primary"
 					onclick={updateTraining}
 					disabled={parameters.step >= 50}
-					><Icon name="play" size={15} /> Take one learning step</button
+					><Icon name="calculator" size={15} /> Take one learning step</button
 				><button
 					class="ie-button"
 					onclick={() => {
@@ -151,7 +151,7 @@
 			<div class="ie-chart-label">
 				<strong>Predicted collections</strong><span>USD thousands · update {parameters.step}</span>
 			</div>
-			<svg class="ie-chart" viewBox="0 0 560 285" role="img" aria-labelledby={`${uid}-train-title`}
+			<svg class="ie-chart" viewBox="0 0 560 305" role="img" aria-labelledby={`${uid}-train-title`}
 				><title id={`${uid}-train-title`}
 					>Actual regression update {parameters.step}. Training mean absolute error {train.mae.toFixed(
 						2
@@ -195,7 +195,7 @@
 					y2={trainY(predictCollection(parameters, 150))}
 					stroke="#c07c45"
 					stroke-width="3"
-				/><text x="289" y="283" text-anchor="middle">Receivables · USD thousands</text></svg
+				/><text x="289" y="295" text-anchor="middle">Receivables · USD thousands</text></svg
 			>
 			<div class="ie-legend">
 				<span><i style="background:#69875c"></i>24 training rows</span><span
@@ -345,7 +345,7 @@
 			</div>
 			<svg
 				class="ie-chart"
-				viewBox="0 0 560 285"
+				viewBox="0 0 560 305"
 				role="img"
 				aria-labelledby={`${uid}-forecast-title`}
 				><title id={`${uid}-forecast-title`}
@@ -403,7 +403,7 @@
 					x={forecastX(origin)}
 					y="266"
 					text-anchor="end">{series[origin].month} · origin</text
-				><text x="289" y="283" text-anchor="middle">Historical observations → one unseen month</text
+				><text x="289" y="295" text-anchor="middle">Historical observations → one unseen month</text
 				></svg
 			>
 			<div class="ie-legend">
@@ -479,8 +479,7 @@
 				>Join strategy<select id={`${uid}-join`} bind:value={joinMode}
 					><option value="customer">Customer key · many × many</option><option value="invoice"
 						>Invoice key · one × many</option
-					><option value="aggregate">Aggregate payments, then invoice key · one × one</option
-					></select
+					><option value="aggregate">Aggregate, then invoice key</option></select
 				></label
 			><Icon name="down" size={22} />
 		</div>
@@ -621,10 +620,10 @@
 		</div>
 		<ol class="ie-agent-phases">
 			{#each phases as phase, i (i)}<li
-					class:ie-current={agent.phase === i}
-					class:ie-complete={agent.phase > i}
+					class:ie-current={agent.phase === i && !agent.posted && !agent.blocked}
+					class:ie-complete={agent.phase > i || agent.posted}
 				>
-					<span>{agent.phase > i ? '✓' : i + 1}</span><strong>{phase}</strong>
+					<span>{agent.phase > i || agent.posted ? '✓' : i + 1}</span><strong>{phase}</strong>
 				</li>{/each}
 		</ol>
 		<div class="ie-agent-state">
@@ -649,9 +648,13 @@
 				class="ie-button ie-primary"
 				disabled={agent.posted || agent.blocked}
 				onclick={() => (agent = advanceAgent(agent, suspicious))}
-				><Icon name="play" size={16} />{agent.phase === 3
-					? 'Try to apply draft'
-					: 'Run next step'}</button
+				><Icon name="workflow" size={16} />{agent.posted
+					? 'Workflow complete'
+					: agent.blocked
+						? 'Blocked by scope'
+						: agent.phase === 3
+							? 'Try to apply draft'
+							: 'Run next step'}</button
 			>{#if agent.phase === 3 && !agent.approved && !agent.blocked}<button
 					class="ie-button"
 					onclick={() => (agent = approveAgent(agent))}

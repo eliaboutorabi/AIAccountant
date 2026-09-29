@@ -114,7 +114,7 @@
 								<a href={`#${visual.id}`}
 									><Icon
 										name={visual.kind === 'interactive'
-											? 'play'
+											? 'sliders'
 											: visual.kind === 'art'
 												? 'sparkles'
 												: 'network'}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChartViewport from './ChartViewport.svelte';
 	import { onMount } from 'svelte';
 	import {
 		readFinalExposure,
@@ -279,7 +280,7 @@
 				class="primary"
 				onclick={() => run('source', 200)}
 				disabled={!metrics || running || frozen || metrics.step >= 1000}
-				><Icon name="play" size={15} />Fit 200 updates</button
+				><Icon name="calculator" size={15} />Fit 200 updates</button
 			><button onclick={() => pause()} disabled={!running}
 				><Icon name="pause" size={15} />Pause</button
 			><button onclick={reset}
@@ -654,34 +655,36 @@
 						</p>
 					</div>
 				</div>
-				<svg
-					class="loss-svg"
-					viewBox="0 0 590 210"
-					role="img"
-					aria-label={`Target validation loss after ${transfer.step} updates: scratch ${transfer.scratch.validation.loss.toFixed(3)}, reused ${transfer.reused.validation.loss.toFixed(3)}.`}
-					>{#each [0, 1, 2, 3] as tick (tick)}<line
-							x1="45"
-							x2="555"
-							y1={175 - (tick / 3) * 145}
-							y2={175 - (tick / 3) * 145}
-							stroke="#e5e5df"
-						/><text x="38" y={179 - (tick / 3) * 145} text-anchor="end"
-							>{((tick / 3) * historyMax).toFixed(2)}</text
-						>{/each}<path
-						d={lossLine('scratch')}
-						fill="none"
-						stroke="#2b7155"
-						stroke-width="3"
-					/><path
-						d={lossLine('reused')}
-						fill="none"
-						stroke="#8462a6"
-						stroke-width="3"
-						stroke-dasharray="7 4"
-					/><text x="45" y="199">0</text><text x="555" y="199" text-anchor="end"
-						>{Math.max(20, transfer.step)} target updates</text
-					></svg
-				>
+				<ChartViewport label="Transfer comparison loss chart" minimum={520}>
+					<svg
+						class="loss-svg"
+						viewBox="0 0 590 210"
+						role="img"
+						aria-label={`Target validation loss after ${transfer.step} updates: scratch ${transfer.scratch.validation.loss.toFixed(3)}, reused ${transfer.reused.validation.loss.toFixed(3)}.`}
+						>{#each [0, 1, 2, 3] as tick (tick)}<line
+								x1="45"
+								x2="555"
+								y1={175 - (tick / 3) * 145}
+								y2={175 - (tick / 3) * 145}
+								stroke="#e5e5df"
+							/><text x="38" y={179 - (tick / 3) * 145} text-anchor="end"
+								>{((tick / 3) * historyMax).toFixed(2)}</text
+							>{/each}<path
+							d={lossLine('scratch')}
+							fill="none"
+							stroke="#2b7155"
+							stroke-width="3"
+						/><path
+							d={lossLine('reused')}
+							fill="none"
+							stroke="#8462a6"
+							stroke-width="3"
+							stroke-dasharray="7 4"
+						/><text x="45" y="199">0</text><text x="555" y="199" text-anchor="end"
+							>{Math.max(20, transfer.step)} target updates</text
+						></svg
+					>
+				</ChartViewport>
 				<div class="chart-legend">
 					<span><i class="marker"></i>Scratch</span><span
 						><i class="marker purple"></i>Reused weights</span

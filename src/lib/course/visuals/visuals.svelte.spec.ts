@@ -75,6 +75,8 @@ test('agent write gate waits for approval and unsafe proposal cannot write', asy
 	await screen.getByRole('button', { name: 'Approve this $144 draft' }).click();
 	await screen.getByRole('button', { name: 'Try to apply draft' }).click();
 	await expect.element(screen.getByText('$144.00 posted', { exact: true })).toBeVisible();
+	expect(document.querySelectorAll('.ie-agent-phases .ie-complete').length).toBe(5);
+	expect(document.querySelectorAll('.ie-agent-phases .ie-current').length).toBe(0);
 	await screen.getByRole('button', { name: 'Reset workflow' }).click();
 	await screen.getByRole('checkbox').click();
 	await screen.getByRole('button', { name: 'Run next step' }).click();
@@ -139,6 +141,12 @@ for (const layout of ['flow', 'cycle', 'compare', 'timeline', 'bars', 'matrix'] 
 			unit: 'illustrative units'
 		};
 		await render(TeachingFigure, { visual });
+		if (layout === 'flow' || layout === 'cycle') {
+			expect(document.querySelectorAll('.tf-connector').length).toBe(visual.nodes.length - 1);
+		}
+		if (layout === 'cycle') {
+			expect(document.querySelector('.tf-cycle-return')?.textContent).toContain('01 · Source');
+		}
 		const result = await axe.run(document.body, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21aa'] });
 		expect(
 			result.violations.map((v) => ({
