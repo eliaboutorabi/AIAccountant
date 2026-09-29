@@ -36,7 +36,10 @@ Reviewed on 2026-09-29. This pass addressed presentation artifacts, confusing co
 - Production browser suite: 23/24 passed initially, identifying the transformer subtitle contrast defect. After its repair, both desktop and mobile page/workbench accessibility tests passed. The deployment workflow reruns all 24 browser cases.
 - `npm run check`: zero errors and warnings. `npm run lint` and `git diff --check`: clean. Official Svelte autofixers reported no issues or suggestions for changed components.
 - Manual interaction checks include the countdown’s Start/Pause/Resume/Reset behavior, glossary close/focus, all 36 archived lessons’ quizzes/completion, all seven inline experiments, all 22 workbench routes, and 12 evidence export actions.
-- Public deployment verification will be appended after publication. Local screenshot and browser evidence is retained under the ignored `.work/` directory.
+- GitHub Actions completed successfully for application commit `ebdec1f8f841dad057b1dab98bf8d9f55d02ce7b`: **165 unit/component tests and all 24 desktop/mobile browser cases passed**. [Deployment run](https://github.com/eliaboutorabi/AIAccountant/actions/runs/36635780237).
+- The public site serves all 25 teaching image files with SHA-256 hashes identical to the reviewed local assets. Its 82-item atlas, actual token round trip, causal attention mask, and 1536-pixel image zoom passed at both 1440 and 390 pixels.
+- **50 public page checks** across the study path, visual atlas, interview studio, and 22 labs found no page overflow, playback glyphs, or client errors. Live regression checks confirmed spreadsheet Apply preserves A1, changed evaluation settings show the warning, the countdown starts/pauses/resumes, and the mobile study-plan note retains a readable width.
+- Local screenshot and browser evidence is retained under the ignored `.work/` directory, including `audit-public-verification.json` and `visual-public-verification.json`.
 
 ## Limits
 
