@@ -1,0 +1,20 @@
+{
+  "fictional": true,
+  "currency": "USD",
+  "invoice_count": 12,
+  "invoice_total": 7800,
+  "raw_payment_rows": 11,
+  "raw_payment_total": 4485,
+  "quarantined_duplicate_rows": 1,
+  "quarantined_duplicate_amount": 200,
+  "accepted_payment_rows": 10,
+  "accepted_payment_total": 4285,
+  "matched_payment_total": 4250,
+  "unmatched_payment_total": 35,
+  "remaining_invoice_balance": 3550,
+  "fully_paid_invoices": 8,
+  "partially_paid_invoices": 1,
+  "unpaid_invoices": 3,
+  "collections_rows": 24,
+  "collections_total_usd_thousands": 2763
+}

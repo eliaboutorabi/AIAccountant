@@ -7,3 +7,13 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+.work/
+.agents/
+.claude/
+build/
+.svelte-kit/
+playwright-report/
+test-results/
+
+skills-lock.json
