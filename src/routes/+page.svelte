@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { asset, resolve } from '$app/paths';
 	import Icon from '$lib/components/Icon.svelte';
-	import { modules } from '$lib/course';
+	import { modules, courseStats } from '$lib/course';
 	import { days } from '$lib/course/days';
 	import { useBook } from '$lib/course/progress.svelte';
 	const book = useBook();
@@ -12,7 +12,7 @@
 <svelte:head
 	><title>AI Accountant — Understand it. Build with it.</title><meta
 		name="description"
-		content="A substantive five-day visual course in AI for accounting and finance: 25 modules, real model training, spreadsheet exercises, worked cases, and interview defense."
+		content="A seven-day visual course in AI for accounting and finance: 35 modules, model training, OCR, agents, evidence dashboards, realtime voice, and application engineering."
 	/></svelte:head
 >
 <div class="page-wrap home-page">
@@ -42,10 +42,11 @@
 				Understand the ideas. Test them with real models. Build financial systems you can explain
 				and defend.
 			</p>
-			<a class="button primary" href={resolve('/course/[slug]', { slug: next.id.toLowerCase() })}
-				>{Object.keys(book.data.modules).length
-					? 'Continue your course'
-					: 'Begin the five-day course'}<Icon name="arrow" size={18} /></a
+			<a class="button primary" href={resolve(`/course/${next.id.toLowerCase()}/`)}
+				>{Object.keys(book.data.modules).length ? 'Continue your course' : 'Begin the course'}<Icon
+					name="arrow"
+					size={18}
+				/></a
 			>
 			<div class="hero-caption">
 				<span class="tiny-check"><Icon name="check" size={11} /></span>Clear explanations. Serious
@@ -55,7 +56,7 @@
 		<span class="art-note"><Icon name="sprout" size={15} />Big ideas. Room to grow.</span>
 	</section>
 	<div class="course-facts">
-		{#each [{ icon: 'book', title: '25 connected modules', text: 'Five days · 30 planned active hours' }, { icon: 'circleCheck', title: `${questionCount} knowledge checks`, text: 'Worked feedback for every option' }, { icon: 'flask', title: 'Real learning experiments', text: 'Train, inspect, test, and explain' }, { icon: 'folder', title: 'A portfolio with evidence', text: 'Build a system. Defend the decisions.' }] as fact (fact.title)}<div
+		{#each [{ icon: 'book', title: `${courseStats.modules} connected modules`, text: `${courseStats.days} days · ${courseStats.hours} planned active hours` }, { icon: 'circleCheck', title: `${questionCount} knowledge checks`, text: 'Worked feedback for every option' }, { icon: 'flask', title: 'Real learning experiments', text: 'Train, inspect, test, and explain' }, { icon: 'folder', title: 'A portfolio with evidence', text: 'Build a system. Defend the decisions.' }] as fact (fact.title)}<div
 			>
 				<span class="fact-icon"><Icon name={fact.icon} size={22} /></span><span
 					><strong>{fact.title}</strong><small>{fact.text}</small></span
@@ -66,7 +67,7 @@
 		<div class="section-heading">
 			<div>
 				<p class="eyebrow">FROM FIRST PRINCIPLES TO PROFESSIONAL JUDGMENT</p>
-				<h2>Five days. One connected story.</h2>
+				<h2>From first principles to building systems.</h2>
 			</div>
 			<a class="text-link" href={resolve('/path/')}
 				>Explore the complete course <Icon name="arrow" size={17} /></a

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { modules } from '$lib/course';
+	import { courseStats, modules } from '$lib/course';
 	import SourceLink from '$lib/course/components/SourceLink.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	const sources = [
@@ -94,14 +94,15 @@
 		<h2>Methods, provenance, and limits</h2>
 		<div class="notes">
 			<details class="disclosure" open>
-				<summary>Depth, assessment, and the five-day estimate</summary>
+				<summary>Depth, assessment, and the seven-day estimate</summary>
 				<p>
-					The core contains 25 substantive modules, worked finance cases, 150 module checks,
-					cumulative reviews, changed-case practice, and a portfolio capstone. The 30-hour schedule
-					includes doing the work, recording evidence, and explaining decisions. It is an authoring
-					estimate; learner completion times have not yet been piloted. Written rubrics are
-					self-assessment. Neither completion nor a quiz score is an accredited qualification or a
-					promise of readiness for every role.
+					The course contains {courseStats.modules} substantive modules, worked finance cases, {courseStats.checks}
+					module checks, cumulative reviews, changed-case practice, and portfolio assignments. Five foundation
+					days lead into two application-building days. The {courseStats.hours}-hour schedule
+					includes doing the guided work, recording evidence, and explaining decisions; independent
+					builds take additional time. It is an authoring estimate; learner completion times have
+					not yet been piloted. Written rubrics are self-assessment. Neither completion nor a quiz
+					score is an accredited qualification or a promise of readiness for every role.
 				</p>
 				<p>
 					The professional and novice reviews are independent agent reviews of the authored course,
@@ -120,12 +121,19 @@
 					numerical view.
 				</p>
 				<p>
-					Document-extraction candidates, agent decision traces, and some evaluation trials are
-					authored fixtures and are labeled as such. The denoiser learns on two-dimensional points;
-					it is not a full image diffusion model. The tiny transformer teaches mechanics and does
-					not provide competent finance advice. An optional downloadable language model produces
-					genuine local outputs on supported WebGPU hardware; failure remains visible rather than
-					being replaced by an authored answer.
+					Document-extraction candidates, model-routing measurements, agent proposals, and some
+					evaluation trials are authored fixtures and are labeled as such. The denoiser learns on
+					two-dimensional points; it is not a full image diffusion model. The tiny transformer
+					teaches mechanics and does not provide competent finance advice. An optional downloadable
+					language model produces genuine local outputs on supported WebGPU hardware; failure
+					remains visible rather than being replaced by an authored answer.
+				</p>
+				<p>
+					The builder labs compute table expansion, typed values, evidence comparisons, execution
+					controls, routing economics, and voice-session state from authored fixtures. They do not
+					perform OCR, call paid providers, or record a microphone. The downloadable Node.js starter
+					runs a real local HTTP service with exact-money reconciliation, durable operation
+					receipts, and replayable server events. Its guide explains how to run and test it.
 				</p>
 			</details>
 			<details class="disclosure">
@@ -170,9 +178,9 @@
 					own pace and take breaks outside the estimated activity time.
 				</p>
 				<p>
-					The original chapter art now includes 25 generated teaching infographics. Their labels,
+					The original chapter art now includes 35 generated teaching infographics. Their labels,
 					arithmetic, and relationships are checked against the lessons. Each has a text companion
-					and an enlarged view. Fifty native diagrams and seven inline interactive figures make
+					and an enlarged view. Seventy native diagrams and seven inline interactive figures make
 					mechanisms visible within the reading flow. Illustrative examples are labeled; model and
 					financial measurements come from computations. Public case data and teaching prose are
 					original.

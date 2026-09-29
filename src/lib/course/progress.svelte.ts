@@ -1,3 +1,4 @@
+import { modules } from './index';
 import { browser } from '$app/environment';
 import { getContext } from 'svelte';
 
@@ -52,7 +53,8 @@ export const emptyEvidence = (): ModuleEvidence => ({
 });
 const storageKey = 'ai-accountant-course-v2';
 const unique = <T>(values: T[]) => values.filter((value, index) => values.indexOf(value) === index);
-const validModule = (id: string) => /^M(0[1-9]|1[0-9]|2[0-5])$/.test(id);
+const moduleIds = new Set(modules.map((module) => module.id));
+const validModule = (id: string) => moduleIds.has(id);
 const validKey = (key: string) =>
 	/^[A-Za-z0-9][\w:.-]{0,149}$/.test(key) &&
 	!['__proto__', 'constructor', 'prototype'].includes(key);

@@ -86,7 +86,7 @@
 		</p>
 	</div>
 	<div class="evidence-stats">
-		{#each [{ value: studied, total: 25, label: 'Modules studied', icon: 'book' }, { value: practiced, total: 25, label: 'Modules with written practice', icon: 'file' }, { value: correct, total: modules.reduce((n, m) => n + m.checks.length, 0), label: 'Checks currently correct', icon: 'check' }, { value: selfAssessed, total: 25, label: 'Cases self-assessed against rubric', icon: 'folder' }] as stat (stat.label)}<div
+		{#each [{ value: studied, total: modules.length, label: 'Modules studied', icon: 'book' }, { value: practiced, total: modules.length, label: 'Modules with written practice', icon: 'file' }, { value: correct, total: modules.reduce((n, m) => n + m.checks.length, 0), label: 'Checks currently correct', icon: 'check' }, { value: selfAssessed, total: modules.length, label: 'Cases self-assessed against rubric', icon: 'folder' }] as stat (stat.label)}<div
 			>
 				<Icon name={stat.icon} size={22} /><strong>{stat.value}<small>/{stat.total}</small></strong
 				><span>{stat.label}</span>

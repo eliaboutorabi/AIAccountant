@@ -24,9 +24,9 @@
 </script>
 
 <svelte:head
-	><title>The five-day course · AI Accountant</title><meta
+	><title>The seven-day course · AI Accountant</title><meta
 		name="description"
-		content="A connected 30-hour study plan: 25 modules, real experiments, worked finance cases, cumulative review, and a defended capstone."
+		content="A connected 42-hour study plan: 35 modules, real experiments, document and agent engineering, cumulative review, and defended builds."
 	/></svelte:head
 >
 <div class="page-wrap">
@@ -41,11 +41,11 @@
 	<div class="plan-note">
 		<Icon name="route" size={25} />
 		<div>
-			<h3>Five study days · 30 planned active hours</h3>
+			<h3>Seven study days · 42 planned active hours</h3>
 			<p>
-				Each day budgets 5½ hours for modules and 30 minutes for cumulative review. Breaks are
-				extra. These are author estimates, not measured completion times. Spread the work across
-				more days whenever useful.
+				Five foundation days lead into two builder days. Each budgets 5½ hours for study and
+				practice plus 30 minutes of review. These are author estimates; independent application
+				builds and breaks take additional time. Spread the work across more days whenever useful.
 			</p>
 		</div>
 		<a class="button primary" href={resolve('/course/[slug]', { slug: next.id.toLowerCase() })}
@@ -135,7 +135,8 @@
 			<p>
 				The core develops applied AI fluency and a first finance-system portfolio. Advanced data
 				science and AI engineering roles also require deeper statistics, SQL, Python, and deployment
-				practice. Day 5 maps those next steps. Reading, exercises, checks, and self-assessment are
+				practice. Days 6–7 connect the foundations to document processing, application architecture,
+				analytical evidence and voice agents. Reading, exercises, checks, and self-assessment are
 				recorded separately; this is not an externally graded certification.
 			</p>
 		</div>

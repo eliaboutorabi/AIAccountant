@@ -160,7 +160,7 @@
 		<div class="journey-note">
 			<span class="note-star">✳</span>
 			<h3>Understand it.<br />Build with it.</h3>
-			<p>Five days of connected learning.</p>
+			<p>Seven days, from foundations to building.</p>
 			<div class="progress-heading">
 				<span>Sections studied</span><strong>{coursePercent}%</strong>
 			</div>
@@ -189,6 +189,7 @@
 		<div class="breadcrumb">
 			<button
 				class="icon-button mobile-menu"
+				disabled={!book.loaded}
 				onclick={() => (mobileOpen = !mobileOpen)}
 				aria-label="Toggle navigation"
 				aria-expanded={mobileOpen}><Icon name="menu" /></button
@@ -197,7 +198,11 @@
 			><span>{currentTitle}</span>
 		</div>
 		<div class="topbar-right">
-			<button class="search-trigger" aria-label="Search the course" onclick={openSearch}
+			<button
+				class="search-trigger"
+				aria-label="Search the course"
+				disabled={!book.loaded}
+				onclick={openSearch}
 				><Icon name="search" size={17} /><span>Search concepts and cases…</span><kbd>⌘ K</kbd
 				></button
 			><span class="learner-avatar" title="Your personal learning space"

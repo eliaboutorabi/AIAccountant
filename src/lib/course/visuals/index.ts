@@ -1,3 +1,6 @@
+import { professionalVisuals } from '../builders/professional-support';
+import { noviceVisuals } from '../builders/novice-support';
+import { builderArt } from './builder-art';
 import { day1Visuals } from './day1';
 import { day2Visuals } from './day2';
 import { day3Visuals } from './day3';
@@ -12,7 +15,10 @@ export const teachingVisuals = [
 	...day3Visuals,
 	...day4Visuals,
 	...day5Visuals,
-	...interactiveVisuals
+	...interactiveVisuals,
+	...professionalVisuals,
+	...noviceVisuals,
+	...builderArt
 ];
 
 export const moduleVisuals = (moduleId: string) =>

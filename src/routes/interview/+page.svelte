@@ -35,7 +35,7 @@
 <svelte:head
 	><title>Interview studio · AI Accountant</title><meta
 		name="description"
-		content="Practice 25 professional AI and finance interview defenses, changed-constraint follow-ups, worked case exhibits, and evidence-based self-assessment."
+		content="Practice 35 professional AI and finance interview defenses, changed-constraint follow-ups, worked case exhibits, and evidence-based self-assessment."
 	/></svelte:head
 >
 <div class="page-wrap">
@@ -57,11 +57,14 @@
 		</div>
 		<label
 			>Focus area<select bind:value={day} onchange={filter}
-				><option value={0}>All 25 modules</option><option value={1}>Day 1 · data & learning</option
+				><option value={0}>All {modules.length} modules</option><option value={1}
+					>Day 1 · data & learning</option
 				><option value={2}>Day 2 · models & analysis</option><option value={3}
 					>Day 3 · LLMs & evidence</option
 				><option value={4}>Day 4 · applications & agents</option><option value={5}
 					>Day 5 · delivery & defense</option
+				><option value={6}>Day 6 · document & agent engineering</option><option value={7}
+					>Day 7 · evidence, voice & delivery</option
 				></select
 			></label
 		>

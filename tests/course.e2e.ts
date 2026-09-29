@@ -6,9 +6,9 @@ test('the visual atlas filters, links into lessons, and supports readable image 
 	page
 }) => {
 	await page.goto('./visuals/');
-	await expect(page.locator('.visual-card')).toHaveCount(82);
+	await expect(page.locator('.visual-card')).toHaveCount(112);
 	await page.getByRole('button', { name: 'Infographics', exact: true }).click();
-	await expect(page.locator('.visual-card')).toHaveCount(25);
+	await expect(page.locator('.visual-card')).toHaveCount(35);
 	await page.getByLabel('Select study day').selectOption('3');
 	await expect(page.locator('.visual-card')).toHaveCount(5);
 	await page.getByLabel('Find a visual').fill('attention');
@@ -63,7 +63,7 @@ test('inline tokens and attention expose actual calculations inside the chapters
 test('a module preserves reading, case writing, bookmarks, and attempts', async ({ page }) => {
 	await page.goto('./');
 	await expect(page.locator('h1')).toContainText('Accounting minds.');
-	await page.getByRole('link', { name: 'Begin the five-day course' }).click();
+	await page.getByRole('link', { name: 'Begin the course' }).click();
 	await expect(page.locator('h1')).toContainText('AI history');
 	await page.getByLabel('I’ve studied this section and can explain its main idea.').first().check();
 	await page
@@ -154,7 +154,7 @@ test('all chapters and laboratory components load without client errors', async 
 	const links = await page
 		.locator('.module-row')
 		.evaluateAll((es) => es.map((e) => (e as HTMLAnchorElement).href));
-	expect(links).toHaveLength(25);
+	expect(links).toHaveLength(35);
 	for (const link of links) {
 		// The course's prerendered canonical URLs use a trailing slash.
 		// Vite preview's directory redirect drops the configured base prefix.
@@ -317,4 +317,39 @@ test('principal pages and all workbenches are accessible and responsive', async 
 	expect(failures).toEqual([]);
 	await page.goto('./course/m14/');
 	await page.screenshot({ path: `.work/course-reader-${info.project.name}.png` });
+});
+
+test('builder days connect reading, transfer practice, persisted writing and runnable downloads', async ({
+	page,
+	request
+}) => {
+	await page.goto('./path/');
+	await expect(page.locator('#day-6 .module-row')).toHaveCount(5);
+	await expect(page.locator('#day-7 .module-row')).toHaveCount(5);
+	await page.goto('./course/m35/');
+	await page
+		.getByLabel('Your case response', { exact: true })
+		.fill(
+			'I verified the operation receipt after restart and retained the conflicting-input trace.'
+		);
+	const changed = page.locator('#transfer-check fieldset');
+	await changed.getByRole('radio').nth(1).check();
+	await changed.getByRole('button', { name: /Check my answer/ }).click();
+	await page.reload();
+	await expect(page.getByLabel('Your case response', { exact: true })).toHaveValue(
+		/receipt after restart/
+	);
+	await expect(page.locator('#transfer-check')).toContainText('First recorded answer:');
+	await page.goto('./visuals/');
+	await page.getByLabel('Select study day').selectOption('7');
+	await expect(page.locator('.visual-card')).toHaveCount(15);
+	const service = await request.get('./downloads/builder-service.mjs');
+	expect(service.ok()).toBe(true);
+	expect(await service.text()).toContain('export async function createService');
+	const guide = await request.get('./downloads/builder-guide.md');
+	expect(guide.ok()).toBe(true);
+	expect(await guide.text()).toContain('node builder-service.mjs --self-test');
+	const brief = await request.get('./downloads/day-7.md');
+	expect(brief.ok()).toBe(true);
+	expect(await brief.text()).toContain('M35');
 });

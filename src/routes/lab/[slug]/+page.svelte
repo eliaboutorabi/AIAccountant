@@ -42,7 +42,7 @@
 	</div>
 	{#key data.lab.id}{#await component}<div class="loading" role="status">
 				Loading the experiment…
-			</div>{:then loaded}<loaded.default mode={data.lab.id} />{:catch error}<div
+			</div>{:then loaded}<loaded.default mode={data.lab.mode ?? data.lab.id} />{:catch error}<div
 				class="loading"
 				role="alert"
 			>

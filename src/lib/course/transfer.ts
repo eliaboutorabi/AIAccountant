@@ -1,3 +1,5 @@
+import { professionalTransferChecks } from './builders/professional-support';
+import { noviceTransferChecks } from './builders/novice-support';
 import type { Check } from './types';
 
 /** Fresh module-level cases; these are separate from the six concept checks. */
@@ -451,7 +453,10 @@ export const transferChecks: (Check & { moduleId: string })[] = [
 			'Precision is 56 / 80 = 70% and recall is 56 / 70 = 80%. The changed constraint requires a changed operational design and its own evaluation. Explaining what additional evidence is needed is stronger than inventing a precise result.',
 			'The removed cases may have a different positive rate. The aggregates do not determine top-60 performance, so 42 is an unsupported extrapolation rather than an evaluated outcome.'
 		]
-	}
+	},
+	...[...professionalTransferChecks, ...noviceTransferChecks].sort((a, b) =>
+		a.moduleId.localeCompare(b.moduleId)
+	)
 ];
 
 /** Reading targets for context-sensitive hints; keys remain independent of check order. */
@@ -480,5 +485,15 @@ export const transferSections: Record<string, string> = {
 	M22: 'variability',
 	M23: 'worked-case',
 	M24: 'respond',
-	M25: 'classification'
+	M25: 'classification',
+	M26: 'contracts',
+	M27: 'evaluate-route',
+	M28: 'confidence',
+	M29: 'formulas',
+	M30: 'recovery',
+	M31: 'revisions',
+	M32: 'denominators',
+	M33: 'interruption',
+	M34: 'retries',
+	M35: 'test-change'
 };

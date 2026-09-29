@@ -109,7 +109,7 @@
 <svelte:head
 	><title>Starting point & return assessment · AI Accountant</title><meta
 		name="description"
-		content="Four substantive cases locate your starting point; changed cases revisit your reasoning after the five-day course."
+		content="Four substantive cases locate your starting point; changed cases revisit your reasoning after the foundation course."
 	/></svelte:head
 >
 <div class="page-wrap">
@@ -159,7 +159,7 @@
 				>
 			</details>
 		</section>{/each}
-	<a class="button primary" href={resolve('/path/')}>Continue to the five-day path →</a>
+	<a class="button primary" href={resolve('/path/')}>Continue to the complete path →</a>
 </div>
 
 <style>

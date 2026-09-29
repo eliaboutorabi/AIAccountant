@@ -7,10 +7,10 @@ import { teachingVisuals, visualsAt } from './index';
 
 describe('visual teaching inventory', () => {
 	it('places every figure in a real chapter and keeps every module visually supported', () => {
-		expect(teachingVisuals).toHaveLength(82);
+		expect(teachingVisuals).toHaveLength(112);
 		expect(new Set(teachingVisuals.map((v) => v.id)).size).toBe(teachingVisuals.length);
-		expect(teachingVisuals.filter((v) => v.kind === 'art')).toHaveLength(25);
-		expect(teachingVisuals.filter((v) => v.kind === 'diagram')).toHaveLength(50);
+		expect(teachingVisuals.filter((v) => v.kind === 'art')).toHaveLength(35);
+		expect(teachingVisuals.filter((v) => v.kind === 'diagram')).toHaveLength(70);
 		expect(teachingVisuals.filter((v) => v.kind === 'interactive')).toHaveLength(7);
 		for (const module of modules) {
 			const visuals = teachingVisuals.filter((v) => v.module === module.id);
@@ -52,6 +52,6 @@ describe('visual teaching inventory', () => {
 			expect(metadata.width!, visual.id).toBeGreaterThanOrEqual(1400);
 			expect(visual.transcript.length, visual.id).toBeGreaterThanOrEqual(3);
 		}
-		expect(total).toBeLessThan(6_000_000);
+		expect(total).toBeLessThan(8_000_000);
 	});
 });

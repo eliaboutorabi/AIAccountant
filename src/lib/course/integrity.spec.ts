@@ -8,10 +8,10 @@ import { starterSource } from '../engines/workflow';
 import { execFileSync } from 'node:child_process';
 
 describe('the published learning graph', () => {
-	it('connects five complete days, prerequisites, objective checks, and changed cases', () => {
-		expect(modules).toHaveLength(25);
-		expect(new Set(modules.map((m) => m.id)).size).toBe(25);
-		expect(days).toHaveLength(5);
+	it('connects seven complete days, prerequisites, objective checks, and changed cases', () => {
+		expect(modules).toHaveLength(35);
+		expect(new Set(modules.map((m) => m.id)).size).toBe(35);
+		expect(days).toHaveLength(7);
 		for (const day of days) {
 			const daily = modules.filter((m) => m.day === day.day);
 			expect(daily).toHaveLength(5);
@@ -46,7 +46,7 @@ describe('the published learning graph', () => {
 			expect(m.assignment.workedSolution.length).toBeGreaterThan(0);
 			expect(m.sources.every((s) => new URL(s.url).protocol === 'https:')).toBe(true);
 		}
-		expect(transferChecks).toHaveLength(25);
+		expect(transferChecks).toHaveLength(35);
 	});
 	it('links every defined term to a real chapter and preserves ordinary text', () => {
 		expect(new Set(terms.map((t) => t.term.toLowerCase())).size).toBe(terms.length);
@@ -57,6 +57,16 @@ describe('the published learning graph', () => {
 		expect(fragments.filter((f) => f.term).map((f) => f.text)).toContain('context window');
 		expect(fragments.filter((f) => f.term).map((f) => f.text)).not.toContain('tokenized');
 	});
+	it('runs the downloadable HTTP service against independent expected receipts and recovery cases', () => {
+		const output = execFileSync(
+			process.execPath,
+			['course-materials/builder-service.mjs', '--self-test'],
+			{ encoding: 'utf8', timeout: 10000 }
+		);
+		expect(output).toContain('Passed: exact amounts');
+		expect(output).toContain('restart recovery');
+	});
+
 	it('uses the same original reconciliation population as the portfolio starter', () => {
 		const result = JSON.parse(
 			execFileSync(process.execPath, ['--input-type=module', '-e', starterSource()], {

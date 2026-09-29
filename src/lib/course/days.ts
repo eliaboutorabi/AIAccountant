@@ -1,3 +1,4 @@
+import { builderDays } from './builders/days';
 import type { CourseDay } from './types';
 
 export const days: CourseDay[] = [
@@ -230,5 +231,6 @@ export const days: CourseDay[] = [
 					'A strong defense identifies the business question and cutoff, follows a stable record through validation, calculation, evidence retrieval, and the review output, and cites an actual evaluation failure and repair. It explains why the selected workflow or agent boundary fits the task. A changed review capacity, policy date, or customer mix should alter the reasoning where relevant. End with a concrete remaining skill—such as SQL window queries, statistical inference, or persistent service deployment—and a practice artifact, rather than a claim of universal interview readiness.'
 			}
 		]
-	}
+	},
+	...builderDays
 ];

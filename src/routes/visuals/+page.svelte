@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { asset, resolve } from '$app/paths';
+	import { days } from '$lib/course/days';
 	import { modules } from '$lib/course';
 	import { teachingVisuals } from '$lib/course/visuals';
 	import Icon from '$lib/components/Icon.svelte';
@@ -48,7 +49,7 @@
 			</p>
 			<div class="atlas-stats">
 				<span><strong>{teachingVisuals.length}</strong> teaching figures</span><span
-					><strong>25</strong> connected chapters</span
+					><strong>{modules.length}</strong> connected chapters</span
 				><span><strong>7</strong> ideas to interact with</span>
 			</div>
 		</div>
@@ -72,8 +73,9 @@
 		>
 		<label class="atlas-day"
 			><span>Study day</span><select aria-label="Select study day" bind:value={day}
-				><option value="all">All five days</option>{#each [1, 2, 3, 4, 5] as number (number)}<option
-						value={String(number)}>Day {number}</option
+				><option value="all">All study days</option
+				>{#each days.map((entry) => entry.day) as number (number)}<option value={String(number)}
+						>Day {number}</option
 					>{/each}</select
 			></label
 		>

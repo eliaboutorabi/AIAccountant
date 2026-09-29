@@ -65,7 +65,7 @@
 >
 <div class="reader-wrap">
 	<nav class="reader-breadcrumb" aria-label="Course breadcrumb">
-		<a href={resolve('/path/')}>Five-day course</a><span>/</span><a
+		<a href={resolve('/path/')}>Course path</a><span>/</span><a
 			href={resolve(`/path/#day-${module.day}`)}>Day {module.day}</a
 		><span>/</span><span>{module.id}</span>
 	</nav>

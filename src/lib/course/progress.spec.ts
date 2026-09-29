@@ -159,6 +159,24 @@ describe('assessment evidence without mastery claims', () => {
 });
 
 describe('imports and merges', () => {
+	it('preserves builder-module progress and earlier work through export and restore', () => {
+		const book = new CourseProgress();
+		book.response('M01', 'assignment', 'Existing foundation work');
+		book.response('M35', 'assignment', 'A tested contract and restart trace');
+		book.captureResponse('M35', 'assignment');
+		book.answer('M35', 'M35-T1', 1);
+		book.toggle('M35', 'read', 'defend');
+		book.data.lastModule = 'M35';
+		const restored = new CourseProgress();
+		restored.restore(JSON.parse(JSON.stringify(book.data)));
+		expect(restored.get('M01').responses.assignment).toBe('Existing foundation work');
+		expect(restored.get('M35').writtenHistory!.assignment.first?.text).toBe(
+			'A tested contract and restart trace'
+		);
+		expect(restored.get('M35').checkHistory!['M35-T1'].attempts[0].answer).toBe(1);
+		expect(restored.get('M35').read).toContain('defend');
+		expect(restored.data.lastModule).toBe('M35');
+	});
 	it('merges assistance and attempts without replacing current notes, duplicating events, or erasing an earlier failed attempt', () => {
 		const old = new CourseProgress();
 		old.answer('M01', check.id, wrong);

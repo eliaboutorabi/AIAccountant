@@ -6,13 +6,13 @@ A substantive visual course in AI for accounting and finance. Built with Svelte 
 
 ## What learners do
 
-- Follow 25 connected modules across five study days: 30 planned active hours including practice and review. The estimate is an authoring budget, not a measured learner completion time.
+- Follow 35 connected modules across seven study days: 42 planned active hours including practice and review. The estimate is an authoring budget, not a measured learner completion time.
 - Work through AI history, machine learning, generalization, neural networks, forecasting, spreadsheet analysis, tokens, transformers, pretraining/adaptation, generative models, retrieval, tools, agents, skills, harnesses, and evaluation.
-- Explore 82 in-chapter teaching figures: 25 original generated infographics, 50 responsive diagrams, and seven interactive explanations. Search the [visual atlas](https://eliaboutorabi.github.io/AIAccountant/visuals/) or inspect the [complete inventory](docs/visual-expansion/inventory.md). Full-resolution image zoom, text companions, and prediction questions accompany the figures.
-- Answer 150 explained concept checks, 25 additional changed-case checks, 30 cumulative review prompts, and substantive written cases. First attempts, hints, solution reveals, and written self-assessment remain distinct.
+- Explore 112 in-chapter teaching figures: 35 original generated infographics, 70 responsive diagrams, and seven interactive explanations. Search the [visual atlas](https://eliaboutorabi.github.io/AIAccountant/visuals/) or inspect the [foundation inventory](docs/visual-expansion/inventory.md) and [builder inventory](docs/builder-extension/visual-inventory.md). Full-resolution image zoom, text companions, and prediction questions accompany the figures.
+- Answer 210 explained concept checks, 35 additional changed-case checks, 42 cumulative review prompts, and substantive written cases. First attempts, hints, solution reveals, and written self-assessment remain distinct.
 - Train real models, inspect their parameters and attention, compare held-out results, and build an executable synthetic finance pipeline. The 3D network uses the actual trained weights and activations.
 - Enter spreadsheet formulas; diagnose join multiplication and filter context; reconcile a variance memo; preserve source evidence and units.
-- Produce five connected portfolio submissions, download original data and a runnable Node.js starter, and defend cases through the interview studio.
+- Produce seven connected portfolio submissions, download original data and a runnable Node.js starter, and defend cases through the interview studio.
 - Open linked technical definitions by hover, touch, or keyboard. Save notes, bookmarks, and learning evidence locally; export and merge records without discarding the original edition's notes.
 
 All chapters are open from the start. Written rubrics are self-assessment; this is not an accredited qualification or a promise of readiness for every interview. The before/after diagnostic and role extensions help identify further practice.
@@ -51,9 +51,11 @@ The optional local language-model verification is separate from normal tests bec
 - `src/lib/data/` and `/learn/`: preserved introductory edition; archive banners point to the expanded chapters.
 - `docs/rebuild/`: approved design, source register, independent agent reviews, and release evidence.
 - `docs/art-direction.md`: original generated artwork and prompt provenance.
-- `docs/visual-expansion/`: the complete visual inventory, exact image-generation prompts, independent educational reviews, and release checks.
+- `docs/visual-expansion/` and `docs/builder-extension/`: visual inventories, exact image-generation prompts, independent educational reviews, and release checks.
 
 The chapter content is independent of presentation. A new concept needs an explanation, a concrete case, appropriate practice, a check of transfer, and a source where applicable; a larger word count alone is not the acceptance test.
+
+The [builder extension](docs/builder-extension/README.md) adds document/workbook engineering, model routing, agent runtimes, evidence analytics, realtime voice, deployment and AI-assisted development. Five new workbenches expose actual deterministic behavior, and a downloadable Node.js HTTP/SSE service demonstrates persisted receipts and recovery.
 
 The [visual and interaction audit](docs/visual-audit/README.md) records the course-wide image review, desktop/mobile checks, defects repaired, and verification limits.
 

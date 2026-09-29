@@ -163,6 +163,7 @@
 	li {
 		line-height: 1.85;
 		font-size: 16px;
+		overflow-wrap: anywhere;
 	}
 	p + p {
 		margin-top: 15px;

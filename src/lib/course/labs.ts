@@ -3,6 +3,7 @@ export type Lab = {
 	title: string;
 	subtitle: string;
 	component: string;
+	mode?: string;
 	icon: string;
 	category: 'Learning' | 'Language' | 'Finance' | 'Systems';
 	provenance: string;
@@ -229,5 +230,62 @@ export const labs: Lab[] = [
 		category: 'Systems',
 		provenance: 'Executable synthetic system · actual state checks · authored draft templates',
 		module: 'M23'
+	},
+
+	{
+		id: 'model-routing',
+		title: 'Choose the model by the job',
+		subtitle: 'Compare declared capabilities, task errors, context budgets, latency and cost.',
+		component: 'BuilderLab',
+		mode: 'routing',
+		icon: 'sliders',
+		category: 'Systems',
+		provenance: 'Actual local calculations · synthetic provider measurements',
+		module: 'M27'
+	},
+	{
+		id: 'document-structure',
+		title: 'From page structure to typed cells',
+		subtitle:
+			'Expand merged headers, preserve identifiers, correct readings and reconcile amounts.',
+		component: 'BuilderLab',
+		mode: 'documents',
+		icon: 'file',
+		category: 'Finance',
+		provenance: 'Actual grid and value processing · authored OCR fixtures',
+		module: 'M28'
+	},
+	{
+		id: 'agent-runtime',
+		title: 'Inside the agent runtime',
+		subtitle: 'Match tool results, enforce scope and recover state when delivery fails.',
+		component: 'BuilderLab',
+		mode: 'runtime',
+		icon: 'workflow',
+		category: 'Systems',
+		provenance: 'Executable local state machine · authored tool proposals',
+		module: 'M30'
+	},
+	{
+		id: 'evidence-lineage',
+		title: 'An observation is more than a number',
+		subtitle: 'Trace periods, revisions and comparison denominators through a live calculation.',
+		component: 'BuilderLab',
+		mode: 'evidence',
+		icon: 'chart',
+		category: 'Finance',
+		provenance: 'Actual analytical calculations · original synthetic disclosures',
+		module: 'M31'
+	},
+	{
+		id: 'voice-coordination',
+		title: 'Interruptions without lost context',
+		subtitle: 'Trace generated audio, heard audio, cancelled turns and late tool results.',
+		component: 'BuilderLab',
+		mode: 'voice',
+		icon: 'mic',
+		category: 'Systems',
+		provenance: 'Deterministic voice-event simulator · no microphone or model call',
+		module: 'M33'
 	}
 ];

@@ -1,3 +1,4 @@
+import { builderModules } from './builders';
 import { day1Modules } from './days/day1';
 import { day2Modules } from './days/day2';
 import { day3Modules } from './days/day3';
@@ -10,8 +11,18 @@ export const modules: CourseModule[] = [
 	...day2Modules,
 	...day3Modules,
 	...day4Modules,
-	...day5Modules
+	...day5Modules,
+	...builderModules
 ];
+export const courseStats = {
+	modules: modules.length,
+	days: new Set(modules.map((m) => m.day)).size,
+	hours:
+		(modules.reduce((n, m) => n + m.minutes, 0) + new Set(modules.map((m) => m.day)).size * 30) /
+		60,
+	checks: modules.reduce((n, m) => n + m.checks.length, 0)
+};
+
 export function status(module: CourseModule, evidence: ModuleEvidence) {
 	const studied = module.sections.every((s) => evidence.read.includes(s.id));
 	const checksCorrect = module.checks.filter((q) => evidence.answers[q.id] === q.answer).length;
@@ -201,6 +212,56 @@ const assessmentSupport: Record<string, { sections: string[]; strategy: string }
 		sections: ['structure', 'classification', 'next'],
 		strategy:
 			'Lead with the decision, show inspectable evidence and explain the mechanism. When a constraint changes, revisit the calculation or design rather than repeating a definition; state the boundary of what you have demonstrated.'
+	},
+	M26: {
+		sections: ['request-journey', 'execution-places', 'read-code', 'contracts', 'versioned-change'],
+		strategy:
+			'Trace the input from the interface to the executing code and back. Separate transport success, parsed structure, access, and business correctness; identify what evidence would establish each.'
+	},
+	M27: {
+		sections: ['roles', 'adapter', 'structured-contract', 'economics', 'evaluate-route'],
+		strategy:
+			'Name the required input and output capability before choosing a route. Account for every call and review step, then check whether evaluation exercised the actual task and failure paths.'
+	},
+	M28: {
+		sections: ['evidence-layers', 'readers', 'geometry', 'confidence', 'confidence'],
+		strategy:
+			'Keep source pixels, extracted text, document structure, interpreted values, and reviewed corrections separate. Test each claim against its source region; a plausible score or matching total is only one check.'
+	},
+	M29: {
+		sections: ['cell-types', 'grid', 'formulas', 'typing', 'revisions'],
+		strategy:
+			'Declare the cell type and number convention before parsing. Follow merged-cell occupancy and formula dependencies explicitly; identify the authoritative revision and retain evidence for corrections.'
+	},
+	M30: {
+		sections: ['loop', 'parallel', 'middleware', 'recovery', 'verification'],
+		strategy:
+			'Separate the model call identity, logical operation identity, artifact identity, and revision. Trace the actual effect and its durable receipt before retrying or accepting a claim of success.'
+	},
+	M31: {
+		sections: ['observation-model', 'revisions', 'missingness', 'derived', 'statistics'],
+		strategy:
+			'Write the entity, metric, unit, period, scope, and version for every input. Establish comparability and availability before calculating; preserve missingness and show which observations support the result.'
+	},
+	M32: {
+		sections: ['encoding', 'denominators', 'gaps-geography', 'accessible-state', 'media'],
+		strategy:
+			'Identify the question answered by the visual, its baseline, denominator, and eligible records. Change one filter and verify the number, caption, source table, and shared state still describe the same result.'
+	},
+	M33: {
+		sections: ['audio-pipeline', 'transport', 'interruption', 'identity', 'identity'],
+		strategy:
+			'Track what was generated, buffered, and actually heard. State the transport contract, then separately reconcile playback, conversation context, late results, and any committed effects.'
+	},
+	M34: {
+		sections: ['boundaries', 'access', 'durability', 'retries', 'release'],
+		strategy:
+			'Locate the trusted enforcement boundary and authoritative state. Walk through a concurrent request, lost reply, or restart; require observable evidence for the control instead of relying on interface text.'
+	},
+	M35: {
+		sections: ['specify', 'trace', 'test-change', 'debug', 'defend'],
+		strategy:
+			'Translate the business rule into a small contract, trace the executing path, and calculate expected results independently. Use a changed or failing case to test the explanation, then tie the evidence to the deployed revision.'
 	}
 };
 export function checkGuidance(

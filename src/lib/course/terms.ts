@@ -1,3 +1,5 @@
+import { professionalTerms } from './builders/professional-support';
+import { noviceTerms } from './builders/novice-support';
 import { technicalTerms, termModuleOverrides } from './technical-terms';
 import { glossary } from '$lib/data/resources';
 export type Term = { term: string; definition: string; example: string; module: string };
@@ -174,10 +176,14 @@ const additions: Term[] = [
 		module: 'M12'
 	}
 ];
+const allAdditions = [...additions, ...professionalTerms, ...noviceTerms].filter(
+	(entry, index, all) =>
+		all.findIndex((other) => other.term.toLowerCase() === entry.term.toLowerCase()) === index
+);
 export const terms: Term[] = [
-	...additions,
+	...allAdditions,
 	...glossary
-		.filter((g) => !additions.some((a) => a.term.toLowerCase() === g.term.toLowerCase()))
+		.filter((g) => !allAdditions.some((a) => a.term.toLowerCase() === g.term.toLowerCase()))
 		.map((g) => ({
 			...g,
 			module: termModuleOverrides[g.term.toLowerCase()] ?? legacyMap[g.chapter] ?? 'M01'

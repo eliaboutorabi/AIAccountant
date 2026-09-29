@@ -4,7 +4,15 @@
 	import { modules } from '$lib/course';
 	import Icon from '$lib/components/Icon.svelte';
 	import Notebook from '$lib/course/components/Notebook.svelte';
-	const labs = ['generalization', 'spreadsheet', 'language-training', 'harness', 'capstone'];
+	const labs = [
+		'generalization',
+		'spreadsheet',
+		'language-training',
+		'harness',
+		'capstone',
+		'document-structure',
+		'voice-coordination'
+	];
 	const checks = [
 		[
 			'Define one prediction or decision time and the information available then.',
@@ -30,11 +38,23 @@
 			'Reproduce the exact pipeline controls and retain exceptions.',
 			'Commit a configuration, preserve its first changed-case result, and explain a repair.',
 			'Defend the source-to-decision trace and identify a remaining professional skill gap.'
+		],
+		[
+			'Trace one request across browser, API, model adapter, tool validation and durable state.',
+			'Preserve document geometry, original readings, typed values and workbook corrections.',
+			'Show a rejected request, a stale revision and recovery without applying a tool result twice.'
+		],
+		[
+			'Reproduce a restated comparison and inspect the evidence behind a chart point.',
+			'Explain a voice interruption and reject a late result from an obsolete turn.',
+			'Present tests, release checks, source versions and an honest account of remaining deployment work.'
 		]
 	];
 	const files = [
 		{ name: 'portfolio-guide.md', label: 'Portfolio guide & role extensions' },
 		{ name: 'willow-pipeline.mjs', label: 'Runnable Node.js reconciliation starter' },
+		{ name: 'builder-service.mjs', label: 'HTTP, durable receipts & SSE · local service' },
+		{ name: 'builder-guide.md', label: 'Builder service · run, test, extend & defend' },
 		{ name: 'pipeline-data.json', label: 'Invoices & payments · PIPE-01' },
 		{ name: 'policies.json', label: 'Versioned policy source documents' },
 		{ name: 'collections-72.csv', label: '72-month forecast series · seed 42' },
@@ -45,9 +65,9 @@
 </script>
 
 <svelte:head
-	><title>Your five-day portfolio · AI Accountant</title><meta
+	><title>Your seven-day portfolio · AI Accountant</title><meta
 		name="description"
-		content="Create five connected finance artifacts, download original datasets and a runnable starter, and defend your evidence with explicit review criteria."
+		content="Create seven connected finance and software artifacts, download original datasets and a runnable starter, and defend your evidence with explicit review criteria."
 	/></svelte:head
 >
 <div class="page-wrap">
@@ -55,7 +75,7 @@
 		<p class="eyebrow">FROM LEARNING TO EVIDENCE</p>
 		<h1>Build something<br />you can defend.</h1>
 		<p>
-			Five connected submissions turn the course into a portfolio. Keep the source records,
+			Seven connected submissions turn the course into a portfolio. Keep the source records,
 			calculations, failed cases, and decisions—not just a polished final screenshot.
 		</p>
 	</div>
