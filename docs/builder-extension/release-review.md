@@ -43,4 +43,10 @@ The full browser pass additionally found and fixed a mobile prose overflow from 
 - `node course-materials/builder-service.mjs --self-test`: passes actual HTTP requests, exact amounts, duplicate/conflicting identities, concurrent retries, restart recovery and SSE replay.
 - Production static build succeeds. The existing large-chunk advisory remains; the build does not fail, and optional model runtimes remain separate lab capabilities.
 
-Public deployment verification is recorded below after GitHub Pages finishes publishing.
+## Public deployment verification
+
+Application commit: `c059cf2ca40eeb7fb9a505c4cf6b46d2b8b82597`. [GitHub Actions run 36640429249](https://github.com/eliaboutorabi/AIAccountant/actions/runs/36640429249) completed successfully, including 189 unit/component tests, all 26 browser tests and the GitHub Pages deployment.
+
+After publication, a fresh mobile browser verified the live home/path counts, glossary-backed search, all ten new chapter routes, six checks and three loaded figures per new chapter, all five new lab routes, and M35 writing retained after reload. No page overflow or client exception was observed in that pass. Both downloadable service/guide files matched the committed source exactly, and all ten new WebP assets matched local SHA-256 hashes.
+
+The [published builder path](https://eliaboutorabi.github.io/AIAccountant/path/#day-6) starts at Day 6. This final documentation record does not change the deployed application artifact.
